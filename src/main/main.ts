@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, ipcMain, session } from "electron";
+import { app, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { Orchestrator } from "./services/orchestrator";
 
@@ -12,6 +12,8 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
     },
+    autoHideMenuBar: true,
+    icon: "./icon.ico",
   });
 
   if (process.env.NODE_ENV === "development") {
@@ -90,3 +92,5 @@ const orchestrator = new Orchestrator();
 orchestrator.getData();
 
 const SaveSometime = setInterval(orchestrator.saveData, 60000);
+
+console.log(__dirname);

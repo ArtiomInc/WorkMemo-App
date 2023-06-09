@@ -85,7 +85,6 @@ export class Orchestrator {
   async updateNoteTitle(id: number, title: string): Promise<void> {
     try {
       Orchestrator.data.note[id].title = title;
-      this.saveData();
     } catch (error) {
       console.log(error);
       throw error;
@@ -123,8 +122,6 @@ export class Orchestrator {
           "Une erreur s'est produite lors de l'écriture du fichier :",
           erreur
         );
-      } else {
-        console.log("Le fichier a été écrit avec succès.");
       }
     });
   }

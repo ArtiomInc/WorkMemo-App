@@ -129,7 +129,7 @@ export default {
 <template>
   <div class="container">
     <div class="sidebar" :class="{ 'sidebar-splitted': idNoteSelect != -1 }">
-      <div class="card card-custom card-of-list">
+      <div class="card card-list">
         <ul
           class="list-of-note"
           v-if="noteList != null"
@@ -150,7 +150,7 @@ export default {
       </div>
     </div>
     <div v-if="idNoteSelect != -1" class="rightcontent">
-      <div class="card card-custom">
+      <div class="card card-note">
         <div class="content-is-true" v-if="isEditingTitle">
           <input class="input is-fullwidth" type="text" v-model="noteTitle" />
           <button class="button" @click="changeStateEdit(false)">
@@ -202,15 +202,7 @@ export default {
   padding-left: 0px;
   padding-right: 0px;
 }
-.card-custom {
-  margin-top: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.card-of-list {
-  padding-left: 10px;
-  padding-right: 10px;
-}
+
 .list-of-note {
   list-style: none;
 }
@@ -221,7 +213,7 @@ export default {
   cursor: pointer;
 }
 .preview-note:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.1);
 }
 .preview-note.is-active {
   background: rgba(0, 0, 0, 0.2);

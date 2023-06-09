@@ -11,6 +11,9 @@ export default {
   computed: {
     ...mapGetters(["getDialogTrigger"]),
   },
+  mounted() {
+    this.$router.push("/");
+  },
 };
 </script>
 

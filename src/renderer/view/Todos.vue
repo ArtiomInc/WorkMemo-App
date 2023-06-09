@@ -101,9 +101,6 @@ export default {
 
 <style scoped>
 .card-custom {
-  margin-top: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   min-width: 150px;
 }
 .todo {
@@ -118,14 +115,13 @@ export default {
 .button-custom {
   height: 35px;
   width: 35px;
-  padding: 0;
   margin-top: 0px;
   margin-left: 10px;
 }
 .button-custom > img {
-  height: 60%;
+  height: 100%;
 }
 .button-add {
-  margin-bottom: 5px;
+  margin-top: 15px;
 }
 </style>

@@ -46,7 +46,7 @@ General CSS
 /* == Card CSS == */
 
 .card {
-  padding: 1.5em;
+  padding: 1em 1.5em;
   margin: 0.5em;
   box-shadow: var(--shadow-card);
   border-radius: 5px;
@@ -59,7 +59,7 @@ General CSS
   box-shadow: var(--shadow-button);
   border-radius: 5px;
   border: 1px solid transparent;
-  padding: 0.4em 1.2em;
+  padding: 0.4em 0.4em;
   margin: 0;
   font-size: 1em;
   font-weight: 500;
@@ -79,6 +79,7 @@ General CSS
 
 .button:hover {
   background-color: var(--color-button-over);
+  border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .button:disabled {
@@ -95,7 +96,7 @@ General CSS
   color: var(--color-button-text);
   border: none;
   border-radius: 5px;
-  outline: 1px solid #999;
+  outline: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0.4em 0.4em;
   margin: 0;
   font-size: 1em;
@@ -109,11 +110,11 @@ General CSS
 }
 
 .input:hover {
-  outline: 1px solid #000;
+  outline: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 .input:focus {
-  outline: 2px solid #000;
+  outline: 2px solid rgba(0, 0, 0, 0.5);
 }
 
 .input.is-fullwidth {

@@ -33,7 +33,7 @@ export default {};
   height: 58px;
   width: 100%;
   background-color: #f5f5f5;
-  border-bottom: 2px solid #dbdbdb;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   display: flex;
 }
 .logo {
@@ -50,9 +50,9 @@ export default {};
   color: #000;
   text-decoration: none;
 }
-.tab:hover {
+.tab:hover:not(.is-active) {
   cursor: pointer;
-  background: #dbdbdb;
+  background: rgba(0, 0, 0, 0.05);
 }
 .tab > img {
   height: 20px;
