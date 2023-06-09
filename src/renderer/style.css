@@ -1,0 +1,136 @@
+/* ==
+CSS file style create by Artiom
+General CSS
+== */
+@font-face {
+  font-family: "GitlabSans";
+  src: url(/fonts/GitLabSans.otf);
+}
+
+:root {
+  font-family: GitlabSans;
+  line-height: 1.5;
+  font-weight: 400;
+
+  --color-card: #fff;
+  --shadow-card: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
+
+  --color-button: #fafafa;
+  --color-button-over: #f6f6f6;
+  --color-button-disabled: #dcdcdc;
+  --color-button-text: rgb(0, 0, 0, 0.8);
+  --shadow-button: 0px 0px 2px 0px rgba(0, 0, 0, 0.4);
+}
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  width: 100%;
+}
+
+/* == Content CSS == */
+
+.view {
+  padding: 0 15px 0 15px;
+}
+
+.content {
+  padding: 0.5em;
+}
+
+/* == Card CSS == */
+
+.card {
+  padding: 1.5em;
+  margin: 0.5em;
+  box-shadow: var(--shadow-card);
+  border-radius: 5px;
+}
+
+/* == Button CSS == */
+
+.button {
+  color: var(--color-button-text);
+  box-shadow: var(--shadow-button);
+  border-radius: 5px;
+  border: 1px solid transparent;
+  padding: 0.4em 1.2em;
+  margin: 0;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--color-button);
+  cursor: pointer;
+  transition: border-color 0.25s;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  text-transform: uppercase;
+}
+
+.button.is-fullwidth {
+  width: 100%;
+}
+
+.button:hover {
+  background-color: var(--color-button-over);
+}
+
+.button:disabled {
+  background-color: var(--color-button-disabled);
+  color: #999;
+  border-color: transparent;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* == Input & Label CSS == */
+
+.input {
+  color: var(--color-button-text);
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid #999;
+  padding: 0.4em 0.4em;
+  margin: 0;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #fff;
+}
+
+.input::placeholder {
+  color: #ccc;
+}
+
+.input:hover {
+  outline: 1px solid #000;
+}
+
+.input:focus {
+  outline: 2px solid #000;
+}
+
+.input.is-fullwidth {
+  width: 100%;
+}
+/* == Test CSS == */
+
+h1 {
+  margin: 0.5em;
+  line-height: 100%;
+}
+h2 {
+  line-height: 100%;
+}
+
+.text-red {
+  color: #e83940;
+}
+
+/* == App custom CSS == */
