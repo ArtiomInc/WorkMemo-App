@@ -15,7 +15,7 @@ function createWindow() {
     icon: __dirname + "/static/icon.ico",
   });
 
-  //mainWindow.setMenu(null);
+  mainWindow.setMenu(null);
 
   if (process.env.NODE_ENV === "development") {
     const rendererPort = process.argv[2];
