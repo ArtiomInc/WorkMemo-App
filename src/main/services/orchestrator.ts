@@ -2,7 +2,6 @@ import * as fs from "fs";
 
 export interface Note {
   title: string;
-  tag: string;
   content: string;
 }
 
@@ -55,10 +54,7 @@ export class Orchestrator {
 
   async getNoteList(): Promise<any | null> {
     try {
-      return Orchestrator.data.note.map((item) => ({
-        title: item.title,
-        tag: item.tag,
-      }));
+      return Orchestrator.data.note.map((item) => item.title);
     } catch (error) {
       console.log(error);
       throw error;
@@ -69,7 +65,6 @@ export class Orchestrator {
     try {
       Orchestrator.data.note.push({
         title: "New note !",
-        tag: "generic tag",
         content: "<p>There is the content !</p>",
       });
     } catch (error) {
@@ -96,15 +91,6 @@ export class Orchestrator {
     }
   }
 
-  async updateNoteTag(id: number, tag: string): Promise<void> {
-    try {
-      Orchestrator.data.note[id].tag = tag;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
   async updateNoteContent(id: number, content: string): Promise<void> {
     try {
       Orchestrator.data.note[id].content = content;
@@ -125,7 +111,7 @@ export class Orchestrator {
 
   async saveData() {
     const fileDirectory = "C:/Users/Public/Documents/Notes/";
-    const fileName = "note.txt";
+    const fileName = "note.json";
     const dataStringified = JSON.stringify(Orchestrator.data);
     if (!fs.existsSync(fileDirectory)) {
       fs.mkdirSync(fileDirectory, { recursive: true });
@@ -142,7 +128,7 @@ export class Orchestrator {
 
   async getData() {
     const fileDirectory = "C:/Users/Public/Documents/Notes/";
-    const fileName = "note.txt";
+    const fileName = "note.json";
     fs.readFile(fileDirectory + fileName, "utf-8", (erreur, contenu) => {
       if (erreur) {
         console.error(erreur);

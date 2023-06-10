@@ -36,11 +36,9 @@ export default {};
   display: flex;
   min-width: 343px;
 }
-
 .logo {
   height: 100%;
 }
-
 .tab {
   display: flex;
   place-items: center;

@@ -27,7 +27,7 @@ const store = createStore({
       dialogTrigger: false,
       dialogTitle: "",
       dialogContent: "",
-      noteTitle: "",
+      dialogReturn: "",
     };
   },
   getters: {
@@ -40,8 +40,8 @@ const store = createStore({
     getDialogContent(state) {
       return state.dialogContent;
     },
-    getNoteTitle(state) {
-      return state.noteTitle;
+    getDialogReturn(state) {
+      return state.dialogReturn;
     },
   },
   mutations: {
@@ -54,8 +54,8 @@ const store = createStore({
     setDialogContent(state, payload) {
       state.dialogContent = payload;
     },
-    setNoteTitle(state, payload) {
-      state.noteTitle = payload;
+    setDialogReturn(state, payload) {
+      state.dialogReturn = payload;
     },
   },
 });

@@ -3,21 +3,18 @@ import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["getDialogTitle", "getDialogContent"]),
+    ...mapGetters(["getDialogTitle", "getDialogContent", "getDialogReturn"]),
   },
   methods: {
-    ...mapMutations(["setDialogTrigger"]),
+    ...mapMutations(["setDialogTrigger", "setDialogReturn"]),
     Cancel() {
-      this.$emit("userAction");
+      this.setDialogReturn("cancelled");
       this.setDialogTrigger(false);
     },
     Delete() {
-      this.$emit("userAction");
+      this.setDialogReturn("deleted");
       this.setDialogTrigger(false);
     },
-  },
-  emits: {
-    userAction: String,
   },
 };
 </script>
@@ -33,6 +30,9 @@ export default {
             Delete
           </button>
           <button class="button is-fullwidth" @click="Cancel">Cancel</button>
+        </div>
+        <div>
+          {{ getDialogReturn }}
         </div>
       </div>
     </div>
@@ -50,7 +50,7 @@ export default {
   height: 100%;
   overflow: none;
   background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+
   /*backdrop-filter: blur(5px);*/
 }
 .dialog-content {
