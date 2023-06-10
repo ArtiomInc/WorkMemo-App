@@ -1,5 +1,5 @@
 {
-  "name": "electron-vue-template",
+  "name": "todo-note-electron-application",
   "version": "1.0.0",
   "description": "A Note application build with Electron + Vue",
   "main": "build/main/main.js",

@@ -11,6 +11,7 @@ export default {
       noteList: null,
       idNoteSelect: -1,
       noteTitle: "",
+      noteTag: "",
       noteContent: "",
       apiResponse: null,
       isEditingTitle: false,
@@ -72,6 +73,7 @@ export default {
         .setCommand(["getNote", id])
         .then((result: any) => {
           this.noteTitle = result.title;
+          this.noteTag = result.tag;
           this.noteContent = result.content;
         })
         .catch((error: any) => {
@@ -85,6 +87,19 @@ export default {
       window.electronAPI
         .setCommand(["updateNoteTitle", id, content])
         .then((result: any) => {})
+        .catch((error: any) => {
+          this.apiResponse = error;
+          this.setDialogTrigger(true);
+          this.setDialogTitle("Error from updateNoteTitle");
+          this.setDialogContent(error);
+        });
+    },
+    updateNoteTag(id: number, tag: string) {
+      window.electronAPI
+        .setCommand(["updateNoteTag", id, tag])
+        .then((result: any) => {
+          this.getNoteList();
+        })
         .catch((error: any) => {
           this.apiResponse = error;
           this.setDialogTrigger(true);
@@ -127,30 +142,45 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <div class="sidebar" :class="{ 'sidebar-splitted': idNoteSelect != -1 }">
-      <div class="card card-list">
-        <ul
-          class="list-of-note"
-          v-if="noteList != null"
-          v-for="(item, index) in noteList"
+  <div :class="{ content: idNoteSelect != -1 }">
+    <div
+      class="card"
+      :class="{
+        'sidebar-splitted': idNoteSelect != -1,
+      }"
+    >
+      <ul
+        class="list-of-note"
+        v-if="noteList != null"
+        v-for="(item, index) in noteList"
+      >
+        <li
+          class="preview-note"
+          :class="{ 'is-active': idNoteSelect == index }"
+          @click="selectNote(index)"
         >
-          <li
-            class="preview-note"
-            :class="{ 'is-active': idNoteSelect == index }"
-            @click="selectNote(index)"
-          >
-            <div class="preview-note-title">{{ item }}</div>
-            <div class="preview-note-tags">&nbsp;</div>
-          </li>
-        </ul>
-        <div class="user-action">
-          <button class="button is-fullwidth" @click="addNoteList">Add</button>
-        </div>
+          <div class="preview-note-title">
+            {{
+              //@ts-ignore
+              item.title
+            }}
+          </div>
+          <div class="preview-note-tags">
+            <div class="tags">
+              {{
+                //@ts-ignore
+                item.tag
+              }}
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="user-action">
+        <button class="button is-fullwidth" @click="addNoteList">Add</button>
       </div>
     </div>
-    <div v-if="idNoteSelect != -1" class="rightcontent">
-      <div class="card card-note">
+    <div v-if="idNoteSelect != -1" class="focus-note">
+      <div class="card card-focus-note">
         <div class="content-is-true" v-if="isEditingTitle">
           <input class="input is-fullwidth" type="text" v-model="noteTitle" />
           <button class="button" @click="changeStateEdit(false)">
@@ -162,6 +192,15 @@ export default {
           <button class="button" @click="changeStateEdit(true)">
             <img src="/public/images/pen-solid.svg" />
           </button>
+        </div>
+        <div class="edit-tag">
+          <input
+            class="custom-input"
+            type="text"
+            @input="updateNoteTag(idNoteSelect, noteTag)"
+            v-model="noteTag"
+            :style="{ width: noteTag.length * 8 + 2 + 'px' }"
+          />
         </div>
         <div class="editor">
           <QuillEditor
@@ -183,26 +222,28 @@ export default {
 </template>
 
 <style scoped>
-.container {
-  width: 100%;
-  height: calc(100vh - 60px);
+.content {
+  margin: 0;
+  padding: 0;
   display: flex;
 }
-.sidebar {
-  width: 100%;
-  height: 100%;
-  overflow-x: auto;
-  padding-left: 15px;
-  padding-right: 15px;
-}
+
 .sidebar-splitted {
   width: 30%;
   max-width: 400px;
   min-width: 200px;
-  padding-left: 0px;
-  padding-right: 0px;
+  height: 100%;
 }
 
+.card {
+  margin-top: 0;
+}
+.card-focus-note {
+  margin-left: 0;
+}
+.focus-note {
+  width: 100%;
+}
 .list-of-note {
   list-style: none;
 }
@@ -227,6 +268,23 @@ export default {
 }
 .preview-note-tags {
   line-height: 1em;
+  display: flex;
+  padding: 3px 2px 0 2px;
+}
+.tags {
+  padding: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-right: 5px;
+  border-radius: 13px;
+  font-size: 0.8em;
+  font-family: GitlabSans;
+  color: #fff;
+  width: fit-content;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.tags:not(:first-child) {
+  margin-left: 5px;
 }
 
 .rightcontent {
@@ -281,5 +339,21 @@ export default {
 }
 .content-is-false > button > img {
   height: 100%;
+}
+.edit-tag {
+  display: flex;
+}
+.custom-input {
+  outline: 0;
+  border: 0;
+  padding: 2px;
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-right: 5px;
+  border-radius: 13px;
+  font-size: 0.9em;
+  font-family: GitlabSans;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 </style>

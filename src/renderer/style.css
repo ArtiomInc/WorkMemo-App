@@ -35,19 +35,11 @@ General CSS
 
 /* == Content CSS == */
 
-.view {
-  padding: 0 15px 0 15px;
-}
-
-.content {
-  padding: 0.5em;
-}
-
 /* == Card CSS == */
 
 .card {
-  padding: 1em 1.5em;
-  margin: 0.5em;
+  padding: 15px;
+  margin: 10px;
   box-shadow: var(--shadow-card);
   border-radius: 5px;
 }

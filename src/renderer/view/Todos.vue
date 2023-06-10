@@ -75,36 +75,25 @@ export default {
 </script>
 
 <template>
-  <div class="view">
-    <div class="card card-custom">
-      <div
-        class="todo"
-        v-if="listTodo != null"
-        v-for="(item, index) in listTodo"
-      >
-        <input
-          class="input input-custom"
-          v-model="listTodo[index]"
-          @input="updateTodo(index)"
-        />
-        <button class="button button-custom" @click="deleteTodo(index)">
-          <img src="/images/trash-can-solid.svg" />
-        </button>
-      </div>
-      <button class="button is-fullwidth button-add" @click="addTodo">
-        Add
+  <div class="card">
+    <div class="todo" v-if="listTodo != null" v-for="(item, index) in listTodo">
+      <input
+        class="input input-custom"
+        v-model="listTodo[index]"
+        @input="updateTodo(index)"
+      />
+      <button class="button button-custom" @click="deleteTodo(index)">
+        <img src="/images/trash-can-solid.svg" />
       </button>
-      <div>{{ apiResponse }}</div>
     </div>
+    <button class="button is-fullwidth" @click="addTodo">Add</button>
+    <div>{{ apiResponse }}</div>
   </div>
 </template>
 
 <style scoped>
-.card-custom {
-  min-width: 150px;
-}
 .todo {
-  margin: 7px 0 7px 0;
+  margin: 0 0 7px 0;
   display: flex;
   align-items: center;
 }
@@ -120,8 +109,5 @@ export default {
 }
 .button-custom > img {
   height: 100%;
-}
-.button-add {
-  margin-top: 15px;
 }
 </style>

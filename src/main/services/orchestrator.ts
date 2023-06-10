@@ -2,6 +2,7 @@ import * as fs from "fs";
 
 export interface Note {
   title: string;
+  tag: string;
   content: string;
 }
 
@@ -54,7 +55,10 @@ export class Orchestrator {
 
   async getNoteList(): Promise<any | null> {
     try {
-      return Orchestrator.data.note.map((item) => item.title);
+      return Orchestrator.data.note.map((item) => ({
+        title: item.title,
+        tag: item.tag,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -65,6 +69,7 @@ export class Orchestrator {
     try {
       Orchestrator.data.note.push({
         title: "New note !",
+        tag: "generic tag",
         content: "<p>There is the content !</p>",
       });
     } catch (error) {
@@ -85,6 +90,15 @@ export class Orchestrator {
   async updateNoteTitle(id: number, title: string): Promise<void> {
     try {
       Orchestrator.data.note[id].title = title;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async updateNoteTag(id: number, tag: string): Promise<void> {
+    try {
+      Orchestrator.data.note[id].tag = tag;
     } catch (error) {
       console.log(error);
       throw error;

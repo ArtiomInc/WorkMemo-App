@@ -3,7 +3,7 @@ export default {};
 </script>
 
 <template>
-  <div class="navbar">
+  <div class="card">
     <img
       src="/images/a_dot_white_logo_logo_black_rounded.png"
       class="logo"
@@ -29,26 +29,28 @@ export default {};
 </template>
 
 <style scoped>
-.navbar {
+.card {
   height: 58px;
-  width: 100%;
+  width: calc(100% - 50px);
   background-color: #f5f5f5;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   display: flex;
+  min-width: 343px;
 }
+
 .logo {
-  height: calc(100% - 20px);
-  padding: 10px 20px 10px 20px;
+  height: 100%;
 }
 
 .tab {
   display: flex;
   place-items: center;
-  padding: 1.5em;
+  margin-left: 20px;
+  padding: 25px;
   font-size: 15px;
   font-weight: 600;
   color: #000;
   text-decoration: none;
+  border-radius: 5px;
 }
 .tab:hover:not(.is-active) {
   cursor: pointer;
@@ -60,7 +62,5 @@ export default {};
 }
 .is-active {
   background: #dbdbdb;
-  border-bottom: 2px solid #000;
-  margin-bottom: -2px;
 }
 </style>
