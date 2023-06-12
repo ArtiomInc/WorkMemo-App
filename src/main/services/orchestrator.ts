@@ -110,8 +110,8 @@ export class Orchestrator {
   }
 
   async saveData() {
-    const fileDirectory = "C:/Users/Public/Documents/Notes/";
-    const fileName = "note.json";
+    const fileDirectory = process.env.APPDATA + "/Notes/";
+    const fileName = "data.json";
     const dataStringified = JSON.stringify(Orchestrator.data);
     if (!fs.existsSync(fileDirectory)) {
       fs.mkdirSync(fileDirectory, { recursive: true });
@@ -127,18 +127,20 @@ export class Orchestrator {
   }
 
   async getData() {
-    const fileDirectory = "C:/Users/Public/Documents/Notes/";
-    const fileName = "note.json";
-    fs.readFile(fileDirectory + fileName, "utf-8", (erreur, contenu) => {
-      if (erreur) {
-        console.error(erreur);
-      } else {
-        try {
-          Orchestrator.data = JSON.parse(contenu);
-        } catch (erreurParse) {
-          console.error(erreurParse);
+    const fileDirectory = process.env.APPDATA + "/Notes/";
+    const fileName = "data.json";
+    try {
+      fs.readFile(fileDirectory + fileName, "utf-8", (erreur, contenu) => {
+        if (erreur) {
+          console.error(erreur);
+        } else {
+          try {
+            Orchestrator.data = JSON.parse(contenu);
+          } catch (erreurParse) {
+            console.error(erreurParse);
+          }
         }
-      }
-    });
+      });
+    } catch {}
   }
 }

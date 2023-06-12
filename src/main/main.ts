@@ -93,3 +93,5 @@ const orchestrator = new Orchestrator();
 orchestrator.getData();
 
 const SaveSometime = setInterval(orchestrator.saveData, 60000);
+
+console.log(process.env.HOME);
