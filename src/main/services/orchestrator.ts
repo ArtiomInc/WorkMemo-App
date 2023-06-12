@@ -1,6 +1,12 @@
 import * as fs from "fs";
 
+export interface Todo {
+  id: number;
+  content: string;
+  color: string;
+}
 export interface Note {
+  id: number;
   title: string;
   content: string;
 }
@@ -8,7 +14,7 @@ export interface Note {
 export class Orchestrator {
   static data: {
     user: any;
-    todo: string[];
+    todo: Todo[];
     note: Note[];
   } = {
     user: null,
@@ -27,16 +33,29 @@ export class Orchestrator {
 
   async addTodo(): Promise<void> {
     try {
-      Orchestrator.data.todo.push("New todo !");
+      Orchestrator.data.todo.push({
+        id: Orchestrator.data.todo.length,
+        content: "New todo !",
+        color: "#000",
+      });
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
 
-  async updateTodo(id: number, content: string): Promise<void> {
+  async updateTodoContent(id: number, content: string): Promise<void> {
     try {
-      Orchestrator.data.todo[id] = content;
+      Orchestrator.data.todo[id].content = content;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async updateTodoColor(id: number, color: string): Promise<void> {
+    try {
+      Orchestrator.data.todo[id].color = color;
     } catch (error) {
       console.log(error);
       throw error;
@@ -64,6 +83,7 @@ export class Orchestrator {
   async addNoteList(): Promise<void> {
     try {
       Orchestrator.data.note.push({
+        id: Orchestrator.data.note.length,
         title: "New note !",
         content: "<p>There is the content !</p>",
       });

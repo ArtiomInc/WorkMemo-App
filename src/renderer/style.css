@@ -147,4 +147,9 @@ h2 {
   color: #e83940;
 }
 
+.span {
+  font-size: 1em;
+  font-weight: 500;
+}
+
 /* == App custom CSS == */

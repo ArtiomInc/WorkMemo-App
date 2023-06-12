@@ -5,7 +5,7 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "/public/style/vue-quill.snow.css";
 export default {
   computed: {
-    ...mapGetters(["getDialogReturn"]),
+    ...mapGetters(["getDialogConfirmReturn"]),
   },
   components: {
     QuillEditor,
@@ -23,15 +23,15 @@ export default {
   },
   methods: {
     ...mapMutations([
-      "setDialogTrigger",
-      "setDialogTitle",
-      "setDialogContent",
-      "setDialogReturn",
+      "setDialogConfirmTrigger",
+      "setDialogConfirmTitle",
+      "setDialogConfirmContent",
+      "setDialogConfirmReturn",
     ]),
     openDialog() {
-      this.setDialogTrigger(true);
-      this.setDialogTitle("Delete note ?");
-      this.setDialogContent(
+      this.setDialogConfirmTrigger(true);
+      this.setDialogConfirmTitle("Delete note ?");
+      this.setDialogConfirmContent(
         "Are you sure you want to delete this note ?<br/>Impossible to recover after delete"
       );
     },
@@ -54,9 +54,9 @@ export default {
         })
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from getNoteList");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from getNoteList");
+          this.setDialogConfirmContent(error);
         });
     },
     addNoteList() {
@@ -67,9 +67,9 @@ export default {
         })
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from addNoteList");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from addNoteList");
+          this.setDialogConfirmContent(error);
         });
     },
     getNote(id: number) {
@@ -81,9 +81,9 @@ export default {
         })
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from getNote");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from getNote");
+          this.setDialogConfirmContent(error);
         });
     },
     updateNoteTitle(id: number, content: string) {
@@ -92,9 +92,9 @@ export default {
         .then((result: any) => {})
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from updateNoteTitle");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from updateNoteTitle");
+          this.setDialogConfirmContent(error);
         });
     },
     updateNoteContent() {
@@ -105,29 +105,29 @@ export default {
         .then((result: any) => {})
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from updateNoteContent");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from updateNoteContent");
+          this.setDialogConfirmContent(error);
         });
     },
     deleteRequest() {
-      this.setDialogTrigger(true);
-      this.setDialogTitle("Delete note ?");
-      this.setDialogContent(
+      this.setDialogConfirmTrigger(true);
+      this.setDialogConfirmTitle("Delete note ?");
+      this.setDialogConfirmContent(
         "Are you sure you want to delete this note ? </br>Once deleted, it will be impossible to recover."
       );
       this.checkingEndOfDialog = setInterval(() => {
-        if (this.getDialogReturn === "cancelled") {
-          console.log(this.getDialogReturn);
-          this.setDialogReturn("");
+        if (this.getDialogConfirmReturn === "cancelled") {
+          console.log(this.getDialogConfirmReturn);
+          this.setDialogConfirmReturn("");
           clearInterval(this.checkingEndOfDialog);
-        } else if (this.getDialogReturn === "deleted") {
-          console.log(this.getDialogReturn);
-          this.setDialogReturn("");
+        } else if (this.getDialogConfirmReturn === "deleted") {
+          console.log(this.getDialogConfirmReturn);
+          this.setDialogConfirmReturn("");
           this.deleteNote(this.idNoteSelect);
           clearInterval(this.checkingEndOfDialog);
         }
-        const read = this.getDialogReturn;
+        const read = this.getDialogConfirmReturn;
       }, 100);
     },
     deleteNote(id: number) {
@@ -139,9 +139,9 @@ export default {
         })
         .catch((error: any) => {
           this.apiResponse = error;
-          this.setDialogTrigger(true);
-          this.setDialogTitle("Error from deleteNote");
-          this.setDialogContent(error);
+          this.setDialogConfirmTrigger(true);
+          this.setDialogConfirmTitle("Error from deleteNote");
+          this.setDialogConfirmContent(error);
         });
     },
   },
@@ -175,20 +175,27 @@ export default {
         </li>
       </ul>
       <div class="user-action">
-        <button class="button is-fullwidth" @click="addNoteList">Add</button>
+        <button class="button is-fullwidth" @click="addNoteList">
+          Add note
+        </button>
       </div>
     </div>
     <div v-if="idNoteSelect != -1" class="focus-note">
       <div class="card card-focus-note">
         <div class="content-is-true" v-if="isEditingTitle">
-          <input class="input is-fullwidth" type="text" v-model="noteTitle" />
-          <button class="button" @click="changeStateEdit(false)">
+          <input
+            class="input is-fullwidth"
+            type="text"
+            v-model="noteTitle"
+            @keydown.enter="changeStateEdit(false)"
+          />
+          <button class="button button-custom" @click="changeStateEdit(false)">
             <img src="/public/images/check-solid.svg" />
           </button>
         </div>
         <div class="content-is-false" v-else>
           <span>{{ noteTitle }}</span>
-          <button class="button" @click="changeStateEdit(true)">
+          <button class="button button-custom" @click="changeStateEdit(true)">
             <img src="/public/images/pen-solid.svg" />
           </button>
         </div>
@@ -275,23 +282,10 @@ export default {
   margin-top: 5px;
   margin-bottom: 6px;
 }
-.button {
-  margin: 1px;
-  width: calc(100% - 2px);
-  margin-bottom: 5px;
-}
 
 .content-is-true {
   display: flex;
-}
-.content-is-true > button {
-  height: 35px;
-  width: 35px;
-  margin-left: 8px;
-  margin-bottom: 1px;
-}
-.content-is-true > button > img {
-  height: 100%;
+  align-items: center;
 }
 
 .content-is-false {
@@ -303,15 +297,7 @@ export default {
   font-size: 1.3em;
   margin-left: 5px;
 }
-.content-is-false > button {
-  height: 25px;
-  width: 25px;
-  margin-left: 10px;
-  margin-bottom: 1px;
-}
-.content-is-false > button > img {
-  height: 100%;
-}
+
 .edit-tag {
   display: flex;
 }
@@ -327,5 +313,19 @@ export default {
   font-family: GitlabSans;
   color: #fff;
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+.button-custom {
+  height: 35px;
+  width: 35px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 10px;
+}
+
+.button-custom > img {
+  height: 50%;
 }
 </style>

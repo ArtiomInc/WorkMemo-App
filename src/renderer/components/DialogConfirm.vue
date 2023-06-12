@@ -3,17 +3,21 @@ import { mapGetters } from "vuex";
 import { mapMutations } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["getDialogTitle", "getDialogContent", "getDialogReturn"]),
+    ...mapGetters([
+      "getDialogConfirmTitle",
+      "getDialogConfirmContent",
+      "getDialogConfirmReturn",
+    ]),
   },
   methods: {
-    ...mapMutations(["setDialogTrigger", "setDialogReturn"]),
+    ...mapMutations(["setDialogConfirmTrigger", "setDialogConfirmReturn"]),
     Cancel() {
-      this.setDialogReturn("cancelled");
-      this.setDialogTrigger(false);
+      this.setDialogConfirmReturn("cancelled");
+      this.setDialogConfirmTrigger(false);
     },
     Delete() {
-      this.setDialogReturn("deleted");
-      this.setDialogTrigger(false);
+      this.setDialogConfirmReturn("deleted");
+      this.setDialogConfirmTrigger(false);
     },
   },
 };
@@ -23,16 +27,13 @@ export default {
   <div class="dialog-bg">
     <div class="dialog-content">
       <div class="card">
-        <h1>{{ getDialogTitle }}</h1>
-        <span v-html="getDialogContent"></span>
+        <h1>{{ getDialogConfirmTitle }}</h1>
+        <span v-html="getDialogConfirmContent"></span>
         <div class="action-user">
           <button class="button is-fullwidth text-red" @click="Delete">
             Delete
           </button>
           <button class="button is-fullwidth" @click="Cancel">Cancel</button>
-        </div>
-        <div>
-          {{ getDialogReturn }}
         </div>
       </div>
     </div>

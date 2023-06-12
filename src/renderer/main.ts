@@ -5,7 +5,6 @@ import "./style.css";
 import App from "./App.vue";
 import Todos from "./view/Todos.vue";
 import Notes from "./view/Notes.vue";
-import HtmlFrameVue from "./view/HtmlFrame.vue";
 
 // Vuejs instance
 const app = createApp(App);
@@ -16,7 +15,6 @@ const router = createRouter({
   routes: [
     { path: "/", name: "Todos", component: Todos },
     { path: "/notes", name: "Notes", component: Notes },
-    { path: "/tags", name: "Tags", component: HtmlFrameVue },
   ],
 });
 
@@ -24,38 +22,52 @@ const router = createRouter({
 const store = createStore({
   state() {
     return {
-      dialogTrigger: false,
-      dialogTitle: "",
-      dialogContent: "",
-      dialogReturn: "",
+      dialogConfirmTrigger: false,
+      dialogConfirmTitle: "",
+      dialogConfirmContent: "",
+      dialogConfirmReturn: "",
+      dialogColorTrigger: false,
+      dialogColorReturn: "",
     };
   },
   getters: {
-    getDialogTrigger(state) {
-      return state.dialogTrigger;
+    getDialogConfirmTrigger(state) {
+      return state.dialogConfirmTrigger;
     },
-    getDialogTitle(state) {
-      return state.dialogTitle;
+    getDialogConfirmTitle(state) {
+      return state.dialogConfirmTitle;
     },
-    getDialogContent(state) {
-      return state.dialogContent;
+    getDialogConfirmContent(state) {
+      return state.dialogConfirmContent;
     },
-    getDialogReturn(state) {
-      return state.dialogReturn;
+    getDialogConfirmReturn(state) {
+      return state.dialogConfirmReturn;
+    },
+    getDialogColorTrigger(state) {
+      return state.dialogColorTrigger;
+    },
+    getDialogColorReturn(state) {
+      return state.dialogColorReturn;
     },
   },
   mutations: {
-    setDialogTrigger(state, payload) {
-      state.dialogTrigger = payload;
+    setDialogConfirmTrigger(state, payload) {
+      state.dialogConfirmTrigger = payload;
     },
-    setDialogTitle(state, payload) {
-      state.dialogTitle = payload;
+    setDialogConfirmTitle(state, payload) {
+      state.dialogConfirmTitle = payload;
     },
-    setDialogContent(state, payload) {
-      state.dialogContent = payload;
+    setDialogConfirmContent(state, payload) {
+      state.dialogConfirmContent = payload;
     },
-    setDialogReturn(state, payload) {
-      state.dialogReturn = payload;
+    setDialogConfirmReturn(state, payload) {
+      state.dialogConfirmReturn = payload;
+    },
+    setDialogColorTrigger(state, payload) {
+      state.dialogColorTrigger = payload;
+    },
+    setDialogColorReturn(state, payload) {
+      state.dialogColorReturn = payload;
     },
   },
 });

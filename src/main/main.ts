@@ -15,7 +15,7 @@ function createWindow() {
     icon: __dirname + "/static/icon.ico",
   });
 
-  mainWindow.setMenu(null);
+  //mainWindow.setMenu(null);
 
   if (process.env.NODE_ENV === "development") {
     const rendererPort = process.argv[2];
@@ -61,8 +61,10 @@ ipcMain.handle("setCommand", async (event, args) => {
       response = await orchestrator.getTodo();
     } else if (args[0] === "addTodo") {
       await orchestrator.addTodo();
-    } else if (args[0] === "updateTodo") {
-      await orchestrator.updateTodo(args[1], args[2]);
+    } else if (args[0] === "updateTodoContent") {
+      await orchestrator.updateTodoContent(args[1], args[2]);
+    } else if (args[0] === "updateTodoColor") {
+      await orchestrator.updateTodoColor(args[1], args[2]);
     } else if (args[0] === "deleteTodo") {
       await orchestrator.deleteTodo(args[1]);
     } else if (args[0] === "getNoteList") {
