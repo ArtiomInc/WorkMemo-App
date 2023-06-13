@@ -1,7 +1,6 @@
 <script lang="ts">
 export default {
   props: {
-    title: String,
     content: String,
   },
   emits: {
@@ -9,10 +8,7 @@ export default {
   },
   methods: {
     Cancel() {
-      this.$emit("userAction", false);
-    },
-    Delete() {
-      this.$emit("userAction", true);
+      this.$emit("userAction");
     },
   },
 };
@@ -22,12 +18,8 @@ export default {
   <div class="dialog-bg">
     <div class="dialog-content">
       <div class="card">
-        <h1>{{ title }}</h1>
-        <span v-html="content"></span>
+        <h2 v-html="content"></h2>
         <div class="action-user">
-          <button class="button is-fullwidth text-red" @click="Delete">
-            Delete
-          </button>
           <button class="button is-fullwidth" @click="Cancel">Cancel</button>
         </div>
       </div>
@@ -46,7 +38,6 @@ export default {
   height: 100%;
   overflow: none;
   background-color: rgba(0, 0, 0, 0.5);
-
   /*backdrop-filter: blur(5px);*/
 }
 .dialog-content {

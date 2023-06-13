@@ -1,51 +1,28 @@
 <script lang="ts">
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
 import { QuillEditor } from "@vueup/vue-quill";
 import "/public/style/vue-quill.snow.css";
+import DialogConfirm from "../components/DialogConfirm.vue";
+import DialogError from "../components/DialogError.vue";
+import { nextTick } from "vue";
 export default {
-  computed: {
-    ...mapGetters(["getDialogConfirmReturn"]),
-  },
   components: {
     QuillEditor,
+    DialogConfirm,
+    DialogError,
   },
   data() {
     return {
       noteList: null,
-      idNoteSelect: -1,
+      selectedID: -1,
       noteTitle: "",
       noteContent: "",
-      apiResponse: null,
       isEditingTitle: false,
-      checkingEndOfDialog: 0,
+      triggerDialogConfirm: false,
+      triggerDialogError: false,
+      contentDialogError: "An error occurred",
     };
   },
   methods: {
-    ...mapMutations([
-      "setDialogConfirmTrigger",
-      "setDialogConfirmTitle",
-      "setDialogConfirmContent",
-      "setDialogConfirmReturn",
-    ]),
-    openDialog() {
-      this.setDialogConfirmTrigger(true);
-      this.setDialogConfirmTitle("Delete note ?");
-      this.setDialogConfirmContent(
-        "Are you sure you want to delete this note ?<br/>Impossible to recover after delete"
-      );
-    },
-    selectNote(payload: number) {
-      this.idNoteSelect = payload;
-      this.getNote(payload);
-    },
-    changeStateEdit(payload: boolean) {
-      this.isEditingTitle = payload;
-      if (!payload) {
-        this.updateNoteTitle(this.idNoteSelect, this.noteTitle);
-        this.getNoteList();
-      }
-    },
     getNoteList() {
       window.electronAPI
         .setCommand(["getNoteList"])
@@ -53,10 +30,8 @@ export default {
           this.noteList = result;
         })
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from getNoteList");
-          this.setDialogConfirmContent(error);
+          this.triggerDialogError = true;
+          this.contentDialogError = error;
         });
     },
     addNoteList() {
@@ -66,13 +41,12 @@ export default {
           this.getNoteList();
         })
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from addNoteList");
-          this.setDialogConfirmContent(error);
+          this.triggerDialogError = true;
+          this.contentDialogError = error;
         });
     },
     getNote(id: number) {
+      this.selectedID = id;
       window.electronAPI
         .setCommand(["getNote", id])
         .then((result: any) => {
@@ -80,69 +54,64 @@ export default {
           this.noteContent = result.content;
         })
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from getNote");
-          this.setDialogConfirmContent(error);
+          this.triggerDialogError = true;
+          this.contentDialogError = error;
         });
+    },
+    changeStateEdit(payload: boolean) {
+      this.isEditingTitle = payload;
+      if (!payload) {
+        this.updateNoteTitle(this.selectedID, this.noteTitle);
+        this.getNoteList();
+      } else {
+        nextTick(() => {
+          //@ts-ignore
+          this.$refs.titleinput.focus();
+        });
+      }
     },
     updateNoteTitle(id: number, content: string) {
       window.electronAPI
         .setCommand(["updateNoteTitle", id, content])
         .then((result: any) => {})
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from updateNoteTitle");
-          this.setDialogConfirmContent(error);
+          this.triggerDialogError = true;
+          this.contentDialogError = error;
         });
     },
     updateNoteContent() {
-      const id = this.idNoteSelect;
-      const content = this.noteContent;
       window.electronAPI
-        .setCommand(["updateNoteContent", id, content])
+        .setCommand(["updateNoteContent", this.selectedID, this.noteContent])
         .then((result: any) => {})
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from updateNoteContent");
-          this.setDialogConfirmContent(error);
+          this.triggerDialogError = true;
+          this.contentDialogError = error;
         });
     },
-    deleteRequest() {
-      this.setDialogConfirmTrigger(true);
-      this.setDialogConfirmTitle("Delete note ?");
-      this.setDialogConfirmContent(
-        "Are you sure you want to delete this note ? </br>Once deleted, it will be impossible to recover."
-      );
-      this.checkingEndOfDialog = setInterval(() => {
-        if (this.getDialogConfirmReturn === "cancelled") {
-          console.log(this.getDialogConfirmReturn);
-          this.setDialogConfirmReturn("");
-          clearInterval(this.checkingEndOfDialog);
-        } else if (this.getDialogConfirmReturn === "deleted") {
-          console.log(this.getDialogConfirmReturn);
-          this.setDialogConfirmReturn("");
-          this.deleteNote(this.idNoteSelect);
-          clearInterval(this.checkingEndOfDialog);
-        }
-        const read = this.getDialogConfirmReturn;
-      }, 100);
+    deleteRequest(id: number) {
+      this.selectedID = id;
+      this.triggerDialogConfirm = true;
     },
-    deleteNote(id: number) {
-      window.electronAPI
-        .setCommand(["deleteNote", id])
-        .then((result: any) => {
-          this.idNoteSelect = -1;
-          this.getNoteList();
-        })
-        .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from deleteNote");
-          this.setDialogConfirmContent(error);
-        });
+    deleteNote(payload: boolean) {
+      console.log(this.selectedID);
+      this.triggerDialogConfirm = false;
+      if (payload && this.selectedID != -1) {
+        this.selectedID = -1;
+        window.electronAPI
+          .setCommand(["deleteNote", this.selectedID])
+          .then((result: any) => {
+            this.selectedID = -1;
+            this.getNoteList();
+          })
+          .catch((error: any) => {
+            this.triggerDialogError = true;
+            this.contentDialogError = error;
+          });
+      }
+    },
+    releaseDialogError() {
+      this.triggerDialogError = false;
+      this.contentDialogError = "An error occurred";
     },
   },
   mounted() {
@@ -152,11 +121,11 @@ export default {
 </script>
 
 <template>
-  <div :class="{ content: idNoteSelect != -1 }">
+  <div :class="{ content: selectedID != -1 }">
     <div
       class="card"
       :class="{
-        'sidebar-splitted': idNoteSelect != -1,
+        'sidebar-splitted': selectedID != -1,
       }"
     >
       <ul
@@ -166,8 +135,8 @@ export default {
       >
         <li
           class="preview-note"
-          :class="{ 'is-active': idNoteSelect == index }"
-          @click="selectNote(index)"
+          :class="{ 'is-active': selectedID == index }"
+          @click="getNote(index)"
         >
           <div class="preview-note-title">
             {{ item }}
@@ -180,10 +149,11 @@ export default {
         </button>
       </div>
     </div>
-    <div v-if="idNoteSelect != -1" class="focus-note">
+    <div v-if="selectedID != -1" class="focus-note">
       <div class="card card-focus-note">
         <div class="content-is-true" v-if="isEditingTitle">
           <input
+            ref="titleinput"
             class="input is-fullwidth"
             type="text"
             v-model="noteTitle"
@@ -207,12 +177,26 @@ export default {
             class="custom-quill-editor"
           ></QuillEditor>
         </div>
-        <button class="button is-fullwidth text-red" @click="deleteRequest()">
+        <button
+          class="button is-fullwidth text-red"
+          @click="deleteRequest(selectedID)"
+        >
           Delete
         </button>
       </div>
     </div>
   </div>
+  <DialogConfirm
+    v-if="triggerDialogConfirm"
+    title="Delete note ?"
+    content="Are you sure you want to delete this note ?<br/>Impossible to recover after delete"
+    @user-action="deleteNote"
+  ></DialogConfirm>
+  <DialogError
+    v-if="triggerDialogError"
+    :content="contentDialogError"
+    @user-action="releaseDialogError"
+  ></DialogError>
 </template>
 
 <style scoped>

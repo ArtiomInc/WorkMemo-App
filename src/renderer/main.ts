@@ -21,55 +21,10 @@ const router = createRouter({
 // Vuex instance
 const store = createStore({
   state() {
-    return {
-      dialogConfirmTrigger: false,
-      dialogConfirmTitle: "",
-      dialogConfirmContent: "",
-      dialogConfirmReturn: "",
-      dialogColorTrigger: false,
-      dialogColorReturn: "",
-    };
+    return {};
   },
-  getters: {
-    getDialogConfirmTrigger(state) {
-      return state.dialogConfirmTrigger;
-    },
-    getDialogConfirmTitle(state) {
-      return state.dialogConfirmTitle;
-    },
-    getDialogConfirmContent(state) {
-      return state.dialogConfirmContent;
-    },
-    getDialogConfirmReturn(state) {
-      return state.dialogConfirmReturn;
-    },
-    getDialogColorTrigger(state) {
-      return state.dialogColorTrigger;
-    },
-    getDialogColorReturn(state) {
-      return state.dialogColorReturn;
-    },
-  },
-  mutations: {
-    setDialogConfirmTrigger(state, payload) {
-      state.dialogConfirmTrigger = payload;
-    },
-    setDialogConfirmTitle(state, payload) {
-      state.dialogConfirmTitle = payload;
-    },
-    setDialogConfirmContent(state, payload) {
-      state.dialogConfirmContent = payload;
-    },
-    setDialogConfirmReturn(state, payload) {
-      state.dialogConfirmReturn = payload;
-    },
-    setDialogColorTrigger(state, payload) {
-      state.dialogColorTrigger = payload;
-    },
-    setDialogColorReturn(state, payload) {
-      state.dialogColorReturn = payload;
-    },
-  },
+  getters: {},
+  mutations: {},
 });
 
 app.use(router).use(store).mount("#app");

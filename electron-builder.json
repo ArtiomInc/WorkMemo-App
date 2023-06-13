@@ -1,5 +1,7 @@
 {
-  "appId": "com.example.todo-note-application",
+  "productName": "WorkMemo",
+  "copyright": "Copyright © 2023 ${author}",
+  "appId": "com.example.work-memo-application",
   "directories": {
     "output": "dist"
   },
@@ -7,12 +9,12 @@
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
-    "shortcutName": "TodoNote"
+    "shortcutName": "WorkMemo"
   },
   "win": {
     "target": "nsis",
     "icon": "assets/icon.ico",
-    "artifactName": "todonote-setup-${version}.${ext}"
+    "artifactName": "workmemo-setup-${version}.${ext}"
   },
   "linux": {
     "target": ["snap"]

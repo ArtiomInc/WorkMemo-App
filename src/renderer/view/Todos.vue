@@ -1,34 +1,28 @@
 <script lang="ts">
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
+import DialogConfirm from "../components/DialogConfirm.vue";
+import DialogColor from "../components/DialogColor.vue";
+import DialogError from "../components/DialogError.vue";
 export default {
-  computed: {
-    ...mapGetters(["getDialogConfirmReturn", "getDialogColorReturn"]),
+  components: {
+    DialogConfirm,
+    DialogColor,
+    DialogError,
   },
   data() {
     return {
       listTodo: null,
-      apiResponse: null,
-      checkingEndOfDialog: 0,
-      deleteIdTodo: -1,
+      triggerDialogConfirm: false,
+      selectedID: -1,
+      triggerDialogColor: false,
+      triggerDialogError: false,
+      contentDialogError: "An error occurred",
+      isRed: false,
+      isBlue: false,
+      isGreen: false,
     };
   },
   methods: {
-    ...mapMutations([
-      "setDialogConfirmTrigger",
-      "setDialogConfirmTitle",
-      "setDialogConfirmContent",
-      "setDialogConfirmReturn",
-      "setDialogColorTrigger",
-      "setDialogColorReturn",
-    ]),
-    openDialog() {
-      this.setDialogConfirmTrigger(true);
-      this.setDialogConfirmTitle("Delete todo ?");
-      this.setDialogConfirmContent(
-        "Are you sure you want to delete this todo ?<br/>Impossible to recover after delete"
-      );
-    },
+    openDialog() {},
     getTodo() {
       window.electronAPI
         .setCommand(["getTodo"])
@@ -36,10 +30,8 @@ export default {
           this.listTodo = result;
         })
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from ElectronAPI");
-          this.setDialogConfirmContent(error);
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
         });
     },
     addTodo() {
@@ -49,78 +41,59 @@ export default {
           this.getTodo();
         })
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from ElectronAPI");
-          this.setDialogConfirmContent(error);
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
         });
     },
-    updateTodoContent(id: number) {
+    updateTodo(id: number) {
       window.electronAPI
-        //@ts-ignore
-        .setCommand(["updateTodoContent", id, this.listTodo[id].content])
+        .setCommand([
+          "updateTodo",
+          id,
+          //@ts-ignore
+          JSON.parse(JSON.stringify(this.listTodo[id])),
+        ])
         .then((result: any) => {})
         .catch((error: any) => {
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from ElectronAPI");
-          this.setDialogConfirmContent(error);
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
         });
     },
     colorRequest(id: number) {
-      this.deleteIdTodo = id;
-      this.setDialogColorTrigger(true);
-      this.checkingEndOfDialog = setInterval(() => {
-        if (this.getDialogConfirmReturn === "cancelled") {
-          console.log(this.getDialogConfirmReturn);
-          this.setDialogConfirmReturn("");
-          clearInterval(this.checkingEndOfDialog);
-        } else {
-          console.log(this.getDialogConfirmReturn);
-          clearInterval(this.checkingEndOfDialog);
-          this.setDialogColorReturn("");
-        }
-        const read = this.getDialogConfirmReturn;
-      }, 100);
+      this.selectedID = id;
+      this.triggerDialogColor = true;
+    },
+    updateColor(color: string) {
+      if (color != "") {
+        //@ts-ignore
+        this.listTodo[this.selectedID].color = color;
+        this.updateTodo(this.selectedID);
+      }
+      this.selectedID = -1;
+      this.triggerDialogColor = false;
     },
     deleteRequest(id: number) {
-      this.deleteIdTodo = id;
-      this.setDialogConfirmTrigger(true);
-      this.setDialogConfirmTitle("Delete todo ?");
-      this.setDialogConfirmContent(
-        "Are you sure you want to delete this todo ? </br>Once deleted, it will be impossible to recover."
-      );
-      this.checkingEndOfDialog = setInterval(() => {
-        if (this.getDialogConfirmReturn === "cancelled") {
-          console.log(this.getDialogConfirmReturn);
-          this.setDialogConfirmReturn("");
-          clearInterval(this.checkingEndOfDialog);
-        } else if (this.getDialogConfirmReturn === "deleted") {
-          console.log(this.getDialogConfirmReturn);
-          this.setDialogConfirmReturn("");
-          this.deleteTodo(this.deleteIdTodo);
-          clearInterval(this.checkingEndOfDialog);
-        }
-        const read = this.getDialogConfirmReturn;
-      }, 100);
+      this.selectedID = id;
+      this.triggerDialogConfirm = true;
     },
-    deleteTodo(id: number) {
-      window.electronAPI
-        .setCommand(["deleteTodo", id])
-        .then((result: any) => {
-          this.deleteIdTodo = -1;
-          this.getTodo();
-        })
-        .catch((error: any) => {
-          this.deleteIdTodo = -1;
-          this.apiResponse = error;
-          this.setDialogConfirmTrigger(true);
-          this.setDialogConfirmTitle("Error from ElectronAPI");
-          this.setDialogConfirmContent(error);
-        });
+    deleteTodo(payload: boolean) {
+      this.triggerDialogConfirm = false;
+      if (payload) {
+        window.electronAPI
+          .setCommand(["deleteTodo", this.selectedID])
+          .then((result: any) => {
+            this.getTodo();
+          })
+          .catch((error: any) => {
+            this.contentDialogError = error;
+            this.triggerDialogError = true;
+          });
+      }
+      this.selectedID = -1;
     },
-    chooseColor() {
-      this.setDialogColorTrigger(true);
+    releaseDialogError() {
+      this.triggerDialogError = false;
+      this.contentDialogError = "An error occurred";
     },
   },
   mounted() {
@@ -134,21 +107,22 @@ export default {
     <div class="todo" v-if="listTodo != null" v-for="(item, index) in listTodo">
       <input
         class="input-very-custom"
-        :style="{
-          //@ts-ignore
-          color: item.color,
-        }"
         v-model="
           //@ts-ignore
           item.content
         "
-        @input="updateTodoContent(index)"
+        @input="updateTodo(index)"
         @focus="
           //@ts-ignore
           $event.target.select()
         "
+        :style="{
+          'background-color':
+            //@ts-ignore
+            item.color,
+        }"
       />
-      <button class="button button-custom" @click="chooseColor">
+      <button class="button button-custom" @click="colorRequest(index)">
         <img src="/images/paint-roller-solid.svg" />
       </button>
       <button class="button button-custom" @click="deleteRequest(index)">
@@ -157,6 +131,19 @@ export default {
     </div>
     <button class="button is-fullwidth" @click="addTodo">Add todo</button>
   </div>
+  <DialogConfirm
+    v-if="triggerDialogConfirm"
+    title="Delete todo ?"
+    content="Are you sure you want to delete this todo ?<br/>Impossible to recover after delete"
+    @user-action="deleteTodo"
+  ></DialogConfirm>
+  <DialogColor v-if="triggerDialogColor" @user-action="updateColor">
+  </DialogColor>
+  <DialogError
+    v-if="triggerDialogError"
+    :content="contentDialogError"
+    @user-action="releaseDialogError()"
+  ></DialogError>
 </template>
 
 <style scoped>

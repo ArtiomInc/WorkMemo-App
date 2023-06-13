@@ -36,7 +36,7 @@ export class Orchestrator {
       Orchestrator.data.todo.push({
         id: Orchestrator.data.todo.length,
         content: "New todo !",
-        color: "#000",
+        color: "rgba(0,0,0,0)",
       });
     } catch (error) {
       console.log(error);
@@ -44,18 +44,11 @@ export class Orchestrator {
     }
   }
 
-  async updateTodoContent(id: number, content: string): Promise<void> {
+  async updateTodo(id: number, content: any): Promise<void> {
     try {
-      Orchestrator.data.todo[id].content = content;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  async updateTodoColor(id: number, color: string): Promise<void> {
-    try {
-      Orchestrator.data.todo[id].color = color;
+      Orchestrator.data.todo[id].id = content.id;
+      Orchestrator.data.todo[id].content = content.content;
+      Orchestrator.data.todo[id].color = content.color;
     } catch (error) {
       console.log(error);
       throw error;
