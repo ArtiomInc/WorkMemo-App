@@ -2,6 +2,9 @@ import { app, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { Orchestrator } from "./services/orchestrator";
 
+const orchestrator = new Orchestrator();
+const SaveSometime = setInterval(orchestrator.saveData, 60000);
+
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1000,
@@ -15,7 +18,7 @@ function createWindow() {
     icon: __dirname + "/static/icon.ico",
   });
 
-  mainWindow.setMenu(null);
+  //mainWindow.setMenu(null);
 
   if (process.env.NODE_ENV === "development") {
     const rendererPort = process.argv[2];
@@ -44,6 +47,8 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+
+  orchestrator.getData();
 });
 
 app.on("window-all-closed", function () {
@@ -87,9 +92,3 @@ ipcMain.handle("setCommand", async (event, args) => {
     return "Error";
   }
 });
-
-const orchestrator = new Orchestrator();
-
-orchestrator.getData();
-
-const SaveSometime = setInterval(orchestrator.saveData, 60000);

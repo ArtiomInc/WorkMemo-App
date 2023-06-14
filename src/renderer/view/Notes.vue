@@ -88,15 +88,12 @@ export default {
           this.contentDialogError = error;
         });
     },
-    deleteRequest(id: number) {
-      this.selectedID = id;
+    deleteRequest() {
       this.triggerDialogConfirm = true;
     },
     deleteNote(payload: boolean) {
-      console.log(this.selectedID);
       this.triggerDialogConfirm = false;
       if (payload && this.selectedID != -1) {
-        this.selectedID = -1;
         window.electronAPI
           .setCommand(["deleteNote", this.selectedID])
           .then((result: any) => {
@@ -177,10 +174,7 @@ export default {
             class="custom-quill-editor"
           ></QuillEditor>
         </div>
-        <button
-          class="button is-fullwidth text-red"
-          @click="deleteRequest(selectedID)"
-        >
+        <button class="button is-fullwidth text-red" @click="deleteRequest">
           Delete
         </button>
       </div>
@@ -212,16 +206,40 @@ export default {
   min-width: 200px;
   height: 100%;
 }
-
-.card {
-  margin-top: 0;
-}
 .card-focus-note {
   margin-left: 0;
 }
 .focus-note {
   width: 100%;
 }
+.content-is-true {
+  display: flex;
+  align-items: center;
+}
+
+.content-is-false {
+  display: flex;
+  align-items: center;
+}
+@media screen and (max-width: 700px) {
+  .content {
+    display: block;
+  }
+  .sidebar-splitted {
+    width: inherit;
+    max-width: inherit;
+    min-width: inherit;
+    height: 100%;
+  }
+  .card-focus-note {
+    margin-left: 10px;
+  }
+}
+
+.card {
+  margin-top: 0;
+}
+
 .list-of-note {
   list-style: none;
 }
@@ -250,13 +268,6 @@ export default {
   margin-left: 5px;
 }
 
-.rightcontent {
-  height: 100%;
-  width: 100%;
-  min-width: 200px;
-  position: relative;
-  overflow-x: auto;
-}
 .input {
   margin: 1px;
   width: calc(100% - 15px);
@@ -267,15 +278,6 @@ export default {
   margin-bottom: 6px;
 }
 
-.content-is-true {
-  display: flex;
-  align-items: center;
-}
-
-.content-is-false {
-  display: flex;
-  align-items: center;
-}
 .content-is-false > span {
   font-weight: 800;
   font-size: 1.3em;
