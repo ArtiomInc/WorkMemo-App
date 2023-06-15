@@ -153,6 +153,7 @@ export default {
   align-items: center;
 }
 .input-very-custom {
+  color: var(--color-text);
   border: none;
   border-radius: 5px;
   outline: 1px solid rgba(0, 0, 0, 0.2);
@@ -161,12 +162,7 @@ export default {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #fff;
   width: 100%;
-}
-
-.input-very-custom::placeholder {
-  color: #ccc;
 }
 
 .input-very-custom:hover {
@@ -193,6 +189,7 @@ export default {
 }
 .button-custom > img {
   height: 50%;
+  filter: var(--color-img);
 }
 .span {
   width: 100%;

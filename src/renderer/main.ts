@@ -21,10 +21,20 @@ const router = createRouter({
 // Vuex instance
 const store = createStore({
   state() {
-    return {};
+    return {
+      darkMode: false,
+    };
   },
-  getters: {},
-  mutations: {},
+  getters: {
+    DarkMode(state) {
+      return state.darkMode;
+    },
+  },
+  mutations: {
+    DarkMode(state, payload: boolean) {
+      state.darkMode = payload;
+    },
+  },
 });
 
 app.use(router).use(store).mount("#app");

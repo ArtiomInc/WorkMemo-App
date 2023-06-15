@@ -48,7 +48,6 @@ export default {
   margin: 20px;
 }
 .card {
-  background: #fff;
   animation-name: ScaleTrans;
   animation-duration: 200ms;
 }

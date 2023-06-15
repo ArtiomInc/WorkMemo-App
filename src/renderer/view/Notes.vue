@@ -162,8 +162,15 @@ export default {
         </div>
         <div class="content-is-false" v-else>
           <span>{{ noteTitle }}</span>
-          <button class="button button-custom" @click="changeStateEdit(true)">
+          <button
+            class="button button-custom img-and-text"
+            @click="changeStateEdit(true)"
+          >
             <img src="/public/images/pen-solid.svg" />
+            Edit title
+          </button>
+          <button id="delete" class="button text-red" @click="deleteRequest">
+            Delete note
           </button>
         </div>
         <div class="editor">
@@ -174,9 +181,6 @@ export default {
             class="custom-quill-editor"
           ></QuillEditor>
         </div>
-        <button class="button is-fullwidth text-red" @click="deleteRequest">
-          Delete
-        </button>
       </div>
     </div>
   </div>
@@ -220,20 +224,6 @@ export default {
 .content-is-false {
   display: flex;
   align-items: center;
-}
-@media screen and (max-width: 700px) {
-  .content {
-    display: block;
-  }
-  .sidebar-splitted {
-    width: inherit;
-    max-width: inherit;
-    min-width: inherit;
-    height: 100%;
-  }
-  .card-focus-note {
-    margin-left: 10px;
-  }
 }
 
 .card {
@@ -303,15 +293,48 @@ export default {
 
 .button-custom {
   height: 35px;
-  width: 35px;
-  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 0 0 10px;
 }
 
-.button-custom > img {
+.img-and-text > img {
+  margin-right: 10px;
+}
+
+.button > img {
   height: 50%;
+  filter: var(--color-img);
+}
+
+#delete {
+  margin-left: 10px;
+}
+@media screen and (max-width: 700px) {
+  .content {
+    display: block;
+  }
+  .sidebar-splitted {
+    width: inherit;
+    max-width: inherit;
+    min-width: inherit;
+    height: 100%;
+  }
+  .card-focus-note {
+    margin-left: 10px;
+  }
+  .content-is-false {
+    display: block;
+    padding: 0;
+  }
+  .button-custom,
+  #delete {
+    margin: 0 0 0 0;
+    width: 100%;
+  }
+  #delete {
+    margin-top: 5px;
+  }
 }
 </style>

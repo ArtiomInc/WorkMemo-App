@@ -11,27 +11,22 @@ General CSS
   font-family: GitlabSans;
   line-height: 1.5;
   font-weight: 400;
+  color: var(--color-text);
 
-  --color-card: #fff;
+  --background: 0;
+
+  --color-text: 0;
+  --color-img: 0;
+
+  --color-card: 0;
   --shadow-card: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
 
-  --color-button: #fafafa;
-  --color-button-over: #f6f6f6;
-  --color-button-disabled: #dcdcdc;
-  --color-button-text: rgb(0, 0, 0, 0.8);
+  --color-button: 0;
+  --color-button-hover: 0;
+  --color-button-disabled: 0;
+  --color-button-active: 0;
+  --color-button-text: var(--color-text);
   --shadow-button: 0px 0px 2px 0px rgba(0, 0, 0, 0.4);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-card: #fff;
-    --shadow-card: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
-
-    --color-button: #fafafa;
-    --color-button-over: #f6f6f6;
-    --color-button-disabled: #dcdcdc;
-    --color-button-text: rgb(0, 0, 0, 0.8);
-    --shadow-button: 0px 0px 2px 0px rgba(0, 0, 0, 0.4);
-  }
 }
 
 *,
@@ -47,6 +42,11 @@ General CSS
 
 /* == Content CSS == */
 
+html {
+  background-color: var(--background);
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+
 /* == Card CSS == */
 
 .card {
@@ -54,19 +54,21 @@ General CSS
   margin: 10px;
   box-shadow: var(--shadow-card);
   border-radius: 5px;
+  background-color: var(--color-card);
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
 }
 
 /* == Button CSS == */
 
 .button {
+  color: var(--color-button-text);
   appearance: none;
-  background-color: #fafbfc;
+  background-color: var(--color-button);
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
     rgba(255, 255, 255, 0.25) 0 1px 0 inset;
   box-sizing: border-box;
-  color: #24292e;
   font-family: GitlabSans;
   cursor: pointer;
   display: inline-block;
@@ -89,20 +91,19 @@ General CSS
 }
 
 .button:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-button-hover);
   text-decoration: none;
   transition-duration: 0.1s;
 }
 
 .button:disabled {
-  background-color: #fafbfc;
+  background-color: var(--color-button-disabled);
   border-color: rgba(27, 31, 35, 0.15);
-  color: #959da5;
   cursor: default;
 }
 
 .button:active {
-  background-color: #edeff2;
+  background-color: var(--color-button-active);
   box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
   transition: none 0s;
 }
@@ -118,7 +119,7 @@ General CSS
 /* == Input & Label CSS == */
 
 .input {
-  color: var(--color-button-text);
+  color: var(--color-input-text);
   border: none;
   border-radius: 5px;
   outline: 1px solid rgba(0, 0, 0, 0.2);
@@ -127,7 +128,7 @@ General CSS
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #fff;
+  background-color: var(--color-input);
 }
 
 .input::placeholder {

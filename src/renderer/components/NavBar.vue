@@ -1,13 +1,29 @@
 <script lang="ts">
-export default {};
+import { mapGetters } from "vuex";
+export default {
+  computed: {
+    ...mapGetters(["DarkMode"]),
+  },
+  emits: {
+    userAction: null,
+  },
+};
 </script>
 
 <template>
   <div class="card">
     <div class="logo">
       <img
+        v-if="!DarkMode"
         src="/images/a_dot_white_logo_logo_black_rounded.png"
         alt="Asyril logo"
+        @click="$emit('userAction')"
+      />
+      <img
+        v-if="DarkMode"
+        src="/images/a_dot_black_logo_white_rounded.png"
+        alt="Asyril logo"
+        @click="$emit('userAction')"
       />
     </div>
 
@@ -35,7 +51,6 @@ export default {};
 .card {
   height: 58px;
   width: calc(100% - 50px);
-  background-color: #f5f5f5;
   display: flex;
   align-items: center;
 }
@@ -45,6 +60,7 @@ export default {};
 a > img {
   height: 20px;
   margin-right: 12px;
+  filter: var(--color-img);
 }
 .theme > img {
   height: 30px;
@@ -53,6 +69,7 @@ a > img {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 .tab {
   display: flex;
@@ -62,16 +79,16 @@ a > img {
   padding: 25px;
   font-size: 15px;
   font-weight: 600;
-  color: #000;
+  color: var(--color-text);
   text-decoration: none;
   border-radius: 5px;
 }
 .tab:hover:not(.is-active) {
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--background);
 }
 .is-active {
-  background: #dbdbdb;
+  background: var(--background);
 }
 .emptyspace {
   width: 100%;
