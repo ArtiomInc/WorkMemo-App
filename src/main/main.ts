@@ -67,6 +67,8 @@ ipcMain.handle("setCommand", async (event, args) => {
       await orchestrator.addTodo();
     } else if (args[0] === "updateTodo") {
       await orchestrator.updateTodo(args[1], args[2]);
+    } else if (args[0] === "updateAllTodo") {
+      await orchestrator.updateAllTodo(args[1]);
     } else if (args[0] === "deleteTodo") {
       await orchestrator.deleteTodo(args[1]);
     } else if (args[0] === "getNoteList") {

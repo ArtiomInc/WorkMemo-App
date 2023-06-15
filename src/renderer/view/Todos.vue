@@ -1,9 +1,11 @@
 <script lang="ts">
+import draggable from "vuedraggable";
 import DialogConfirm from "../components/DialogConfirm.vue";
 import DialogColor from "../components/DialogColor.vue";
 import DialogError from "../components/DialogError.vue";
 export default {
   components: {
+    draggable,
     DialogConfirm,
     DialogColor,
     DialogError,
@@ -16,9 +18,7 @@ export default {
       triggerDialogColor: false,
       triggerDialogError: false,
       contentDialogError: "An error occurred",
-      isRed: false,
-      isBlue: false,
-      isGreen: false,
+      drag: false,
     };
   },
   methods: {
@@ -52,6 +52,19 @@ export default {
           id,
           //@ts-ignore
           JSON.parse(JSON.stringify(this.listTodo[id])),
+        ])
+        .then((result: any) => {})
+        .catch((error: any) => {
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
+        });
+    },
+    updateAllTodo() {
+      window.electronAPI
+        .setCommand([
+          "updateAllTodo",
+          //@ts-ignore
+          JSON.parse(JSON.stringify(this.listTodo)),
         ])
         .then((result: any) => {})
         .catch((error: any) => {
@@ -104,33 +117,38 @@ export default {
 
 <template>
   <div class="card">
-    <div class="todo" v-if="listTodo != null" v-for="(item, index) in listTodo">
-      <input
-        class="input-very-custom"
-        v-model="
-          //@ts-ignore
-          item.content
-        "
-        @input="updateTodo(index)"
-        @focus="
-          //@ts-ignore
-          $event.target.select()
-        "
-        :style="{
-          'background-color':
-            //@ts-ignore
-            item.color,
-        }"
-      />
-      <button class="button button-custom" @click="colorRequest(index)">
-        <img src="/images/paint-roller-solid.svg" />
-      </button>
-      <button class="button button-custom" @click="deleteRequest(index)">
-        <img src="/images/trash-can-solid.svg" />
-      </button>
-    </div>
+    <draggable
+      v-if="listTodo != null"
+      :list="listTodo"
+      @end="updateAllTodo"
+      item-key="id"
+    >
+      <template #item="{ index, element }">
+        <div class="todo">
+          <input
+            class="input-very-custom"
+            v-model="element.content"
+            @input="updateTodo(index)"
+            @focus="
+              //@ts-ignore
+              $event.target.select()
+            "
+            :style="{
+              'background-color': element.color,
+            }"
+          />
+          <button class="button button-custom" @click="colorRequest(index)">
+            <img src="/images/paint-roller-solid.svg" />
+          </button>
+          <button class="button button-custom" @click="deleteRequest(index)">
+            <img src="/images/trash-can-solid.svg" />
+          </button>
+        </div>
+      </template>
+    </draggable>
     <button class="button is-fullwidth" @click="addTodo">Add todo</button>
   </div>
+
   <DialogConfirm
     v-if="triggerDialogConfirm"
     title="Delete todo ?"

@@ -33,6 +33,7 @@ export class Orchestrator {
 
   async addTodo(): Promise<void> {
     try {
+      console.log(Orchestrator.data);
       Orchestrator.data.todo.push({
         id: Orchestrator.data.todo.length,
         content: "New todo !",
@@ -49,6 +50,21 @@ export class Orchestrator {
       Orchestrator.data.todo[id].id = content.id;
       Orchestrator.data.todo[id].content = content.content;
       Orchestrator.data.todo[id].color = content.color;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async updateAllTodo(content: any): Promise<void> {
+    try {
+      Orchestrator.data.todo.forEach((todo, index) => {
+        if (content[index]) {
+          todo.id = content[index].id;
+          todo.content = content[index].content;
+          todo.color = content[index].color;
+        }
+      });
     } catch (error) {
       console.log(error);
       throw error;
