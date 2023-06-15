@@ -2,6 +2,8 @@
 
 Note and Todo applicaiton build with **Vue3** + **Electron** TypeScript based application, including **ViteJS** and **Electron Builder**.
 
+Download workmemo-setup.exe to test !
+
 ## Preview
 
 ![todo view](pictures/todo.png)

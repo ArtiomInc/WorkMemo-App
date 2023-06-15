@@ -43,7 +43,6 @@ export default {
       <img src="/images/note-sticky-solid.svg" />
       Notes</router-link
     >
-    <div class="emptyspace"></div>
   </div>
 </template>
 

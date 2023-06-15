@@ -169,12 +169,18 @@ export default {
             <img src="/public/images/pen-solid.svg" />
             Edit title
           </button>
-          <button id="delete" class="button text-red" @click="deleteRequest">
+          <button
+            id="delete"
+            class="button button-custom img-and-text text-red"
+            @click="deleteRequest"
+          >
+            <img src="/public/images/trash-can-solid.svg" />
             Delete note
           </button>
         </div>
         <div class="editor">
           <QuillEditor
+            toolbar="minimal"
             contentType="html"
             v-model:content="noteContent"
             @update:content="updateNoteContent"
@@ -304,7 +310,7 @@ export default {
 }
 
 .button > img {
-  height: 50%;
+  height: 70%;
   filter: var(--color-img);
 }
 
