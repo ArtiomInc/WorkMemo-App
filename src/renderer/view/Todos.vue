@@ -116,7 +116,7 @@ export default {
 </script>
 
 <template>
-  <div class="card">
+  <div class="bg-white m-2 p-2 rounded-lg">
     <draggable
       v-if="listTodo != null"
       :list="listTodo"
@@ -124,9 +124,9 @@ export default {
       item-key="id"
     >
       <template #item="{ index, element }">
-        <div class="todo">
+        <div class="flex items-center mb-2">
           <input
-            class="input-very-custom"
+            class="w-full p-1 mr-1 focus:outline-0 rounded"
             v-model="element.content"
             @input="updateTodo(index)"
             @focus="
@@ -137,16 +137,27 @@ export default {
               'background-color': element.color,
             }"
           />
-          <button class="button button-custom" @click="colorRequest(index)">
-            <img src="/images/paint-roller-solid.svg" />
+          <button
+            class="h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 mr-1 rounded hover:outline hover:outline-2"
+            @click="colorRequest(index)"
+          >
+            <img class="h-5" src="/images/paint-roller-solid.svg" />
           </button>
-          <button class="button button-custom" @click="deleteRequest(index)">
-            <img src="/images/trash-can-solid.svg" />
+          <button
+            class="h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 rounded hover:outline hover:outline-2"
+            @click="deleteRequest(index)"
+          >
+            <img class="h-5" src="/images/trash-can-solid.svg" />
           </button>
         </div>
       </template>
     </draggable>
-    <button class="button is-fullwidth" @click="addTodo">Add todo</button>
+    <button
+      class="bg-stone-200 px-3 py-1 rounded hover:outline hover:outline-2"
+      @click="addTodo"
+    >
+      Add todo
+    </button>
   </div>
 
   <DialogConfirm
@@ -164,53 +175,4 @@ export default {
   ></DialogError>
 </template>
 
-<style scoped>
-.todo {
-  margin: 0 0 7px 0;
-  display: flex;
-  align-items: center;
-}
-.input-very-custom {
-  color: var(--color-text);
-  border: none;
-  border-radius: 5px;
-  outline: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 0.4em 0.4em;
-  margin: 0;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  width: 100%;
-}
-
-.input-very-custom:hover {
-  outline: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-.input-very-custom:focus {
-  outline: 2px solid rgba(0, 0, 0, 0.5);
-}
-
-.input-very-custom.is-fullwidth {
-  width: 100%;
-}
-
-.button-custom {
-  height: 35px;
-  width: 35px;
-  padding: 0;
-  margin-top: 0px;
-  margin-left: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.button-custom > img {
-  height: 50%;
-  filter: var(--color-img);
-}
-.span {
-  width: 100%;
-  padding-left: 0.4em;
-}
-</style>
+<style scoped></style>
