@@ -33,7 +33,6 @@ export class Orchestrator {
 
   async addTodo(): Promise<void> {
     try {
-      console.log(Orchestrator.data);
       Orchestrator.data.todo.push({
         id: Orchestrator.data.todo.length,
         content: "New todo !",
@@ -94,7 +93,7 @@ export class Orchestrator {
       Orchestrator.data.note.push({
         id: Orchestrator.data.note.length,
         title: "New note !",
-        content: "<p>There is the content !</p>",
+        content: "<p></p>",
       });
     } catch (error) {
       console.log(error);

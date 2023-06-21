@@ -198,6 +198,7 @@ export default {
           <QuillEditor
             toolbar="minimal"
             contentType="html"
+            placeholder="Type your note here"
             v-model:content="noteContent"
             @update:content="updateNoteContent"
             class="custom-quill-editor"
