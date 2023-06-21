@@ -21,19 +21,7 @@ const router = createRouter({
 // Vuex instance
 const store = createStore({
   state() {
-    return {
-      darkMode: false,
-    };
-  },
-  getters: {
-    DarkMode(state) {
-      return state.darkMode;
-    },
-  },
-  mutations: {
-    DarkMode(state, payload: boolean) {
-      state.darkMode = payload;
-    },
+    return {};
   },
 });
 

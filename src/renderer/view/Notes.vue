@@ -118,67 +118,83 @@ export default {
 </script>
 
 <template>
-  <div class="bg-white m-2 p-2 rounded-lg" :class="{ content: selectedID != -1 }">
+  <div
+    class="flex flex-col"
+    :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }"
+  >
     <div
-      class="card"
+      class="bg-white m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
       :class="{
-        'sidebar-splitted': selectedID != -1,
+        'md:w-1/4': selectedID == -1,
+        //@ts-ignore
+        'md:w-1/4': selectedID != -1,
       }"
     >
       <ul
-        class="list-of-note"
+        class="select-none mb-2 h-8 p-1 rounded hover:cursor-pointer"
+        :class="{
+          'bg-stone-200': selectedID != index || selectedID == -1,
+          'hover:bg-stone-300': selectedID != index || selectedID == -1,
+          'bg-neutral-400': selectedID == index,
+        }"
         v-if="noteList != null"
         v-for="(item, index) in noteList"
       >
-        <li
-          class="preview-note"
-          :class="{ 'is-active': selectedID == index }"
-          @click="getNote(index)"
-        >
-          <div class="preview-note-title">
+        <li class="" @click="getNote(index)">
+          <div class="text-ellipsis overflow-hidden">
             {{ item }}
           </div>
         </li>
       </ul>
-      <div class="user-action">
-        <button class="button is-fullwidth" @click="addNoteList">
+      <div class="">
+        <button
+          class="select-none bg-stone-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          @click="addNoteList"
+        >
           Add note
         </button>
       </div>
     </div>
-    <div v-if="selectedID != -1" class="focus-note">
-      <div class="card card-focus-note">
-        <div class="content-is-true" v-if="isEditingTitle">
+    <div
+      v-if="selectedID != -1"
+      :class="{ 'note-context-responsive': selectedID != -1 }"
+      class="bg-white mx-2 mt-0 md:m-0 md:mr-2 p-2 h-full rounded-lg drop-shadow"
+    >
+      <div class="">
+        <div class="flex items-center" v-if="isEditingTitle">
           <input
             ref="titleinput"
-            class="input is-fullwidth"
+            class="h-8 m-1 hover:outline focus:outline outline-1 rounded"
             type="text"
             v-model="noteTitle"
             @keydown.enter="changeStateEdit(false)"
           />
-          <button class="button button-custom" @click="changeStateEdit(false)">
-            <img src="/public/images/check-solid.svg" />
+          <button
+            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2"
+            @click="changeStateEdit(false)"
+          >
+            <img class="h-5" src="/public/images/check-solid.svg" />
           </button>
         </div>
-        <div class="content-is-false" v-else>
-          <span>{{ noteTitle }}</span>
+        <div class="md:flex items-center" v-else>
+          <span class="m-1 text-ellipsis overflow-hidden">{{ noteTitle }}</span>
           <button
-            class="button button-custom img-and-text"
+            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
             @click="changeStateEdit(true)"
           >
-            <img src="/public/images/pen-solid.svg" />
+            <img class="h-5 mr-2" src="/public/images/pen-solid.svg" />
             Edit title
           </button>
           <button
             id="delete"
-            class="button button-custom img-and-text text-red"
+            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
             @click="deleteRequest"
           >
-            <img src="/public/images/trash-can-solid.svg" />
+            <img class="h-5 mr-2" src="/public/images/trash-can-solid.svg" />
             Delete note
           </button>
         </div>
-        <div class="editor">
+        <div class="mt-1">
           <QuillEditor
             toolbar="minimal"
             contentType="html"
@@ -204,5 +220,12 @@ export default {
 </template>
 
 <style scoped>
-
+.note-context-responsive {
+  width: calc(100% - 1rem);
+}
+@media (min-width: 768px) {
+  .note-context-responsive {
+    width: calc(100% - 25% - 1.5rem);
+  }
+}
 </style>

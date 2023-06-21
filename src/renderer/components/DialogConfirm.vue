@@ -19,60 +19,28 @@ export default {
 </script>
 
 <template>
-  <div class="dialog-bg">
-    <div class="dialog-content">
-      <div class="card">
-        <h1>{{ title }}</h1>
+  <div class="block fixed w-screen h-screen z-50 top-0 left-0 bg-black/50">
+    <div class="flex items-start mt-20 justify-center w-screen h-screen">
+      <div class="bg-white p-2 rounded-lg drop-shadow">
+        <h1 class="text-lg font-bold">{{ title }}</h1>
         <span v-html="content"></span>
-        <div class="action-user">
-          <button class="button is-fullwidth text-red" @click="Delete">
+        <div class="flex mt-1">
+          <button
+            class="text-red-500 select-none h-8 px-3 py-1 bg-stone-200 rounded hover:outline hover:outline-2"
+            @click="Delete"
+          >
             Delete
           </button>
-          <button class="button is-fullwidth" @click="Cancel">Cancel</button>
+          <button
+            class="select-none h-8 mx-2 px-3 py-1 bg-stone-200 rounded hover:outline hover:outline-2"
+            @click="Cancel"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.dialog-bg {
-  display: block;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: none;
-  background-color: rgba(0, 0, 0, 0.5);
-
-  /*backdrop-filter: blur(5px);*/
-}
-.dialog-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 20px;
-}
-.card {
-  animation-name: ScaleTrans;
-  animation-duration: 200ms;
-}
-.card > h1 {
-  text-align: center;
-}
-.button {
-  margin-top: 10px;
-}
-@keyframes ScaleTrans {
-  from {
-    transform: scale(0, 0);
-  }
-
-  to {
-    transform: scale(1, 1);
-  }
-}
-</style>
+<style scoped></style>

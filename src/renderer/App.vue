@@ -16,7 +16,7 @@ export default {
 </script>
 
 <template>
-  <NavBar @user-action=""></NavBar>
+  <NavBar></NavBar>
   <router-view></router-view>
 </template>
 

@@ -116,7 +116,7 @@ export default {
 </script>
 
 <template>
-  <div class="bg-white m-2 p-2 rounded-lg">
+  <div class="bg-white m-2 p-2 rounded-lg drop-shadow">
     <draggable
       v-if="listTodo != null"
       :list="listTodo"
@@ -138,13 +138,13 @@ export default {
             }"
           />
           <button
-            class="h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 mr-1 rounded hover:outline hover:outline-2"
+            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 mr-1 rounded hover:outline hover:outline-2"
             @click="colorRequest(index)"
           >
             <img class="h-5" src="/images/paint-roller-solid.svg" />
           </button>
           <button
-            class="h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 rounded hover:outline hover:outline-2"
+            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 p-1 rounded hover:outline hover:outline-2"
             @click="deleteRequest(index)"
           >
             <img class="h-5" src="/images/trash-can-solid.svg" />
@@ -153,7 +153,7 @@ export default {
       </template>
     </draggable>
     <button
-      class="bg-stone-200 px-3 py-1 rounded hover:outline hover:outline-2"
+      class="select-none bg-stone-200 px-3 py-1 rounded hover:outline hover:outline-2"
       @click="addTodo"
     >
       Add todo
