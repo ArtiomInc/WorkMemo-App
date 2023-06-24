@@ -314,6 +314,7 @@
 .ql-editor .ql-bg-black {
   background-color: #000;
 }
+
 .ql-editor .ql-bg-red {
   background-color: #e60000;
 }
@@ -353,10 +354,6 @@
 .ql-editor .ql-color-purple {
   color: #93f;
 }
-.ql-editor .ql-font-serif {
-}
-.ql-editor .ql-font-monospace {
-}
 .ql-editor .ql-size-small {
   font-size: 0.75em;
 }
@@ -380,7 +377,6 @@
   text-align: right;
 }
 .ql-editor.ql-blank::before {
-  color: rgba(0, 0, 0, 0.6);
   content: attr(data-placeholder);
   font-style: italic;
   left: 15px;
@@ -608,13 +604,12 @@
 }
 .ql-snow .ql-picker {
   color: #4b5563;
-  display: inline-block;
+  display: block;
   float: left;
   font-size: 14px;
   font-weight: 500;
   height: 24px;
   position: relative;
-  vertical-align: middle;
   margin-right: 1px;
   margin-left: 1px;
 }
@@ -782,10 +777,6 @@
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
   content: "Monospace";
-}
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
-}
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
 }
 .ql-snow .ql-picker.ql-size {
   width: 98px;

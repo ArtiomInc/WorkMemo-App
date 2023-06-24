@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="block fixed w-screen h-screen z-50 top-0 left-0 bg-black/50">
     <div class="flex items-start mt-20 justify-center w-screen h-screen">
-      <div class="bg-white p-2 rounded-lg drop-shadow">
+      <div class="bg-white dark:bg-neutral-800 p-2 rounded-lg drop-shadow">
         <h1 class="text-lg font-bold text-center">Choose color</h1>
         <div class="flex mb-2">
           <div
@@ -48,7 +48,7 @@ export default {
           ></div>
         </div>
         <button
-          class="select-none h-8 w-full px-3 py-1 bg-stone-200 rounded hover:outline hover:outline-2"
+          class="select-none h-8 w-full px-3 py-1 bg-stone-200 dark:bg-neutral-900 rounded hover:outline hover:outline-2"
           @click="Cancel"
         >
           Cancel

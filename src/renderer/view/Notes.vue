@@ -123,7 +123,7 @@ export default {
     :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }"
   >
     <div
-      class="bg-white m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
+      class="bg-white dark:bg-neutral-800 m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
       :class="{
         'md:w-1/4': selectedID == -1,
         //@ts-ignore
@@ -133,22 +133,22 @@ export default {
       <ul
         class="select-none mb-2 h-8 p-1 rounded hover:cursor-pointer"
         :class="{
-          'bg-stone-200': selectedID != index || selectedID == -1,
-          'hover:bg-stone-300': selectedID != index || selectedID == -1,
-          'bg-neutral-400': selectedID == index,
+          'bg-stone-200 dark:bg-neutral-900': selectedID != index || selectedID == -1,
+          'hover:bg-stone-300 hover:dark:bg-neutral-950': selectedID != index || selectedID == -1,
+          'bg-neutral-400 dark:bg-neutral-950': selectedID == index,
         }"
         v-if="noteList != null"
         v-for="(item, index) in noteList"
       >
         <li class="" @click="getNote(index)">
-          <div class="text-ellipsis overflow-hidden">
+          <div class="text-ellipsis overflow-hidden dark:text-neutral-200">
             {{ item }}
           </div>
         </li>
       </ul>
       <div class="">
         <button
-          class="select-none bg-stone-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          class="select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
           @click="addNoteList"
         >
           Add note
@@ -158,39 +158,51 @@ export default {
     <div
       v-if="selectedID != -1"
       :class="{ 'note-context-responsive': selectedID != -1 }"
-      class="bg-white mx-2 mt-0 md:m-0 md:mr-2 p-2 h-full rounded-lg drop-shadow"
+      class="bg-white dark:bg-neutral-800 mx-2 mt-0 md:m-0 md:mr-2 p-2 h-full rounded-lg drop-shadow"
     >
       <div class="">
         <div class="flex items-center" v-if="isEditingTitle">
           <input
             ref="titleinput"
-            class="h-8 m-1 hover:outline focus:outline outline-1 rounded"
+            class="h-8 m-0 pl-1 hover:outline focus:outline outline-1 rounded dark:bg-neutral-900 dark:text-neutral-200 outline-neutral-200"
             type="text"
             v-model="noteTitle"
             @keydown.enter="changeStateEdit(false)"
           />
           <button
-            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2"
+            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2"
             @click="changeStateEdit(false)"
           >
-            <img class="h-5" src="/public/images/check-solid.svg" />
+            <svg class="h-5 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 448 512">
+              <path
+                d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+              />
+            </svg>
           </button>
         </div>
         <div class="md:flex items-center" v-else>
-          <span class="m-1 text-ellipsis overflow-hidden">{{ noteTitle }}</span>
+          <span class="m-1 text-ellipsis overflow-hidden dark:text-neutral-200">{{ noteTitle }}</span>
           <button
-            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
+            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
             @click="changeStateEdit(true)"
           >
-            <img class="h-5 mr-2" src="/public/images/pen-solid.svg" />
+            <svg class="h-5 mr-2 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 512 512">
+              <path
+                d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+              />
+            </svg>
             Edit title
           </button>
           <button
             id="delete"
-            class="h-8 flex items-center select-none bg-stone-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
+            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
             @click="deleteRequest"
           >
-            <img class="h-5 mr-2" src="/public/images/trash-can-solid.svg" />
+            <svg class="h-5 mr-2 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 448 512">
+              <path
+                d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+              />
+            </svg>
             Delete note
           </button>
         </div>
@@ -201,7 +213,6 @@ export default {
             placeholder="Type your note here"
             v-model:content="noteContent"
             @update:content="updateNoteContent"
-            class="custom-quill-editor"
           ></QuillEditor>
         </div>
       </div>
