@@ -131,11 +131,9 @@ export default {
       }"
     >
       <ul
-        class="select-none mb-2 h-8 p-1 rounded hover:cursor-pointer"
+        class="select-none mb-2 h-8 p-1 rounded"
         :class="{
-          'bg-stone-200 dark:bg-neutral-900':
-            selectedID != index || selectedID == -1,
-          'hover:bg-stone-300 hover:dark:bg-neutral-950':
+          'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
             selectedID != index || selectedID == -1,
           'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
             selectedID == index,

@@ -84,6 +84,8 @@ if (!hasLock) {
         response = await orchestrator.getTodo();
       } else if (args[0] === "addTodo") {
         await orchestrator.addTodo();
+      } else if (args[0] === "addTodoGroup") {
+        await orchestrator.addTodoGroup();
       } else if (args[0] === "updateTodo") {
         await orchestrator.updateTodo(args[1], args[2]);
       } else if (args[0] === "updateAllTodo") {

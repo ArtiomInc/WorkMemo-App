@@ -1,26 +1,10 @@
 import * as fs from "fs";
 
-export interface Todo {
-  id: number;
-  content: string;
-  color: string;
-}
-export interface TodoGroup {
-  id: number;
-  title: string;
-  list: Todo[];
-}
-export interface Note {
-  id: number;
-  title: string;
-  content: string;
-}
-
 export class Orchestrator {
   static data: {
     user: any;
-    todo: Todo[];
-    note: Note[];
+    todo: any;
+    note: any;
   } = {
     user: null,
     todo: [],
@@ -40,9 +24,25 @@ export class Orchestrator {
     try {
       Orchestrator.data.todo.push({
         id: Orchestrator.data.todo.length,
+        type: 8,
         content: "New todo !",
         color: "rgba(0,0,0,0)",
       });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async addTodoGroup(): Promise<void> {
+    try {
+      Orchestrator.data.todo.push({
+        id: Orchestrator.data.todo.length,
+        type: 32,
+        title: "New todo group !",
+        list: [],
+      });
+      console.log(Orchestrator.data);
     } catch (error) {
       console.log(error);
       throw error;

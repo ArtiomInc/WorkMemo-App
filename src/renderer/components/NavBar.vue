@@ -37,7 +37,7 @@ export default {
     style="width: calc(100% - 1rem)"
   >
     <div
-      class="h-14 aspect-square m-auto md:ml-0 md:mr-5"
+      class="h-14 aspect-square m-auto md:ml-0 md:mr-5 cursor-pointer"
       @click="toggleDarkMode"
     >
       <img
@@ -49,9 +49,15 @@ export default {
     <router-link
       to="/"
       class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-900 select-none"
-      :class="{ 'bg-neutral-200 dark:bg-neutral-900 cursor-default': $route.fullPath === '/' }"
+      :class="{
+        'bg-neutral-200 dark:bg-neutral-900 cursor-default':
+          $route.fullPath === '/',
+      }"
     >
-      <svg class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 512 512">
+      <svg
+        class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200"
+        viewBox="0 0 512 512"
+      >
         <path
           d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"
         />
@@ -61,9 +67,15 @@ export default {
     <router-link
       to="/notes"
       class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-900 select-none"
-      :class="{ 'bg-neutral-200 dark:bg-neutral-900 cursor-default': $route.fullPath === '/notes' }"
+      :class="{
+        'bg-neutral-200 dark:bg-neutral-900 cursor-default':
+          $route.fullPath === '/notes',
+      }"
     >
-      <svg class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 448 512">
+      <svg
+        class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200"
+        viewBox="0 0 448 512"
+      >
         <path
           d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H288V368c0-26.5 21.5-48 48-48H448V96c0-35.3-28.7-64-64-64H64zM448 352H402.7 336c-8.8 0-16 7.2-16 16v66.7V480l32-32 64-64 32-32z"
         />
