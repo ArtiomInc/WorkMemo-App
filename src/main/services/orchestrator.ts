@@ -5,6 +5,11 @@ export interface Todo {
   content: string;
   color: string;
 }
+export interface TodoGroup {
+  id: number;
+  title: string;
+  list: Todo[];
+}
 export interface Note {
   id: number;
   title: string;
