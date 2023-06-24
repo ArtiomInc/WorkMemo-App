@@ -49,7 +49,7 @@ export default {
     <router-link
       to="/"
       class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-900 select-none"
-      :class="{ 'bg-neutral-200 dark:bg-neutral-900': $route.fullPath === '/' }"
+      :class="{ 'bg-neutral-200 dark:bg-neutral-900 cursor-default': $route.fullPath === '/' }"
     >
       <svg class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 512 512">
         <path
@@ -61,7 +61,7 @@ export default {
     <router-link
       to="/notes"
       class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-900 select-none"
-      :class="{ 'bg-neutral-200 dark:bg-neutral-900': $route.fullPath === '/notes' }"
+      :class="{ 'bg-neutral-200 dark:bg-neutral-900 cursor-default': $route.fullPath === '/notes' }"
     >
       <svg class="h-7 w-7 fill-neutral-800 dark:fill-neutral-200" viewBox="0 0 448 512">
         <path
