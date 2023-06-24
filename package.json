@@ -1,6 +1,6 @@
 {
   "name": "todo-note-application",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "ArtiomInc",
   "description": "A Note application build with Electron + Vue",
   "main": "build/main/main.js",
