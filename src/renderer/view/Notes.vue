@@ -141,10 +141,12 @@ export default {
         v-if="noteList != null"
         v-for="(item, index) in noteList"
       >
-        <li class="" @click="getNote(index)">
-          <div class="text-ellipsis overflow-hidden dark:text-neutral-200">
+        <li @click="getNote(index)">
+          <span
+            class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
+          >
             {{ item }}
-          </div>
+          </span>
         </li>
       </ul>
       <div class="">

@@ -84,12 +84,8 @@ if (!hasLock) {
         response = await orchestrator.getTodo();
       } else if (args[0] === "addTodo") {
         await orchestrator.addTodo();
-      } else if (args[0] === "addTodoGroup") {
-        await orchestrator.addTodoGroup();
       } else if (args[0] === "updateTodo") {
         await orchestrator.updateTodo(args[1], args[2]);
-      } else if (args[0] === "updateAllTodo") {
-        await orchestrator.updateAllTodo(args[1]);
       } else if (args[0] === "deleteTodo") {
         await orchestrator.deleteTodo(args[1]);
       } else if (args[0] === "getNoteList") {
@@ -105,9 +101,8 @@ if (!hasLock) {
       } else if (args[0] === "deleteNote") {
         await orchestrator.deleteNote(args[1]);
       } else {
-        return "Command inexisting";
+        throw "Command not exist";
       }
-
       return response;
     } catch (error) {
       console.error("Erreur :", error);
