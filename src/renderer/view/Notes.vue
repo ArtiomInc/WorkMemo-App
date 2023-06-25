@@ -20,6 +20,7 @@ export default {
       triggerDialogConfirm: false,
       triggerDialogError: false,
       contentDialogError: "An error occurred",
+      Sortable: false,
     };
   },
   methods: {
@@ -88,6 +89,23 @@ export default {
           this.contentDialogError = error;
         });
     },
+    shiftNote(id: number, content: string) {
+      this.selectedID = -1;
+      window.electronAPI
+        .setCommand(["shiftNote", id, content])
+        .then((result: any) => {
+          if (result == null) {
+            this.getNoteList();
+          } else {
+            this.contentDialogError = result;
+            this.triggerDialogError = true;
+          }
+        })
+        .catch((error: any) => {
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
+        });
+    },
     deleteRequest() {
       this.triggerDialogConfirm = true;
     },
@@ -131,22 +149,52 @@ export default {
       }"
     >
       <ul v-if="noteList != null" v-for="(item, index) in noteList">
-        <li
-          class="select-none mb-2 h-8 p-1 rounded"
-          :class="{
-            'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
-              selectedID != index || selectedID == -1,
-            'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
-              selectedID == index,
-          }"
-          @click="getNote(index)"
-        >
-          <span
-            class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
+        <div class="flex items-center mb-2">
+          <li
+            class="select-none h-8 p-1 rounded flex w-full"
+            :class="{
+              'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
+                selectedID != index || selectedID == -1,
+              'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
+                selectedID == index,
+            }"
+            @click="getNote(index)"
           >
-            {{ item }}
-          </span>
-        </li>
+            <span
+              class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
+            >
+              {{ item }}
+            </span>
+          </li>
+          <button
+            v-if="Sortable"
+            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            @click="shiftNote(index, 'up')"
+          >
+            <svg
+              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              viewBox="0 0 384 512"
+            >
+              <path
+                d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+              />
+            </svg>
+          </button>
+          <button
+            v-if="Sortable"
+            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            @click="shiftNote(index, 'down')"
+          >
+            <svg
+              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              viewBox="0 0 384 512"
+            >
+              <path
+                d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"
+              />
+            </svg>
+          </button>
+        </div>
       </ul>
       <div class="">
         <button
@@ -154,6 +202,13 @@ export default {
           @click="addNoteList"
         >
           Add note
+        </button>
+        <button
+          class="ml-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          @click="Sortable = !Sortable"
+        >
+          <span v-if="!Sortable">Sort order</span>
+          <span v-if="Sortable">Finish order sorting</span>
         </button>
       </div>
     </div>

@@ -16,7 +16,7 @@ export default {
       triggerDialogColor: false,
       triggerDialogError: false,
       contentDialogError: "An error occurred",
-      drag: false,
+      Sortable: false,
     };
   },
   methods: {
@@ -36,7 +36,12 @@ export default {
       window.electronAPI
         .setCommand(["addTodo"])
         .then((result: any) => {
-          this.getTodo();
+          if (result == null) {
+            this.getTodo();
+          } else {
+            this.contentDialogError = result;
+            this.triggerDialogError = true;
+          }
         })
         .catch((error: any) => {
           this.contentDialogError = error;
@@ -51,7 +56,28 @@ export default {
           //@ts-ignore
           JSON.parse(JSON.stringify(this.listTodo[id])),
         ])
-        .then((result: any) => {})
+        .then((result: any) => {
+          if (result != null) {
+            this.contentDialogError = result;
+            this.triggerDialogError = true;
+          }
+        })
+        .catch((error: any) => {
+          this.contentDialogError = error;
+          this.triggerDialogError = true;
+        });
+    },
+    shiftTodo(id: number, content: string) {
+      window.electronAPI
+        .setCommand(["shiftTodo", id, content])
+        .then((result: any) => {
+          if (result == null) {
+            this.getTodo();
+          } else {
+            this.contentDialogError = result;
+            this.triggerDialogError = true;
+          }
+        })
         .catch((error: any) => {
           this.contentDialogError = error;
           this.triggerDialogError = true;
@@ -80,7 +106,12 @@ export default {
         window.electronAPI
           .setCommand(["deleteTodo", this.selectedID])
           .then((result: any) => {
-            this.getTodo();
+            if (result == null) {
+              this.getTodo();
+            } else {
+              this.contentDialogError = result;
+              this.triggerDialogError = true;
+            }
           })
           .catch((error: any) => {
             this.contentDialogError = error;
@@ -117,8 +148,9 @@ export default {
           }"
         />
         <button
+          v-if="Sortable"
           class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
-          @click=""
+          @click="shiftTodo(index, 'up')"
         >
           <svg
             class="h-5 fill-neutral-800 dark:fill-neutral-200"
@@ -130,8 +162,9 @@ export default {
           </svg>
         </button>
         <button
+          v-if="Sortable"
           class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
-          @click=""
+          @click="shiftTodo(index, 'down')"
         >
           <svg
             class="h-5 fill-neutral-800 dark:fill-neutral-200"
@@ -175,6 +208,13 @@ export default {
       @click="addTodo"
     >
       Add todo
+    </button>
+    <button
+      class="ml-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+      @click="Sortable = !Sortable"
+    >
+      <span v-if="!Sortable">Sort order</span>
+      <span v-if="Sortable">Finish order sorting</span>
     </button>
   </div>
 

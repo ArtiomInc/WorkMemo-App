@@ -60,15 +60,24 @@ export class Orchestrator {
     }
   }
 
-  async updateAllTodo(content: any): Promise<void> {
+  async shiftTodo(id: number, content: any): Promise<void> {
     try {
-      Orchestrator.data.todo.forEach((todo, index) => {
-        if (content[index]) {
-          todo.id = content[index].id;
-          todo.content = content[index].content;
-          todo.color = content[index].color;
+      if (
+        (id == 0 && content === "up") ||
+        (id == Orchestrator.data.todo.length - 1 && content === "down")
+      ) {
+        throw "Command not executable";
+      } else {
+        if (content === "up") {
+          const temp = Orchestrator.data.todo[id];
+          Orchestrator.data.todo[id] = Orchestrator.data.todo[id - 1];
+          Orchestrator.data.todo[id - 1] = temp;
+        } else if (content === "down") {
+          const temp = Orchestrator.data.todo[id];
+          Orchestrator.data.todo[id] = Orchestrator.data.todo[id + 1];
+          Orchestrator.data.todo[id + 1] = temp;
         }
-      });
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -127,6 +136,30 @@ export class Orchestrator {
   async updateNoteContent(id: number, content: string): Promise<void> {
     try {
       Orchestrator.data.note[id].content = content;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async shiftNote(id: number, content: any): Promise<void> {
+    try {
+      if (
+        (id == 0 && content === "up") ||
+        (id == Orchestrator.data.note.length - 1 && content === "down")
+      ) {
+        throw "Command not executable";
+      } else {
+        if (content === "up") {
+          const temp = Orchestrator.data.note[id];
+          Orchestrator.data.note[id] = Orchestrator.data.note[id - 1];
+          Orchestrator.data.note[id - 1] = temp;
+        } else if (content === "down") {
+          const temp = Orchestrator.data.note[id];
+          Orchestrator.data.note[id] = Orchestrator.data.note[id + 1];
+          Orchestrator.data.note[id + 1] = temp;
+        }
+      }
     } catch (error) {
       console.log(error);
       throw error;
