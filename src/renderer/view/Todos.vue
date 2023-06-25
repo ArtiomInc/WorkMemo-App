@@ -105,7 +105,7 @@ export default {
     <div v-if="listTodo != null" v-for="(todo, index) in listTodo">
       <div class="flex items-center mb-2">
         <input
-          class="w-full p-1 mr-1 focus:outline-0 rounded dark:text-neutral-200 border border-1"
+          class="w-full p-1 mr-1 focus:outline-0 rounded dark:text-neutral-200"
           v-model="todo.content"
           @input="updateTodo(index)"
           @focus="
