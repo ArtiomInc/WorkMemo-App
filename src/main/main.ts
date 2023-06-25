@@ -86,6 +86,8 @@ if (!hasLock) {
         await orchestrator.addTodo();
       } else if (args[0] === "updateTodo") {
         await orchestrator.updateTodo(args[1], args[2]);
+      } else if (args[0] === "shiftTodo") {
+        await orchestrator.shiftTodo(args[1], args[2]);
       } else if (args[0] === "deleteTodo") {
         await orchestrator.deleteTodo(args[1]);
       } else if (args[0] === "getNoteList") {
@@ -98,6 +100,8 @@ if (!hasLock) {
         await orchestrator.updateNoteTitle(args[1], args[2]);
       } else if (args[0] === "updateNoteContent") {
         await orchestrator.updateNoteContent(args[1], args[2]);
+      } else if (args[0] === "shiftNote") {
+        await orchestrator.shiftNote(args[1], args[2]);
       } else if (args[0] === "deleteNote") {
         await orchestrator.deleteNote(args[1]);
       } else {
@@ -106,7 +110,7 @@ if (!hasLock) {
       return response;
     } catch (error) {
       console.error("Erreur :", error);
-      return "Error";
+      return error;
     }
   });
 }
