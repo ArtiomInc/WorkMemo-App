@@ -130,18 +130,17 @@ export default {
         'md:w-1/4': selectedID != -1,
       }"
     >
-      <ul
-        class="select-none mb-2 h-8 p-1 rounded"
-        :class="{
-          'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
-            selectedID != index || selectedID == -1,
-          'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
-            selectedID == index,
-        }"
-        v-if="noteList != null"
-        v-for="(item, index) in noteList"
-      >
-        <li @click="getNote(index)">
+      <ul v-if="noteList != null" v-for="(item, index) in noteList">
+        <li
+          class="select-none mb-2 h-8 p-1 rounded"
+          :class="{
+            'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
+              selectedID != index || selectedID == -1,
+            'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
+              selectedID == index,
+          }"
+          @click="getNote(index)"
+        >
           <span
             class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
           >
