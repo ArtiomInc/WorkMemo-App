@@ -134,7 +134,10 @@ export default {
 <template>
   <div class="bg-white dark:bg-neutral-800 m-2 p-2 rounded-lg drop-shadow">
     <div v-if="listTodo != null" v-for="(todo, index) in listTodo">
-      <div class="flex items-center mb-2">
+      <div
+        class="flex items-center mb-2"
+        :class="{ 'mb-0': index == listTodo.length - 1 }"
+      >
         <input
           class="w-full p-1 mr-1 focus:outline-0 rounded dark:text-neutral-200"
           v-model="todo.content"
@@ -148,7 +151,7 @@ export default {
           }"
         />
         <button
-          v-if="Sortable"
+          v-if="Sortable && index != 0"
           class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
           @click="shiftTodo(index, 'up')"
         >
@@ -162,7 +165,7 @@ export default {
           </svg>
         </button>
         <button
-          v-if="Sortable"
+          v-if="Sortable && index != listTodo.length - 1"
           class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
           @click="shiftTodo(index, 'down')"
         >
@@ -204,13 +207,13 @@ export default {
       </div>
     </div>
     <button
-      class="select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+      class="mt-2 mr-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
       @click="addTodo"
     >
       Add todo
     </button>
     <button
-      class="ml-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+      class="mt-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
       @click="Sortable = !Sortable"
     >
       <span v-if="!Sortable">Sort order</span>

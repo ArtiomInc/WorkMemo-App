@@ -149,7 +149,13 @@ export default {
       }"
     >
       <ul v-if="noteList != null" v-for="(item, index) in noteList">
-        <div class="flex items-center mb-2">
+        <div
+          class="flex items-center mb-2"
+          :class="{
+            //@ts-ignore
+            'mb-0': index == noteList.length - 1,
+          }"
+        >
           <li
             class="select-none h-8 p-1 rounded flex w-full"
             :class="{
@@ -198,13 +204,13 @@ export default {
       </ul>
       <div class="">
         <button
-          class="select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          class="mt-2 mr-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
           @click="addNoteList"
         >
           Add note
         </button>
         <button
-          class="ml-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          class="mt-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
           @click="Sortable = !Sortable"
         >
           <span v-if="!Sortable">Sort order</span>
