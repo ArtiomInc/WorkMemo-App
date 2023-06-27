@@ -143,7 +143,6 @@ export default {
     <div
       class="bg-white dark:bg-neutral-800 m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
       :class="{
-        'md:w-1/4': selectedID == -1,
         'md:w-1/4': selectedID != -1,
       }"
     >

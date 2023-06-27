@@ -1,5 +1,4 @@
 <script lang="ts">
-import { mapMutations } from "vuex";
 import NavBar from "./components/NavBar.vue";
 
 export default {
@@ -8,9 +7,6 @@ export default {
   },
   mounted() {
     this.$router.push("/");
-  },
-  methods: {
-    ...mapMutations(["DarkMode"]),
   },
 };
 </script>
