@@ -171,8 +171,8 @@ export default {
             </span>
           </li>
           <button
-            v-if="Sortable"
-            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            v-if="Sortable && index != 0"
+            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
             @click="shiftNote(index, 'up')"
           >
             <svg
@@ -185,8 +185,8 @@ export default {
             </svg>
           </button>
           <button
-            v-if="Sortable"
-            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            v-if="Sortable && index != noteList.length - 1"
+            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
             @click="shiftNote(index, 'down')"
           >
             <svg
