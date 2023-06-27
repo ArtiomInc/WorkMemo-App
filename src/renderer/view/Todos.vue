@@ -135,8 +135,11 @@ export default {
   <div class="bg-white dark:bg-neutral-800 m-2 p-2 rounded-lg drop-shadow">
     <div v-if="listTodo != null" v-for="(todo, index) in listTodo">
       <div
-        class="flex items-center mb-2"
-        :class="{ 'mb-0': index == listTodo.length - 1 }"
+        class="flex items-center"
+        :class="{
+          'mb-0': index == listTodo.length - 1,
+          'mb-2': index != listTodo.length - 1,
+        }"
       >
         <input
           class="w-full p-1 mr-1 focus:outline-0 rounded dark:text-neutral-200"

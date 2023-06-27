@@ -144,15 +144,14 @@ export default {
       class="bg-white dark:bg-neutral-800 m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
       :class="{
         'md:w-1/4': selectedID == -1,
-        //@ts-ignore
         'md:w-1/4': selectedID != -1,
       }"
     >
       <ul v-if="noteList != null" v-for="(item, index) in noteList">
         <div
-          class="flex items-center mb-2"
+          class="flex items-center"
           :class="{
-            //@ts-ignore
+            'mb-2': index != noteList.length - 1,
             'mb-0': index == noteList.length - 1,
           }"
         >
