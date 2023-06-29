@@ -2,9 +2,7 @@
  * Should match main/preload.ts for typescript support in renderer
  */
 export default interface ElectronApi {
-  setCommand: (
-    args: [cmd: string, id?: number, content?: string]
-  ) => Promise<any>;
+  setCommand: (args: [...args: any]) => Promise<any>;
 }
 
 declare global {
