@@ -2,12 +2,14 @@
 import { QuillEditor } from "@vueup/vue-quill";
 import "/public/style/vue-quill.snow.css";
 import DialogConfirm from "../components/DialogConfirm.vue";
+import DialogColor from "../components/DialogColor.vue";
 import DialogError from "../components/DialogError.vue";
 import { nextTick } from "vue";
 export default {
   components: {
     QuillEditor,
     DialogConfirm,
+    DialogColor,
     DialogError,
   },
   data() {
@@ -18,6 +20,7 @@ export default {
       noteContent: "",
       isEditingTitle: false,
       triggerDialogConfirm: false,
+      triggerDialogColor: false,
       triggerDialogError: false,
       contentDialogError: "An error occurred",
       Sortable: false,
@@ -79,6 +82,25 @@ export default {
           this.triggerDialogError = true;
           this.contentDialogError = error;
         });
+    },
+    colorRequest() {
+      this.triggerDialogColor = true;
+    },
+    updateNoteColor(color: string) {
+      console.log(color);
+      if (color != "" && false) {
+        //@ts-ignore
+        window.electronAPI
+          .setCommand(["updateNoteColor", color])
+          .then((result: any) => {
+            this.noteList = result;
+          })
+          .catch((error: any) => {
+            this.triggerDialogError = true;
+            this.contentDialogError = error;
+          });
+      }
+      this.triggerDialogColor = false;
     },
     updateNoteContent() {
       window.electronAPI
@@ -146,7 +168,7 @@ export default {
         'md:w-1/4': selectedID != -1,
       }"
     >
-      <ul v-if="noteList != null" v-for="(item, index) in noteList">
+      <div v-if="noteList != null" v-for="(item, index) in noteList">
         <div
           class="flex items-center"
           :class="{
@@ -154,7 +176,7 @@ export default {
             'mb-0': index == noteList.length - 1,
           }"
         >
-          <li
+          <div
             class="select-none h-8 p-1 rounded flex w-full"
             :class="{
               'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
@@ -169,7 +191,7 @@ export default {
             >
               {{ item }}
             </span>
-          </li>
+          </div>
           <button
             v-if="Sortable && index != 0"
             class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
@@ -199,7 +221,7 @@ export default {
             </svg>
           </button>
         </div>
-      </ul>
+      </div>
       <div class="">
         <button
           class="mt-2 mr-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
@@ -264,6 +286,19 @@ export default {
             Edit title
           </button>
           <button
+            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mx-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            @click="colorRequest"
+          >
+            <svg
+              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M0 64C0 28.7 28.7 0 64 0H352c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zM160 352c0-17.7 14.3-32 32-32V304c0-44.2 35.8-80 80-80H416c17.7 0 32-14.3 32-32V160 69.5c37.3 13.2 64 48.7 64 90.5v32c0 53-43 96-96 96H272c-8.8 0-16 7.2-16 16v16c17.7 0 32 14.3 32 32V480c0 17.7-14.3 32-32 32H192c-17.7 0-32-14.3-32-32V352z"
+              />
+            </svg>
+          </button>
+          <button
             id="delete"
             class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
             @click="deleteRequest"
@@ -281,6 +316,7 @@ export default {
         </div>
         <div class="mt-1">
           <QuillEditor
+            spellcheck="false"
             toolbar="minimal"
             contentType="html"
             placeholder="Type your note here"
@@ -297,6 +333,8 @@ export default {
     content="Are you sure you want to delete this note ?<br/>Impossible to recover after delete"
     @user-action="deleteNote"
   ></DialogConfirm>
+  <DialogColor v-if="triggerDialogColor" @user-action="updateNoteColor">
+  </DialogColor>
   <DialogError
     v-if="triggerDialogError"
     :content="contentDialogError"
