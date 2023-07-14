@@ -26,7 +26,7 @@ export class Orchestrator {
         id: Orchestrator.data.todo.length,
         type: 8,
         content: "New todo !",
-        color: "rgba(0,0,0,0)",
+        color: 0,
       });
     } catch (error) {
       console.log(error);
@@ -40,6 +40,7 @@ export class Orchestrator {
         id: Orchestrator.data.todo.length,
         type: 32,
         title: "New todo group !",
+        color: 0,
         list: [],
       });
       console.log(Orchestrator.data);
@@ -110,6 +111,7 @@ export class Orchestrator {
       Orchestrator.data.note.push({
         id: Orchestrator.data.note.length,
         title: "New note !",
+        color: 0,
         content: "<p></p>",
       });
     } catch (error) {
@@ -194,12 +196,9 @@ export class Orchestrator {
     if (!fs.existsSync(fileDirectory)) {
       fs.mkdirSync(fileDirectory, { recursive: true });
     }
-    fs.writeFile(fileDirectory + fileName, dataStringified, (erreur) => {
-      if (erreur) {
-        console.error(
-          "Une erreur s'est produite lors de l'écriture du fichier :",
-          erreur
-        );
+    fs.writeFile(fileDirectory + fileName, dataStringified, (error) => {
+      if (error) {
+        console.error(error);
       }
     });
   }
@@ -208,14 +207,14 @@ export class Orchestrator {
     const fileDirectory = process.env.APPDATA + "/Notes/";
     const fileName = "data.json";
     try {
-      fs.readFile(fileDirectory + fileName, "utf-8", (erreur, contenu) => {
-        if (erreur) {
-          console.error(erreur);
+      fs.readFile(fileDirectory + fileName, "utf-8", (error, contenu) => {
+        if (error) {
+          console.error(error);
         } else {
           try {
             Orchestrator.data = JSON.parse(contenu);
-          } catch (erreurParse) {
-            console.error(erreurParse);
+          } catch (errorParse) {
+            console.error(errorParse);
           }
         }
       });
