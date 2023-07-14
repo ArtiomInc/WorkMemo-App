@@ -95,7 +95,10 @@ export class Orchestrator {
 
   async getNoteList(): Promise<any | null> {
     try {
-      return Orchestrator.data.note.map((item) => item.title);
+      return Orchestrator.data.note.map((item: any) => ({
+        title: item.title,
+        color: item.color,
+      }));
     } catch (error) {
       console.log(error);
       throw error;
@@ -127,6 +130,15 @@ export class Orchestrator {
   async updateNoteTitle(id: number, title: string): Promise<void> {
     try {
       Orchestrator.data.note[id].title = title;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async updateNoteColor(id: number, color: string): Promise<void> {
+    try {
+      Orchestrator.data.note[id].color = color;
     } catch (error) {
       console.log(error);
       throw error;

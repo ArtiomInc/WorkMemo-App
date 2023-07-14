@@ -86,14 +86,14 @@ export default {
     colorRequest() {
       this.triggerDialogColor = true;
     },
-    updateNoteColor(color: string) {
-      console.log(color);
-      if (color != "" && false) {
+    updateNoteColor(color: number) {
+      if (color >= 0) {
         //@ts-ignore
         window.electronAPI
-          .setCommand(["updateNoteColor", color])
+          .setCommand(["updateNoteColor", this.selectedID, color])
           .then((result: any) => {
-            this.noteList = result;
+            this.selectedID = -1;
+            this.getNoteList();
           })
           .catch((error: any) => {
             this.triggerDialogError = true;
@@ -179,17 +179,20 @@ export default {
           <div
             class="select-none h-8 p-1 rounded flex w-full"
             :class="{
-              'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950 hover:cursor-pointer':
-                selectedID != index || selectedID == -1,
-              'bg-neutral-400 dark:bg-neutral-950 hover:cursor-default':
-                selectedID == index,
+              'hover:cursor-pointer': selectedID != index || selectedID == -1,
+              'hover:cursor-default': selectedID == index,
+              'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950':
+                item.color == 0,
+              'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
+              'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
+              'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
             }"
             @click="getNote(index)"
           >
             <span
               class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
             >
-              {{ item }}
+              {{ item.title }}
             </span>
           </div>
           <button
@@ -268,7 +271,15 @@ export default {
         </div>
         <div class="md:flex items-center" v-else>
           <span
-            class="m-1 text-ellipsis overflow-hidden dark:text-neutral-200"
+            class="text-ellipsis overflow-hidden whitespace-nowrap h-8 px-3 flex items-center rounded"
+            :class="{
+              'bg-stone-200 dark:bg-neutral-900':
+                noteList[selectedID].color == 0,
+              'bg-red-400/50': noteList[selectedID].color == 1,
+              'bg-green-400/50': noteList[selectedID].color == 2,
+              'bg-blue-400/50': noteList[selectedID].color == 3,
+            }"
+            @click="changeStateEdit(true)"
             >{{ noteTitle }}</span
           >
           <button

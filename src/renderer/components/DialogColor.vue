@@ -7,7 +7,7 @@ export default {
     Cancel() {
       this.$emit("userAction", "");
     },
-    setColor(uuid: String) {
+    setColor(uuid: number) {
       this.$emit("userAction", uuid);
     },
   },
@@ -23,19 +23,16 @@ export default {
         <h1 class="text-lg font-bold text-center">Choose color</h1>
         <div class="flex mb-2">
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline"
-            style="background-color: #ff5252"
-            @click="setColor('rgba(255, 82, 82, 0.5)')"
+            class="h-8 m-1 aspect-square rounded-full hover:outline bg-red-400"
+            @click="setColor(1)"
           ></div>
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline"
-            style="background-color: #448aff"
-            @click="setColor('rgba(68, 138, 255, 0.5)')"
+            class="h-8 m-1 aspect-square rounded-full hover:outline bg-green-400"
+            @click="setColor(2)"
           ></div>
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline"
-            style="background-color: #66bb6a"
-            @click="setColor('rgba(102, 187, 106, 0.5)')"
+            class="h-8 m-1 aspect-square rounded-full hover:outline bg-blue-400"
+            @click="setColor(3)"
           ></div>
           <div
             class="h-8 m-1 aspect-square rounded-full hover:outline"
@@ -46,7 +43,7 @@ export default {
                 rgba(255, 255, 255, 1) 100%
               );
             "
-            @click="setColor('rgba(0,0,0,0)')"
+            @click="setColor(0)"
           ></div>
         </div>
         <button

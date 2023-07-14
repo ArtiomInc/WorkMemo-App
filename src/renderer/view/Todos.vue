@@ -87,8 +87,8 @@ export default {
       this.selectedID = id;
       this.triggerDialogColor = true;
     },
-    updateColor(color: string) {
-      if (color != "") {
+    updateColor(color: number) {
+      if (color >= 0) {
         //@ts-ignore
         this.listTodo[this.selectedID].color = color;
         this.updateTodo(this.selectedID);
@@ -142,15 +142,19 @@ export default {
         }"
       >
         <input
-          class="w-full p-1 mr-1 focus:outline-0 rounded dark:text-neutral-200"
+          class="w-full p-1 mr-1 focus:outline-0 rounded"
           v-model="todo.content"
           @input="updateTodo(index)"
           @focus="
             //@ts-ignore
             $event.target.select()
           "
-          :style="{
-            'background-color': todo.color,
+          :class="{
+            'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950':
+              todo.color == 0,
+            'bg-red-400/50 hover:bg-red-400/80': todo.color == 1,
+            'bg-green-400/50 hover:bg-green-400/80': todo.color == 2,
+            'bg-blue-400/50 hover:bg-blue-400/80': todo.color == 3,
           }"
         />
         <button

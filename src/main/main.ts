@@ -98,6 +98,8 @@ if (!hasLock) {
         response = await orchestrator.getNote(args[1]);
       } else if (args[0] === "updateNoteTitle") {
         await orchestrator.updateNoteTitle(args[1], args[2]);
+      } else if (args[0] === "updateNoteColor") {
+        await orchestrator.updateNoteColor(args[1], args[2]);
       } else if (args[0] === "updateNoteContent") {
         await orchestrator.updateNoteContent(args[1], args[2]);
       } else if (args[0] === "shiftNote") {
