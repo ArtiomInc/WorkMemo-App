@@ -1,21 +1,23 @@
-# Note | Todo application
+# WorkMemo application
 
 Note and Todo applicaiton build with **Vue3** + **Electron** TypeScript based application, including **ViteJS** and **Electron Builder**.
 
 ## Preview
 
 ![todo view](pictures/todo.png)
-![note retraced view](pictures/note-retracted.png)
+![todo color view](pictures/todo-color.png)
+![note view](pictures/note.png)
 ![note focus view](pictures/note-focus.png)
 ![note delete view](pictures/note-delete.png)
+![todo darkmode view](pictures/todo-darkmode.png)
 
-### Install dependencies ⏬
+## Install dependencies ⏬
 
 ```bash
 npm install
 ```
 
-### Start developing ⚒️
+## Start developing ⚒️
 
 ```bash
 npm run dev
