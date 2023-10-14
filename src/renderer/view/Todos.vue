@@ -128,7 +128,11 @@ onMounted(async () => {
 
 <template>
   <div class="bg-white dark:bg-neutral-800 m-2 p-2 rounded-lg drop-shadow">
-    <div v-if="listTodo != null" v-for="(todo, index) in listTodo">
+    <div
+      v-if="listTodo.length != 0"
+      v-for="(todo, index) in listTodo"
+      class="mb-2"
+    >
       <div
         class="flex items-center"
         :class="{
@@ -190,7 +194,7 @@ onMounted(async () => {
         </button>
       </div>
     </div>
-    <div class="flex flex-col sm:flex-row mt-2">
+    <div class="flex flex-col sm:flex-row">
       <button class="btn-primary text sm:mr-1" @click="addTodo">
         Add todo
       </button>

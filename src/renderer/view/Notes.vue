@@ -182,7 +182,11 @@ onMounted(async () => {
         'md:w-1/4': selectedID != -1,
       }"
     >
-      <div v-if="noteList != null" v-for="(item, index) in noteList">
+      <div
+        v-if="noteList != null"
+        v-for="(item, index) in noteList"
+        class="mb-2"
+      >
         <div
           class="flex items-center"
           :class="{
@@ -237,7 +241,7 @@ onMounted(async () => {
           </button>
         </div>
       </div>
-      <div class="flex flex-col sm:flex-row mt-2">
+      <div class="flex flex-col sm:flex-row">
         <button class="btn-primary text sm:mr-1" @click="addNoteList">
           Add note
         </button>
