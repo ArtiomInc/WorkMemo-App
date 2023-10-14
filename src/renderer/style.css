@@ -18,19 +18,19 @@
     @apply border border-black/10 dark:border-white/10 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white/90 rounded;
   }
   .btn-primary.text {
-    @apply flex justify-center items-center px-3 py-0.5;
+    @apply flex justify-center items-center px-3 py-0.5 h-8 truncate;
   }
   .btn-primary.icon {
-    @apply flex justify-center items-center p-1.5;
+    @apply flex justify-center items-center p-1.5 h-8 aspect-square;
   }
   .btn-primary.icon-text {
-    @apply flex justify-center items-center px-1.5 py-1;
+    @apply flex justify-center items-center px-1.5 py-1 h-8 truncate;
   }
 
   .btn-error {
     @apply border border-red-500/90 text-white bg-red-500/50 hover:bg-red-500/70 rounded;
   }
   .btn-error.text {
-    @apply flex justify-center items-center px-3 py-0.5;
+    @apply flex justify-center items-center px-3 py-0.5 h-8;
   }
 }

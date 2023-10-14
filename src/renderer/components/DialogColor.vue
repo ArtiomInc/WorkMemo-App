@@ -1,19 +1,3 @@
-<script lang="ts">
-export default {
-  emits: {
-    userAction: null,
-  },
-  methods: {
-    Cancel() {
-      this.$emit('userAction', '');
-    },
-    setColor(uuid: number) {
-      this.$emit('userAction', uuid);
-    },
-  },
-};
-</script>
-
 <template>
   <div
     class="block fixed w-screen h-screen z-50 top-0 left-0 bg-black/50 dark:bg-white/25"
@@ -23,19 +7,19 @@ export default {
         <h1 class="text-lg font-bold text-center">Choose color</h1>
         <div class="flex mb-2">
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline bg-red-400"
-            @click="setColor(1)"
+            class="h-8 m-1 aspect-square rounded-full cursor-pointer hover:outline bg-red-400"
+            @click="$emit('userAction', 1)"
           ></div>
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline bg-green-400"
-            @click="setColor(2)"
+            class="h-8 m-1 aspect-square rounded-full cursor-pointer hover:outline bg-green-400"
+            @click="$emit('userAction', 2)"
           ></div>
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline bg-blue-400"
-            @click="setColor(3)"
+            class="h-8 m-1 aspect-square rounded-full cursor-pointer hover:outline bg-blue-400"
+            @click="$emit('userAction', 3)"
           ></div>
           <div
-            class="h-8 m-1 aspect-square rounded-full hover:outline"
+            class="h-8 m-1 aspect-square rounded-full cursor-pointer hover:outline"
             style="
               background: linear-gradient(
                 90deg,
@@ -43,12 +27,12 @@ export default {
                 rgba(255, 255, 255, 1) 100%
               );
             "
-            @click="setColor(0)"
+            @click="$emit('userAction', 0)"
           ></div>
         </div>
         <button
           class="btn-primary text w-full flex justify-center"
-          @click="Cancel"
+          @click="$emit('cancel')"
         >
           Cancel
         </button>

@@ -1,17 +1,7 @@
-<script lang="ts">
-export default {
-  props: {
-    content: String,
-  },
-  emits: {
-    userAction: null,
-  },
-  methods: {
-    Cancel() {
-      this.$emit('userAction');
-    },
-  },
-};
+<script lang="ts" setup>
+defineProps({
+  content: String,
+});
 </script>
 
 <template>
@@ -22,7 +12,7 @@ export default {
       <div class="bg-white dark:bg-neutral-800 p-2 rounded-lg drop-shadow">
         <span v-html="content"></span>
         <div class="flex mt-1">
-          <button class="btn-primary text w-full" @click="Cancel">
+          <button class="btn-primary text w-full" @click="$emit('cancel')">
             Cancel
           </button>
         </div>

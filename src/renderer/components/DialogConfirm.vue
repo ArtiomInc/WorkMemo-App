@@ -1,21 +1,8 @@
-<script lang="ts">
-export default {
-  props: {
-    title: String,
-    content: String,
-  },
-  emits: {
-    userAction: null,
-  },
-  methods: {
-    Cancel() {
-      this.$emit('userAction', false);
-    },
-    Delete() {
-      this.$emit('userAction', true);
-    },
-  },
-};
+<script lang="ts" setup>
+defineProps({
+  title: String,
+  content: String,
+});
 </script>
 
 <template>
@@ -27,8 +14,12 @@ export default {
         <h1 class="text-lg font-bold">{{ title }}</h1>
         <span v-html="content"></span>
         <div class="flex justify-end mt-2">
-          <button class="btn-error text mr-1" @click="Delete">Delete</button>
-          <button class="btn-primary text" @click="Cancel">Cancel</button>
+          <button class="btn-error text mr-1" @click="$emit('delete')">
+            Delete
+          </button>
+          <button class="btn-primary text" @click="$emit('cancel')">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
