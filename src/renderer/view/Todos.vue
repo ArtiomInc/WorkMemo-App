@@ -23,7 +23,7 @@ let triggerDialogDeleteTodoGroupTodo: Ref<boolean> = ref(false);
 let triggerDialogTodoColor: Ref<boolean> = ref(false);
 let triggerDialogTodoGroupTodoColor: Ref<boolean> = ref(false);
 let triggerDialogError: Ref<boolean> = ref(false);
-let contentDialogError: Ref<string> = ref('An error occurred');
+let contentDialogError: Ref<string> = ref('');
 let sortable: Ref<boolean> = ref(false);
 
 const getTodo = () => {
@@ -42,12 +42,7 @@ const addTodo = () => {
   window.electronAPI
     .setCommand([ipcMainControl.TODO_ADD])
     .then((result: any) => {
-      if (result == null) {
-        getTodo();
-      } else {
-        triggerDialogError.value = true;
-        contentDialogError.value = result;
-      }
+      getTodo();
     })
     .catch((error: any) => {
       triggerDialogError.value = true;
@@ -59,12 +54,7 @@ const addTodoGroup = () => {
   window.electronAPI
     .setCommand([ipcMainControl.TODO_GROUP_ADD])
     .then((result: any) => {
-      if (result == null) {
-        getTodo();
-      } else {
-        triggerDialogError.value = true;
-        contentDialogError.value = result;
-      }
+      getTodo();
     })
     .catch((error: any) => {
       triggerDialogError.value = true;
@@ -233,7 +223,7 @@ const deleteTodoGroupTodo = () => {
 
 const releaseDialogError = () => {
   triggerDialogError.value = false;
-  contentDialogError.value = 'An error occurred';
+  contentDialogError.value = '';
 };
 
 onMounted(async () => {

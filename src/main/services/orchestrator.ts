@@ -55,7 +55,7 @@ export class Orchestrator {
         color: 0,
       });
     } catch {
-      throw new Error('orchestrator.error.unable_to_add_todo');
+      throw new Error('orchestrator.error.unable_to_add_todo_group_todo');
     }
   }
 
@@ -75,7 +75,7 @@ export class Orchestrator {
     try {
       Orchestrator.data.todo[id].list[sub_id] = content;
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_todo');
+      throw new Error('orchestrator.error.unable_to_update_todo_group_todo');
     }
   }
 

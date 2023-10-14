@@ -128,12 +128,7 @@ const shiftNote = (id: number, content: string) => {
   window.electronAPI
     .setCommand([ipcMainControl.NOTE_SHIFT, id, content])
     .then((result: any) => {
-      if (result == null) {
-        getNoteList();
-      } else {
-        triggerDialogError.value = true;
-        contentDialogError.value = result;
-      }
+      getNoteList();
     })
     .catch((error: any) => {
       triggerDialogError.value = true;
