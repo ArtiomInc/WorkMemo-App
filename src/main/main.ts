@@ -97,6 +97,8 @@ if (!hasLock) {
         return null;
       case ipcMainControl.TODO_GROUP_DELETE:
         return await orchestrator.deleteTodoGroup(args[1]);
+      case ipcMainControl.TODO_GROUP_UPDATE_TITLE:
+        return await orchestrator.updateTodoGroupTitle(args[1], args[2]);
       case ipcMainControl.TODO_GROUP_TODO_ADD:
         return await orchestrator.addTodoGroupTodo(args[1]);
       case ipcMainControl.TODO_GROUP_TODO_SHIFT:

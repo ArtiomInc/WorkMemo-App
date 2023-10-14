@@ -25,6 +25,7 @@ let triggerDialogTodoGroupTodoColor: Ref<boolean> = ref(false);
 let triggerDialogError: Ref<boolean> = ref(false);
 let contentDialogError: Ref<string> = ref('');
 let sortable: Ref<boolean> = ref(false);
+let editTodoGroupTitle: Ref<boolean> = ref(false);
 
 const getTodo = () => {
   window.electronAPI
@@ -84,7 +85,22 @@ const updateTodo = (id: number) => {
     .then((result: any) => {})
     .catch((error: any) => {
       triggerDialogError.value = true;
-      contentDialogError.value = error.message + 'test';
+      contentDialogError.value = error.message;
+    });
+};
+
+const updateTodoGroupTitle = (id: number) => {
+  editTodoGroupTitle.value = false;
+  window.electronAPI
+    .setCommand([
+      ipcMainControl.TODO_GROUP_UPDATE_TITLE,
+      id,
+      listTodo.value[id].title,
+    ])
+    .then((result: any) => {})
+    .catch((error: any) => {
+      triggerDialogError.value = true;
+      contentDialogError.value = error.message;
     });
 };
 
@@ -297,44 +313,66 @@ onMounted(async () => {
         class="flex flex-col justify-center bg-black/10 dark:bg-white/10 rounded p-2"
       >
         <div class="flex items-center">
-          <p class="w-full">{{ todo.title }}</p>
-          <button
-            v-if="sortable && index != 0"
-            class="btn-primary icon mr-1"
-            @click="shiftTodo(index, 'up')"
-          >
-            <img
-              class="hidden dark:block"
-              src="../assets/vertical_align_top_white.svg"
-            />
-            <img
-              class="block dark:hidden"
-              src="../assets/vertical_align_top_black.svg"
-            />
-          </button>
-          <button
-            v-if="sortable && index != listTodo.length - 1"
-            class="btn-primary icon mr-1"
-            @click="shiftTodo(index, 'down')"
-          >
-            <img
-              class="hidden dark:block"
-              src="../assets/vertical_align_bottom_white.svg"
-            />
-            <img
-              class="block dark:hidden"
-              src="../assets/vertical_align_bottom_black.svg"
-            />
-          </button>
-          <button class="btn-primary text" @click="addTodoGroupTodo(index)">
-            Add todo
-          </button>
-          <button
-            class="btn-primary text ml-1"
-            @click="deleteTodoGroupRequest(index)"
-          >
-            Delete group
-          </button>
+          <div class="w-full">
+            <p v-if="!editTodoGroupTitle" @click="editTodoGroupTitle = true">
+              {{ todo.title }}
+            </p>
+            <div class="flex items-center" v-if="editTodoGroupTitle">
+              <input
+                ref="titleinput"
+                class="h-8 m-0 mr-1 px-2 rounded bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10 dark:text-neutral-200 outline-none"
+                type="text"
+                v-model="todo.title"
+                @keydown.enter="updateTodoGroupTitle(index)"
+              />
+              <button
+                class="btn-primary icon"
+                @click="updateTodoGroupTitle(index)"
+              >
+                <img class="hidden dark:block" src="../assets/done_white.svg" />
+                <img class="block dark:hidden" src="../assets/done_black.svg" />
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <button
+              v-if="sortable && index != 0"
+              class="btn-primary icon mr-1"
+              @click="shiftTodo(index, 'up')"
+            >
+              <img
+                class="hidden dark:block"
+                src="../assets/vertical_align_top_white.svg"
+              />
+              <img
+                class="block dark:hidden"
+                src="../assets/vertical_align_top_black.svg"
+              />
+            </button>
+            <button
+              v-if="sortable && index != listTodo.length - 1"
+              class="btn-primary icon mr-1"
+              @click="shiftTodo(index, 'down')"
+            >
+              <img
+                class="hidden dark:block"
+                src="../assets/vertical_align_bottom_white.svg"
+              />
+              <img
+                class="block dark:hidden"
+                src="../assets/vertical_align_bottom_black.svg"
+              />
+            </button>
+            <button class="btn-primary text" @click="addTodoGroupTodo(index)">
+              Add todo
+            </button>
+            <button
+              class="btn-primary text ml-1"
+              @click="deleteTodoGroupRequest(index)"
+            >
+              Delete group
+            </button>
+          </div>
         </div>
         <div
           v-if="todo.list.length != 0"

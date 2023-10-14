@@ -67,6 +67,14 @@ export class Orchestrator {
     }
   }
 
+  async updateTodoGroupTitle(id: number, title: string): Promise<void> {
+    try {
+      Orchestrator.data.todo[id].title = title;
+    } catch {
+      throw new Error('orchestrator.error.unable_to_update_todo_group_title');
+    }
+  }
+
   async updateTodoGroupTodo(
     id: number,
     sub_id: number,
