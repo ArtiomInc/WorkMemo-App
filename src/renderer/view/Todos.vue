@@ -320,13 +320,13 @@ onMounted(async () => {
             <div class="flex items-center" v-if="editTodoGroupTitle">
               <input
                 ref="titleinput"
-                class="h-8 m-0 mr-1 px-2 rounded bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10 dark:text-neutral-200 outline-none"
+                class="w-full h-8 m-0 mr-1 px-1 rounded bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10 dark:text-neutral-200 outline-none"
                 type="text"
                 v-model="todo.title"
                 @keydown.enter="updateTodoGroupTitle(index)"
               />
               <button
-                class="btn-primary icon"
+                class="btn-primary icon mr-1"
                 @click="updateTodoGroupTitle(index)"
               >
                 <img class="hidden dark:block" src="../assets/done_white.svg" />
