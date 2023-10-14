@@ -20,6 +20,8 @@ export enum ipcMainControl {
   NOTE_UPDATE_COLOR = 26,
   NOTE_SHIFT = 27,
   NOTE_DELETE = 28,
+  GET_THEME = 30,
+  SAVE_THEME = 31,
 }
 
 export default ipcMainControl;

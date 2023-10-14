@@ -128,6 +128,12 @@ if (!hasLock) {
         return await orchestrator.shiftNote(args[1], args[2]);
       case ipcMainControl.NOTE_DELETE:
         return await orchestrator.deleteNote(args[1]);
+
+      case ipcMainControl.GET_THEME:
+        return await orchestrator.getTheme();
+      case ipcMainControl.SAVE_THEME:
+        return await orchestrator.saveTheme(args[1]);
+
       default:
         throw new Error('main.error.command_not_exist');
     }

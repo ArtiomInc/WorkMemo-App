@@ -1,18 +1,39 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { ref, Ref, onMounted } from 'vue';
+import ipcMainControl from '../../main/static/ipcMainControl';
 
 onMounted(async () => {
-  localStorage.theme = 'light';
+  getTheme();
 });
 
+let theme: Ref<string> = ref('');
+
+const getTheme = () => {
+  window.electronAPI
+    .setCommand([ipcMainControl.GET_THEME])
+    .then((result: any) => {
+      theme.value = result;
+      document.documentElement.classList.add(theme.value);
+    })
+    .catch((error: any) => {});
+};
+
+const saveTheme = () => {
+  window.electronAPI
+    .setCommand([ipcMainControl.SAVE_THEME, theme.value])
+    .then((result: any) => {})
+    .catch((error: any) => {});
+};
+
 const toggleDarkMode = () => {
-  if (localStorage.theme === 'light') {
-    localStorage.theme = 'dark';
+  if (theme.value === 'light') {
+    theme.value = 'dark';
     document.documentElement.classList.add('dark');
   } else {
-    localStorage.theme = 'light';
+    theme.value = 'light';
     document.documentElement.classList.remove('dark');
   }
+  saveTheme();
 };
 </script>
 

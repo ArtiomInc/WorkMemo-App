@@ -1,7 +1,9 @@
 import * as fs from 'fs';
+import ElectronStore from 'electron-store';
 
 export class Orchestrator {
-  static data: {
+  protected store: any;
+  protected data: {
     user: any;
     todo: any;
     note: any;
@@ -11,9 +13,13 @@ export class Orchestrator {
     note: [],
   };
 
+  constructor() {
+    this.store = new ElectronStore();
+  }
+
   async getTodo(): Promise<any | null> {
     try {
-      return Orchestrator.data.todo;
+      return this.data.todo;
     } catch {
       throw new Error('orchestrator.error.unable_to_get_todo_list');
     }
@@ -21,8 +27,8 @@ export class Orchestrator {
 
   async addTodo(): Promise<void> {
     try {
-      Orchestrator.data.todo.push({
-        id: Orchestrator.data.todo.length,
+      this.data.todo.push({
+        id: this.data.todo.length,
         type: 8,
         content: 'New todo !',
         color: 0,
@@ -34,8 +40,8 @@ export class Orchestrator {
 
   async addTodoGroup(): Promise<void> {
     try {
-      Orchestrator.data.todo.push({
-        id: Orchestrator.data.todo.length,
+      this.data.todo.push({
+        id: this.data.todo.length,
         type: 32,
         title: 'New todo group !',
         color: 0,
@@ -48,8 +54,8 @@ export class Orchestrator {
 
   async addTodoGroupTodo(id: number): Promise<void> {
     try {
-      Orchestrator.data.todo[id].list.push({
-        id: Orchestrator.data.todo[id].list.length,
+      this.data.todo[id].list.push({
+        id: this.data.todo[id].list.length,
         type: 8,
         content: 'New todo in group !',
         color: 0,
@@ -61,7 +67,7 @@ export class Orchestrator {
 
   async updateTodo(id: number, content: any): Promise<void> {
     try {
-      Orchestrator.data.todo[id] = content;
+      this.data.todo[id] = content;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_todo');
     }
@@ -69,7 +75,7 @@ export class Orchestrator {
 
   async updateTodoGroupTitle(id: number, title: string): Promise<void> {
     try {
-      Orchestrator.data.todo[id].title = title;
+      this.data.todo[id].title = title;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_todo_group_title');
     }
@@ -81,7 +87,7 @@ export class Orchestrator {
     content: any
   ): Promise<void> {
     try {
-      Orchestrator.data.todo[id].list[sub_id] = content;
+      this.data.todo[id].list[sub_id] = content;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_todo_group_todo');
     }
@@ -91,18 +97,18 @@ export class Orchestrator {
     try {
       if (
         (id == 0 && content === 'up') ||
-        (id == Orchestrator.data.todo.length - 1 && content === 'down')
+        (id == this.data.todo.length - 1 && content === 'down')
       ) {
         throw new Error('orchestrator.error.unable_to_shift_todo');
       } else {
         if (content === 'up') {
-          const temp = Orchestrator.data.todo[id];
-          Orchestrator.data.todo[id] = Orchestrator.data.todo[id - 1];
-          Orchestrator.data.todo[id - 1] = temp;
+          const temp = this.data.todo[id];
+          this.data.todo[id] = this.data.todo[id - 1];
+          this.data.todo[id - 1] = temp;
         } else if (content === 'down') {
-          const temp = Orchestrator.data.todo[id];
-          Orchestrator.data.todo[id] = Orchestrator.data.todo[id + 1];
-          Orchestrator.data.todo[id + 1] = temp;
+          const temp = this.data.todo[id];
+          this.data.todo[id] = this.data.todo[id + 1];
+          this.data.todo[id + 1] = temp;
         }
       }
     } catch {
@@ -119,22 +125,19 @@ export class Orchestrator {
       if (
         (id == 0 && content === 'up') ||
         (sub_id == 0 && content === 'up') ||
-        (id == Orchestrator.data.todo.length - 1 && content === 'down') ||
-        (sub_id == Orchestrator.data.todo[id].list.length - 1 &&
-          content === 'down')
+        (id == this.data.todo.length - 1 && content === 'down') ||
+        (sub_id == this.data.todo[id].list.length - 1 && content === 'down')
       ) {
         throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
       } else {
         if (content === 'up') {
-          const temp = Orchestrator.data.todo[id].list[sub_id];
-          Orchestrator.data.todo[id].list[sub_id] =
-            Orchestrator.data.todo[id].list[sub_id - 1];
-          Orchestrator.data.todo[id].list[sub_id - 1] = temp;
+          const temp = this.data.todo[id].list[sub_id];
+          this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id - 1];
+          this.data.todo[id].list[sub_id - 1] = temp;
         } else if (content === 'down') {
-          const temp = Orchestrator.data.todo[id].list[sub_id];
-          Orchestrator.data.todo[id].list[sub_id] =
-            Orchestrator.data.todo[id].list[sub_id + 1];
-          Orchestrator.data.todo[id].list[sub_id + 1] = temp;
+          const temp = this.data.todo[id].list[sub_id];
+          this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id + 1];
+          this.data.todo[id].list[sub_id + 1] = temp;
         }
       }
     } catch {
@@ -144,7 +147,7 @@ export class Orchestrator {
 
   async deleteTodo(id: number): Promise<void> {
     try {
-      Orchestrator.data.todo.splice(id, 1);
+      this.data.todo.splice(id, 1);
     } catch {
       throw new Error('orchestrator.error.unable_to_delete_todo');
     }
@@ -152,7 +155,7 @@ export class Orchestrator {
 
   async deleteTodoGroup(id: number): Promise<void> {
     try {
-      Orchestrator.data.todo.splice(id, 1);
+      this.data.todo.splice(id, 1);
     } catch {
       throw new Error('orchestrator.error.unable_to_delete_todo_group');
     }
@@ -160,7 +163,7 @@ export class Orchestrator {
 
   async deleteTodoGroupTodo(id: number, sub_id: number): Promise<void> {
     try {
-      Orchestrator.data.todo[id].list.splice(sub_id, 1);
+      this.data.todo[id].list.splice(sub_id, 1);
     } catch {
       throw new Error('orchestrator.error.unable_to_delete_todo_group_todo');
     }
@@ -168,7 +171,7 @@ export class Orchestrator {
 
   async getNoteList(): Promise<any | null> {
     try {
-      return Orchestrator.data.note.map((item: any) => ({
+      return this.data.note.map((item: any) => ({
         title: item.title,
         color: item.color,
       }));
@@ -179,8 +182,8 @@ export class Orchestrator {
 
   async addNoteList(): Promise<void> {
     try {
-      Orchestrator.data.note.push({
-        id: Orchestrator.data.note.length,
+      this.data.note.push({
+        id: this.data.note.length,
         title: 'New note !',
         color: 0,
         content: '<p></p>',
@@ -192,7 +195,7 @@ export class Orchestrator {
 
   async getNote(id: number): Promise<any | null> {
     try {
-      return Orchestrator.data.note[id];
+      return this.data.note[id];
     } catch {
       throw new Error('orchestrator.error.unable_to_get_note');
     }
@@ -200,7 +203,7 @@ export class Orchestrator {
 
   async updateNoteTitle(id: number, title: string): Promise<void> {
     try {
-      Orchestrator.data.note[id].title = title;
+      this.data.note[id].title = title;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_note_title');
     }
@@ -208,7 +211,7 @@ export class Orchestrator {
 
   async updateNoteColor(id: number, color: string): Promise<void> {
     try {
-      Orchestrator.data.note[id].color = color;
+      this.data.note[id].color = color;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_note_color');
     }
@@ -216,7 +219,7 @@ export class Orchestrator {
 
   async updateNoteContent(id: number, content: string): Promise<void> {
     try {
-      Orchestrator.data.note[id].content = content;
+      this.data.note[id].content = content;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_note_content');
     }
@@ -226,18 +229,18 @@ export class Orchestrator {
     try {
       if (
         (id == 0 && content === 'up') ||
-        (id == Orchestrator.data.note.length - 1 && content === 'down')
+        (id == this.data.note.length - 1 && content === 'down')
       ) {
         throw new Error('orchestrator.error.unable_to_shift_note');
       } else {
         if (content === 'up') {
-          const temp = Orchestrator.data.note[id];
-          Orchestrator.data.note[id] = Orchestrator.data.note[id - 1];
-          Orchestrator.data.note[id - 1] = temp;
+          const temp = this.data.note[id];
+          this.data.note[id] = this.data.note[id - 1];
+          this.data.note[id - 1] = temp;
         } else if (content === 'down') {
-          const temp = Orchestrator.data.note[id];
-          Orchestrator.data.note[id] = Orchestrator.data.note[id + 1];
-          Orchestrator.data.note[id + 1] = temp;
+          const temp = this.data.note[id];
+          this.data.note[id] = this.data.note[id + 1];
+          this.data.note[id + 1] = temp;
         }
       }
     } catch {
@@ -247,7 +250,7 @@ export class Orchestrator {
 
   async deleteNote(id: number): Promise<void> {
     try {
-      Orchestrator.data.note.splice(id, 1);
+      this.data.note.splice(id, 1);
     } catch {
       throw new Error('orchestrator.error.unable_to_delete_note');
     }
@@ -256,7 +259,7 @@ export class Orchestrator {
   async saveData() {
     const fileDirectory = process.env.APPDATA + '/Notes/';
     const fileName = 'data.json';
-    const dataStringified = JSON.stringify(Orchestrator.data);
+    const dataStringified = JSON.stringify(this.data);
     if (!fs.existsSync(fileDirectory)) {
       fs.mkdirSync(fileDirectory, { recursive: true });
     }
@@ -276,12 +279,25 @@ export class Orchestrator {
           throw new Error('orchestrator.error.unable_to_find_data');
         } else {
           try {
-            Orchestrator.data = JSON.parse(contenu);
+            this.data = JSON.parse(contenu);
           } catch (errorParse) {
             throw new Error('orchestrator.error.unable_to_catch_data');
           }
         }
       });
     } catch {}
+  }
+
+  async getTheme() {
+    try {
+      return this.store.get('theme');
+    } catch {
+      this.store.set('theme', 'light');
+      return this.store.get('theme');
+    }
+  }
+
+  async saveTheme(theme: string) {
+    this.store.set('theme', theme);
   }
 }
