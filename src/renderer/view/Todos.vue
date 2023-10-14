@@ -1,7 +1,7 @@
 <script lang="ts">
-import DialogConfirm from "../components/DialogConfirm.vue";
-import DialogColor from "../components/DialogColor.vue";
-import DialogError from "../components/DialogError.vue";
+import DialogConfirm from '../components/DialogConfirm.vue';
+import DialogColor from '../components/DialogColor.vue';
+import DialogError from '../components/DialogError.vue';
 export default {
   components: {
     DialogConfirm,
@@ -10,12 +10,12 @@ export default {
   },
   data() {
     return {
-      listTodo: null,
+      listTodo: [{ content: '', color: 0 }],
       selectedID: -1,
       triggerDialogConfirm: false,
       triggerDialogColor: false,
       triggerDialogError: false,
-      contentDialogError: "An error occurred",
+      contentDialogError: 'An error occurred',
       Sortable: false,
     };
   },
@@ -23,7 +23,7 @@ export default {
     openDialog() {},
     getTodo() {
       window.electronAPI
-        .setCommand(["getTodo"])
+        .setCommand(['getTodo'])
         .then((result: any) => {
           this.listTodo = result;
         })
@@ -34,7 +34,7 @@ export default {
     },
     addTodo() {
       window.electronAPI
-        .setCommand(["addTodo"])
+        .setCommand(['addTodo'])
         .then((result: any) => {
           if (result == null) {
             this.getTodo();
@@ -51,7 +51,7 @@ export default {
     updateTodo(id: number) {
       window.electronAPI
         .setCommand([
-          "updateTodo",
+          'updateTodo',
           id,
           //@ts-ignore
           JSON.parse(JSON.stringify(this.listTodo[id])),
@@ -69,7 +69,7 @@ export default {
     },
     shiftTodo(id: number, content: string) {
       window.electronAPI
-        .setCommand(["shiftTodo", id, content])
+        .setCommand(['shiftTodo', id, content])
         .then((result: any) => {
           if (result == null) {
             this.getTodo();
@@ -104,7 +104,7 @@ export default {
       this.triggerDialogConfirm = false;
       if (payload) {
         window.electronAPI
-          .setCommand(["deleteTodo", this.selectedID])
+          .setCommand(['deleteTodo', this.selectedID])
           .then((result: any) => {
             if (result == null) {
               this.getTodo();
@@ -122,7 +122,7 @@ export default {
     },
     releaseDialogError() {
       this.triggerDialogError = false;
-      this.contentDialogError = "An error occurred";
+      this.contentDialogError = 'An error occurred';
     },
   },
   mounted() {
@@ -142,7 +142,7 @@ export default {
         }"
       >
         <input
-          class="w-full p-1 mr-1 focus:outline-0 rounded"
+          class="w-full p-1 focus:outline-0 rounded mr-1"
           v-model="todo.content"
           @input="updateTodo(index)"
           @focus="
@@ -151,19 +151,19 @@ export default {
           "
           :class="{
             'bg-stone-200 hover:bg-stone-300 dark:bg-neutral-900 dark:hover:dark:bg-neutral-950':
-              todo.color == 0,
-            'bg-red-400/50 hover:bg-red-400/80': todo.color == 1,
-            'bg-green-400/50 hover:bg-green-400/80': todo.color == 2,
-            'bg-blue-400/50 hover:bg-blue-400/80': todo.color == 3,
+              todo.color === 0,
+            'bg-red-400/50 hover:bg-red-400/80': todo.color === 1,
+            'bg-green-400/50 hover:bg-green-400/80': todo.color === 2,
+            'bg-blue-400/50 hover:bg-blue-400/80': todo.color === 3,
           }"
         />
         <button
           v-if="Sortable && index != 0"
-          class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+          class="btn-primary icon mr-1"
           @click="shiftTodo(index, 'up')"
         >
           <svg
-            class="h-5 fill-neutral-800 dark:fill-neutral-200"
+            class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
             viewBox="0 0 384 512"
           >
             <path
@@ -173,11 +173,11 @@ export default {
         </button>
         <button
           v-if="Sortable && index != listTodo.length - 1"
-          class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+          class="btn-primary icon mr-1"
           @click="shiftTodo(index, 'down')"
         >
           <svg
-            class="h-5 fill-neutral-800 dark:fill-neutral-200"
+            class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
             viewBox="0 0 384 512"
           >
             <path
@@ -185,12 +185,9 @@ export default {
             />
           </svg>
         </button>
-        <button
-          class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mr-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
-          @click="colorRequest(index)"
-        >
+        <button class="btn-primary icon mr-1" @click="colorRequest(index)">
           <svg
-            class="h-5 fill-neutral-800 dark:fill-neutral-200"
+            class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
             viewBox="0 0 512 512"
           >
             <path
@@ -198,12 +195,9 @@ export default {
             />
           </svg>
         </button>
-        <button
-          class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
-          @click="deleteRequest(index)"
-        >
+        <button class="btn-primary icon" @click="deleteRequest(index)">
           <svg
-            class="h-5 fill-neutral-800 dark:fill-neutral-200"
+            class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
             viewBox="0 0 448 512"
           >
             <path
@@ -213,19 +207,18 @@ export default {
         </button>
       </div>
     </div>
-    <button
-      class="mt-2 mr-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
-      @click="addTodo"
-    >
-      Add todo
-    </button>
-    <button
-      class="mt-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
-      @click="Sortable = !Sortable"
-    >
-      <span v-if="!Sortable">Sort order</span>
-      <span v-if="Sortable">Finish order sorting</span>
-    </button>
+    <div class="flex flex-col sm:flex-row mt-2">
+      <button class="btn-primary text sm:mr-1" @click="addTodo">
+        Add todo
+      </button>
+      <button
+        class="btn-primary text mt-1 sm:mt-0"
+        @click="Sortable = !Sortable"
+      >
+        <span v-if="!Sortable">Sort order</span>
+        <span v-if="Sortable">Finish order sorting</span>
+      </button>
+    </div>
   </div>
 
   <DialogConfirm

@@ -9,10 +9,10 @@ export default {
   },
   methods: {
     Cancel() {
-      this.$emit("userAction", false);
+      this.$emit('userAction', false);
     },
     Delete() {
-      this.$emit("userAction", true);
+      this.$emit('userAction', true);
     },
   },
 };
@@ -27,18 +27,8 @@ export default {
         <h1 class="text-lg font-bold">{{ title }}</h1>
         <span v-html="content"></span>
         <div class="flex justify-end mt-2">
-          <button
-            class="text-red-500 select-none h-8 px-3 py-1 bg-stone-200 dark:bg-neutral-900 rounded hover:outline hover:outline-2"
-            @click="Delete"
-          >
-            Delete
-          </button>
-          <button
-            class="select-none h-8 ml-2 px-3 py-1 bg-stone-200 dark:bg-neutral-900 rounded hover:outline hover:outline-2"
-            @click="Cancel"
-          >
-            Cancel
-          </button>
+          <button class="btn-error text mr-1" @click="Delete">Delete</button>
+          <button class="btn-primary text" @click="Cancel">Cancel</button>
         </div>
       </div>
     </div>

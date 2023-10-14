@@ -5,10 +5,10 @@ export default {
   },
   methods: {
     Cancel() {
-      this.$emit("userAction", "");
+      this.$emit('userAction', '');
     },
     setColor(uuid: number) {
-      this.$emit("userAction", uuid);
+      this.$emit('userAction', uuid);
     },
   },
 };
@@ -47,7 +47,7 @@ export default {
           ></div>
         </div>
         <button
-          class="select-none h-8 w-full px-3 py-1 bg-stone-200 dark:bg-neutral-900 rounded hover:outline hover:outline-2"
+          class="btn-primary text w-full flex justify-center"
           @click="Cancel"
         >
           Cancel

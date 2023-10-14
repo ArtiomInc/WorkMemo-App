@@ -1,10 +1,10 @@
 <script lang="ts">
-import { QuillEditor } from "@vueup/vue-quill";
-import "/public/style/vue-quill.snow.css";
-import DialogConfirm from "../components/DialogConfirm.vue";
-import DialogColor from "../components/DialogColor.vue";
-import DialogError from "../components/DialogError.vue";
-import { nextTick } from "vue";
+import { QuillEditor } from '@vueup/vue-quill';
+import '/public/style/vue-quill.snow.css';
+import DialogConfirm from '../components/DialogConfirm.vue';
+import DialogColor from '../components/DialogColor.vue';
+import DialogError from '../components/DialogError.vue';
+import { nextTick } from 'vue';
 export default {
   components: {
     QuillEditor,
@@ -14,22 +14,22 @@ export default {
   },
   data() {
     return {
-      noteList: null,
+      noteList: [{ title: '', content: '', color: 0 }],
       selectedID: -1,
-      noteTitle: "",
-      noteContent: "",
+      noteTitle: '',
+      noteContent: '',
       isEditingTitle: false,
       triggerDialogConfirm: false,
       triggerDialogColor: false,
       triggerDialogError: false,
-      contentDialogError: "An error occurred",
+      contentDialogError: 'An error occurred',
       Sortable: false,
     };
   },
   methods: {
     getNoteList() {
       window.electronAPI
-        .setCommand(["getNoteList"])
+        .setCommand(['getNoteList'])
         .then((result: any) => {
           this.noteList = result;
         })
@@ -40,7 +40,7 @@ export default {
     },
     addNoteList() {
       window.electronAPI
-        .setCommand(["addNoteList"])
+        .setCommand(['addNoteList'])
         .then((result: any) => {
           this.getNoteList();
         })
@@ -52,7 +52,7 @@ export default {
     getNote(id: number) {
       this.selectedID = id;
       window.electronAPI
-        .setCommand(["getNote", id])
+        .setCommand(['getNote', id])
         .then((result: any) => {
           this.noteTitle = result.title;
           this.noteContent = result.content;
@@ -76,7 +76,7 @@ export default {
     },
     updateNoteTitle(id: number, content: string) {
       window.electronAPI
-        .setCommand(["updateNoteTitle", id, content])
+        .setCommand(['updateNoteTitle', id, content])
         .then((result: any) => {})
         .catch((error: any) => {
           this.triggerDialogError = true;
@@ -90,7 +90,7 @@ export default {
       if (color >= 0) {
         //@ts-ignore
         window.electronAPI
-          .setCommand(["updateNoteColor", this.selectedID, color])
+          .setCommand(['updateNoteColor', this.selectedID, color])
           .then((result: any) => {
             this.selectedID = -1;
             this.getNoteList();
@@ -104,7 +104,7 @@ export default {
     },
     updateNoteContent() {
       window.electronAPI
-        .setCommand(["updateNoteContent", this.selectedID, this.noteContent])
+        .setCommand(['updateNoteContent', this.selectedID, this.noteContent])
         .then((result: any) => {})
         .catch((error: any) => {
           this.triggerDialogError = true;
@@ -114,7 +114,7 @@ export default {
     shiftNote(id: number, content: string) {
       this.selectedID = -1;
       window.electronAPI
-        .setCommand(["shiftNote", id, content])
+        .setCommand(['shiftNote', id, content])
         .then((result: any) => {
           if (result == null) {
             this.getNoteList();
@@ -135,7 +135,7 @@ export default {
       this.triggerDialogConfirm = false;
       if (payload && this.selectedID != -1) {
         window.electronAPI
-          .setCommand(["deleteNote", this.selectedID])
+          .setCommand(['deleteNote', this.selectedID])
           .then((result: any) => {
             this.selectedID = -1;
             this.getNoteList();
@@ -148,7 +148,7 @@ export default {
     },
     releaseDialogError() {
       this.triggerDialogError = false;
-      this.contentDialogError = "An error occurred";
+      this.contentDialogError = 'An error occurred';
     },
   },
   mounted() {
@@ -177,7 +177,7 @@ export default {
           }"
         >
           <div
-            class="select-none h-8 p-1 rounded flex w-full"
+            class="select-none h-8 p-1 rounded flex w-full truncate"
             :class="{
               'hover:cursor-pointer': selectedID != index || selectedID == -1,
               'hover:cursor-default': selectedID == index,
@@ -189,19 +189,17 @@ export default {
             }"
             @click="getNote(index)"
           >
-            <span
-              class="block text-ellipsis overflow-hidden whitespace-nowrap dark:text-neutral-200"
-            >
+            <span class="block dark:text-neutral-200">
               {{ item.title }}
             </span>
           </div>
           <button
             v-if="Sortable && index != 0"
-            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            class="btn-primary icon ml-1"
             @click="shiftNote(index, 'up')"
           >
             <svg
-              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 384 512"
             >
               <path
@@ -211,11 +209,11 @@ export default {
           </button>
           <button
             v-if="Sortable && index != noteList.length - 1"
-            class="ml-1 select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            class="btn-primary icon ml-1"
             @click="shiftNote(index, 'down')"
           >
             <svg
-              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 384 512"
             >
               <path
@@ -225,15 +223,12 @@ export default {
           </button>
         </div>
       </div>
-      <div class="">
-        <button
-          class="mt-2 mr-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
-          @click="addNoteList"
-        >
+      <div class="flex flex-col sm:flex-row mt-2">
+        <button class="btn-primary text sm:mr-1" @click="addNoteList">
           Add note
         </button>
         <button
-          class="mt-2 select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 px-3 py-1 rounded hover:outline hover:outline-2"
+          class="mt-1 sm:mt-0 btn-primary text"
           @click="Sortable = !Sortable"
         >
           <span v-if="!Sortable">Sort order</span>
@@ -250,17 +245,17 @@ export default {
         <div class="flex items-center" v-if="isEditingTitle">
           <input
             ref="titleinput"
-            class="h-8 m-0 pl-1 hover:outline focus:outline outline-1 rounded dark:bg-neutral-900 dark:text-neutral-200 outline-neutral-200"
+            class="h-8 m-0 mr-1 px-2 outline outline-1 rounded dark:bg-neutral-900 dark:text-neutral-200 outline-neutral-200"
             type="text"
             v-model="noteTitle"
             @keydown.enter="changeStateEdit(false)"
           />
           <button
-            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2"
+            class="btn-primary icon h-[34px] w-[34px]"
             @click="changeStateEdit(false)"
           >
             <svg
-              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 448 512"
             >
               <path
@@ -271,7 +266,7 @@ export default {
         </div>
         <div class="md:flex items-center" v-else>
           <span
-            class="text-ellipsis overflow-hidden whitespace-nowrap h-8 px-3 flex items-center rounded"
+            class="px-2 py-1 flex items-center h-[34px] md:mr-1 border border-black/10 dark:border-white/10 rounded"
             :class="{
               'bg-stone-200 dark:bg-neutral-900':
                 noteList[selectedID].color == 0,
@@ -283,11 +278,11 @@ export default {
             >{{ noteTitle }}</span
           >
           <button
-            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
+            class="btn-primary icon-text w-full md:w-auto md:mr-1 mt-1 md:mt-0"
             @click="changeStateEdit(true)"
           >
             <svg
-              class="h-5 mr-2 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 mr-2 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 512 512"
             >
               <path
@@ -297,11 +292,11 @@ export default {
             Edit title
           </button>
           <button
-            class="select-none h-8 aspect-square flex items-center justify-center bg-stone-200 dark:bg-neutral-900 p-1 mx-1 rounded hover:outline hover:outline-2 dark:outline-neutral-200"
+            class="btn-primary icon w-full md:w-auto md:mr-1 h-[34px] mt-1 md:mt-0"
             @click="colorRequest"
           >
             <svg
-              class="h-5 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 512 512"
             >
               <path
@@ -311,18 +306,18 @@ export default {
           </button>
           <button
             id="delete"
-            class="h-8 flex items-center select-none bg-stone-200 dark:bg-neutral-900 dark:text-neutral-200 m-1 px-3 py-1 rounded hover:outline hover:outline-2 whitespace-nowrap"
+            class="btn-primary icon-text w-full md:w-auto mt-1 md:mt-0"
             @click="deleteRequest"
           >
             <svg
-              class="h-5 mr-2 fill-neutral-800 dark:fill-neutral-200"
+              class="h-4 w-4 mr-2 fill-neutral-800 dark:fill-neutral-200"
               viewBox="0 0 448 512"
             >
               <path
                 d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
               />
             </svg>
-            Delete note
+            <p>Delete note</p>
           </button>
         </div>
         <div class="mt-1">

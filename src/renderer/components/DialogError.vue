@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     Cancel() {
-      this.$emit("userAction");
+      this.$emit('userAction');
     },
   },
 };
@@ -22,10 +22,7 @@ export default {
       <div class="bg-white dark:bg-neutral-800 p-2 rounded-lg drop-shadow">
         <span v-html="content"></span>
         <div class="flex mt-1">
-          <button
-            class="select-none h-8 w-full px-3 py-1 bg-stone-200 dark:bg-neutral-900 rounded hover:outline hover:outline-2"
-            @click="Cancel"
-          >
+          <button class="btn-primary text w-full" @click="Cancel">
             Cancel
           </button>
         </div>

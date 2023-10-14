@@ -3,12 +3,34 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "GitlabSans";
+  font-family: 'GitlabSans';
   src: url(/fonts/GitLabSans.otf);
 }
 
 @layer base {
   html {
     font-family: GitlabSans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply border border-black/10 dark:border-white/10 bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white/90 rounded;
+  }
+  .btn-primary.text {
+    @apply flex justify-center items-center px-3 py-0.5;
+  }
+  .btn-primary.icon {
+    @apply flex justify-center items-center p-1.5;
+  }
+  .btn-primary.icon-text {
+    @apply flex justify-center items-center px-1.5 py-1;
+  }
+
+  .btn-error {
+    @apply border border-red-500/90 text-white bg-red-500/50 hover:bg-red-500/70 rounded;
+  }
+  .btn-error.text {
+    @apply flex justify-center items-center px-3 py-0.5;
   }
 }
