@@ -41,17 +41,39 @@ export class Orchestrator {
         color: 0,
         list: [],
       });
-      console.log(Orchestrator.data);
     } catch {
       throw new Error('orchestrator.error.unable_to_add_todo_group');
     }
   }
 
+  async addTodoGroupTodo(id: number): Promise<void> {
+    try {
+      Orchestrator.data.todo[id].list.push({
+        id: Orchestrator.data.todo[id].list.length,
+        type: 8,
+        content: 'New todo in group !',
+        color: 0,
+      });
+    } catch {
+      throw new Error('orchestrator.error.unable_to_add_todo');
+    }
+  }
+
   async updateTodo(id: number, content: any): Promise<void> {
     try {
-      Orchestrator.data.todo[id].id = content.id;
-      Orchestrator.data.todo[id].content = content.content;
-      Orchestrator.data.todo[id].color = content.color;
+      Orchestrator.data.todo[id] = content;
+    } catch {
+      throw new Error('orchestrator.error.unable_to_update_todo');
+    }
+  }
+
+  async updateTodoGroupTodo(
+    id: number,
+    sub_id: number,
+    content: any
+  ): Promise<void> {
+    try {
+      Orchestrator.data.todo[id].list[sub_id] = content;
     } catch {
       throw new Error('orchestrator.error.unable_to_update_todo');
     }
@@ -80,11 +102,59 @@ export class Orchestrator {
     }
   }
 
+  async shiftTodoGroupTodo(
+    id: number,
+    sub_id: number,
+    content: string
+  ): Promise<void> {
+    try {
+      if (
+        (id == 0 && content === 'up') ||
+        (sub_id == 0 && content === 'up') ||
+        (id == Orchestrator.data.todo.length - 1 && content === 'down') ||
+        (sub_id == Orchestrator.data.todo[id].list.length - 1 &&
+          content === 'down')
+      ) {
+        throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
+      } else {
+        if (content === 'up') {
+          const temp = Orchestrator.data.todo[id].list[sub_id];
+          Orchestrator.data.todo[id].list[sub_id] =
+            Orchestrator.data.todo[id].list[sub_id - 1];
+          Orchestrator.data.todo[id].list[sub_id - 1] = temp;
+        } else if (content === 'down') {
+          const temp = Orchestrator.data.todo[id].list[sub_id];
+          Orchestrator.data.todo[id].list[sub_id] =
+            Orchestrator.data.todo[id].list[sub_id + 1];
+          Orchestrator.data.todo[id].list[sub_id + 1] = temp;
+        }
+      }
+    } catch {
+      throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
+    }
+  }
+
   async deleteTodo(id: number): Promise<void> {
     try {
       Orchestrator.data.todo.splice(id, 1);
     } catch {
       throw new Error('orchestrator.error.unable_to_delete_todo');
+    }
+  }
+
+  async deleteTodoGroup(id: number): Promise<void> {
+    try {
+      Orchestrator.data.todo.splice(id, 1);
+    } catch {
+      throw new Error('orchestrator.error.unable_to_delete_todo_group');
+    }
+  }
+
+  async deleteTodoGroupTodo(id: number, sub_id: number): Promise<void> {
+    try {
+      Orchestrator.data.todo[id].list.splice(sub_id, 1);
+    } catch {
+      throw new Error('orchestrator.error.unable_to_delete_todo_group_todo');
     }
   }
 

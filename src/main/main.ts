@@ -90,6 +90,26 @@ if (!hasLock) {
         return await orchestrator.shiftTodo(args[1], args[2]);
       case ipcMainControl.TODO_DELETE:
         return await orchestrator.deleteTodo(args[1]);
+
+      case ipcMainControl.TODO_GROUP_ADD:
+        return await orchestrator.addTodoGroup();
+      case ipcMainControl.TODO_GROUP_SHIFT:
+        return null;
+      case ipcMainControl.TODO_GROUP_DELETE:
+        return await orchestrator.deleteTodoGroup(args[1]);
+      case ipcMainControl.TODO_GROUP_TODO_ADD:
+        return await orchestrator.addTodoGroupTodo(args[1]);
+      case ipcMainControl.TODO_GROUP_TODO_SHIFT:
+        return await orchestrator.shiftTodoGroupTodo(args[1], args[2], args[3]);
+      case ipcMainControl.TODO_GROUP_TODO_UPDATE:
+        return await orchestrator.updateTodoGroupTodo(
+          args[1],
+          args[2],
+          args[3]
+        );
+      case ipcMainControl.TODO_GROUP_TODO_DELETE:
+        return await orchestrator.deleteTodoGroupTodo(args[1], args[2]);
+
       case ipcMainControl.NOTE_GET_LIST:
         return await orchestrator.getNoteList();
       case ipcMainControl.NOTE_ADD:
