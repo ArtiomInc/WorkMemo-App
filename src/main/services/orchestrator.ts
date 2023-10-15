@@ -121,11 +121,9 @@ export class Orchestrator {
     sub_id: number,
     content: string
   ): Promise<void> {
-    try {
       if (
-        (id == 0 && content === 'up') ||
+      id == -1 ||
         (sub_id == 0 && content === 'up') ||
-        (id == this.data.todo.length - 1 && content === 'down') ||
         (sub_id == this.data.todo[id].list.length - 1 && content === 'down')
       ) {
         throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
@@ -139,9 +137,6 @@ export class Orchestrator {
           this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id + 1];
           this.data.todo[id].list[sub_id + 1] = temp;
         }
-      }
-    } catch {
-      throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
     }
   }
 
