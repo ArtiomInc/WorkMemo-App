@@ -121,22 +121,22 @@ export class Orchestrator {
     sub_id: number,
     content: string
   ): Promise<void> {
-      if (
+    if (
       id == -1 ||
-        (sub_id == 0 && content === 'up') ||
-        (sub_id == this.data.todo[id].list.length - 1 && content === 'down')
-      ) {
-        throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
-      } else {
-        if (content === 'up') {
-          const temp = this.data.todo[id].list[sub_id];
-          this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id - 1];
-          this.data.todo[id].list[sub_id - 1] = temp;
-        } else if (content === 'down') {
-          const temp = this.data.todo[id].list[sub_id];
-          this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id + 1];
-          this.data.todo[id].list[sub_id + 1] = temp;
-        }
+      (sub_id == 0 && content === 'up') ||
+      (sub_id == this.data.todo[id].list.length - 1 && content === 'down')
+    ) {
+      throw new Error('orchestrator.error.unable_to_shift_todo_group_todo');
+    } else {
+      if (content === 'up') {
+        const temp = this.data.todo[id].list[sub_id];
+        this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id - 1];
+        this.data.todo[id].list[sub_id - 1] = temp;
+      } else if (content === 'down') {
+        const temp = this.data.todo[id].list[sub_id];
+        this.data.todo[id].list[sub_id] = this.data.todo[id].list[sub_id + 1];
+        this.data.todo[id].list[sub_id + 1] = temp;
+      }
     }
   }
 
@@ -258,29 +258,25 @@ export class Orchestrator {
     if (!fs.existsSync(fileDirectory)) {
       fs.mkdirSync(fileDirectory, { recursive: true });
     }
-    fs.writeFile(fileDirectory + fileName, dataStringified, (error) => {
-      if (error) {
-        throw new Error('orchestrator.error.unable_to_save_data');
-      }
-    });
+    try {
+      await fs.promises.writeFile(fileDirectory + fileName, dataStringified);
+    } catch {
+      throw new Error('orchestrator.error.unable_to_save_data');
+    }
   }
 
   async getData() {
     const fileDirectory = process.env.APPDATA + '/Notes/';
     const fileName = 'data.json';
     try {
-      fs.readFile(fileDirectory + fileName, 'utf-8', (error, contenu) => {
-        if (error) {
-          throw new Error('orchestrator.error.unable_to_find_data');
-        } else {
-          try {
-            this.data = JSON.parse(contenu);
-          } catch (errorParse) {
-            throw new Error('orchestrator.error.unable_to_catch_data');
-          }
-        }
-      });
-    } catch {}
+      const contenu = await fs.promises.readFile(
+        fileDirectory + fileName,
+        'utf-8'
+      );
+      this.data = JSON.parse(contenu);
+    } catch (error) {
+      throw new Error('orchestrator.error.unable_to_find_data');
+    }
   }
 
   async getTheme() {
