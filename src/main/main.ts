@@ -7,6 +7,7 @@ var mainWindow = null;
 const hasLock = app.requestSingleInstanceLock();
 
 const orchestrator = new Orchestrator();
+orchestrator.getData();
 const SaveSometime = setInterval(orchestrator.saveData, 60000);
 
 if (!hasLock) {
@@ -66,8 +67,6 @@ if (!hasLock) {
         createWindow();
       }
     });
-
-    orchestrator.getData();
   });
 
   app.on('window-all-closed', function () {
