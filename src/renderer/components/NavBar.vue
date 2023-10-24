@@ -39,11 +39,11 @@ const toggleDarkMode = () => {
 
 <template>
   <div
-    class="bg-white dark:bg-neutral-800 m-2 p-3 rounded-lg md:flex items-center drop-shadow"
+    class="bg-white dark:bg-neutral-800 m-2 p-2 rounded-lg md:flex items-center drop-shadow"
     style="width: calc(100% - 1rem)"
   >
     <div
-      class="h-14 aspect-square m-auto md:ml-0 md:mr-5 cursor-pointer"
+      class="h-14 aspect-square m-auto md:ml-0 md:mr-0 cursor-pointer"
       @click="toggleDarkMode"
     >
       <img
