@@ -177,7 +177,7 @@ onMounted(async () => {
         'md:w-1/4': selectedID != -1,
       }"
     >
-      <div class="max-h-[calc(100vh-145px)] overflow-y-auto">
+      <div class="md:max-h-[calc(100vh-145px)] overflow-y-auto">
         <div
           v-if="noteList != null"
           v-for="(item, index) in noteList"
