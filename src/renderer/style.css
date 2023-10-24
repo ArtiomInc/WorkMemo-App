@@ -34,3 +34,20 @@
     @apply flex justify-center items-center px-3 py-0.5 h-8;
   }
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #7d7d7d;
+  border-radius: 9999px;
+  border: 0px solid rgba(255, 255, 255, 1);
+}

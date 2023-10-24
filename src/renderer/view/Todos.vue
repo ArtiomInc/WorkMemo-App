@@ -442,7 +442,10 @@ onMounted(async () => {
     </div>
     <div class="flex flex-col sm:flex-row">
       <button class="btn-primary text sm:mr-1" @click="addTodo">Add todo</button
-      ><button class="btn-primary text sm:mr-1" @click="addTodoGroup">
+      ><button
+        class="btn-primary text mt-1 sm:mt-0 sm:mr-1"
+        @click="addTodoGroup"
+      >
         Add group
       </button>
       <button

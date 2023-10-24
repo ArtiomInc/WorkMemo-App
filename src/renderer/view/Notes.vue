@@ -172,68 +172,70 @@ onMounted(async () => {
     :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }"
   >
     <div
-      class="bg-white dark:bg-neutral-800 m-2 mt-0 p-2 rounded-lg drop-shadow h-full"
+      class="bg-white dark:bg-neutral-800 m-2 mt-0 p-2 rounded-lg drop-shadow h-full overflow-y-auto"
       :class="{
         'md:w-1/4': selectedID != -1,
       }"
     >
-      <div
-        v-if="noteList != null"
-        v-for="(item, index) in noteList"
-        class="mb-2"
-      >
+      <div class="max-h-[calc(100vh-145px)] overflow-y-auto">
         <div
-          class="flex items-center"
-          :class="{
-            'mb-2': index != noteList.length - 1,
-            'mb-0': index == noteList.length - 1,
-          }"
+          v-if="noteList != null"
+          v-for="(item, index) in noteList"
+          class="mb-2"
         >
           <div
-            class="select-none h-8 p-1 rounded flex w-full truncate"
+            class="flex items-center"
             :class="{
-              'hover:cursor-pointer': selectedID != index || selectedID == -1,
-              'hover:cursor-default': selectedID == index,
-              'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20':
-                item.color == 0,
-              'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
-              'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
-              'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
+              'mb-2': index != noteList.length - 1,
+              'mb-0': index == noteList.length - 1,
             }"
-            @click="getNote(index)"
           >
-            <span class="block dark:text-neutral-200">
-              {{ item.title }}
-            </span>
+            <div
+              class="select-none h-8 p-1 rounded flex w-full truncate"
+              :class="{
+                'hover:cursor-pointer': selectedID != index || selectedID == -1,
+                'hover:cursor-default': selectedID == index,
+                'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20':
+                  item.color == 0,
+                'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
+                'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
+                'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
+              }"
+              @click="getNote(index)"
+            >
+              <span class="block dark:text-neutral-200">
+                {{ item.title }}
+              </span>
+            </div>
+            <button
+              v-if="sortable && index != 0"
+              class="btn-primary icon ml-1"
+              @click="shiftNote(index, 'up')"
+            >
+              <img
+                class="hidden dark:block"
+                src="../assets/vertical_align_top_white.svg"
+              />
+              <img
+                class="block dark:hidden"
+                src="../assets/vertical_align_top_black.svg"
+              />
+            </button>
+            <button
+              v-if="sortable && index != noteList.length - 1"
+              class="btn-primary icon ml-1"
+              @click="shiftNote(index, 'down')"
+            >
+              <img
+                class="hidden dark:block"
+                src="../assets/vertical_align_bottom_white.svg"
+              />
+              <img
+                class="block dark:hidden"
+                src="../assets/vertical_align_bottom_black.svg"
+              />
+            </button>
           </div>
-          <button
-            v-if="sortable && index != 0"
-            class="btn-primary icon ml-1"
-            @click="shiftNote(index, 'up')"
-          >
-            <img
-              class="hidden dark:block"
-              src="../assets/vertical_align_top_white.svg"
-            />
-            <img
-              class="block dark:hidden"
-              src="../assets/vertical_align_top_black.svg"
-            />
-          </button>
-          <button
-            v-if="sortable && index != noteList.length - 1"
-            class="btn-primary icon ml-1"
-            @click="shiftNote(index, 'down')"
-          >
-            <img
-              class="hidden dark:block"
-              src="../assets/vertical_align_bottom_white.svg"
-            />
-            <img
-              class="block dark:hidden"
-              src="../assets/vertical_align_bottom_black.svg"
-            />
-          </button>
         </div>
       </div>
       <div class="flex flex-col sm:flex-row">
@@ -252,7 +254,7 @@ onMounted(async () => {
     <div
       v-if="selectedID != -1"
       :class="{ 'note-context-responsive': selectedID != -1 }"
-      class="bg-white dark:bg-neutral-800 mx-2 mt-0 md:m-0 md:mr-2 p-2 h-full rounded-lg drop-shadow"
+      class="bg-white dark:bg-neutral-800 mx-2 mt-0 md:m-0 md:mr-2 mb-2 p-2 h-full rounded-lg drop-shadow"
     >
       <div class="">
         <div class="flex items-center mb-2" v-if="isEditingTitle">
