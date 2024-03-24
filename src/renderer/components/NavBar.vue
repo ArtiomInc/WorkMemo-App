@@ -47,9 +47,9 @@ const toggleDarkMode = () => {
       @click="toggleDarkMode"
     >
       <img
-        class="select-none"
-        src="/images/a_dot_white_logo_logo_black_rounded.png"
-        alt="Asyril logo"
+        class="select-none rounded-lg"
+        src="../public/images/workmemo-logo.svg"
+        alt="WorkMemo logo"
       />
     </div>
     <router-link
