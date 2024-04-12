@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('electronAPI', {
   setCommand: (cmd: string) => {
@@ -6,15 +6,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer
         .invoke('setCommand', cmd)
         .then((response) => {
-          resolve(response);
+          resolve(response)
         })
         .catch((error) => {
           try {
-            reject(new Error(error.message.split(':')[2].trim()));
+            reject(new Error(error.message.split(':')[2].trim()))
           } catch {
-            reject(new Error('preload.error.wrong_implementation'));
+            reject(new Error('preload.error.wrong_implementation'))
           }
-        });
-    });
+        })
+    })
   },
-});
+})

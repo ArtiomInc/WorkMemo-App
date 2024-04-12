@@ -24,4 +24,4 @@ export enum ipcMainControl {
   SAVE_THEME = 31,
 }
 
-export default ipcMainControl;
+export default ipcMainControl

@@ -1,55 +1,49 @@
-import { app, BrowserWindow, ipcMain, session } from 'electron';
-import { join } from 'path';
-import { Orchestrator } from './services/orchestrator';
-import ipcMainControl from './static/ipcMainControl';
+import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { join } from 'path'
 
-var mainWindow = null;
-const hasLock = app.requestSingleInstanceLock();
+import { Orchestrator } from './services/orchestrator'
+import ipcMainControl from './static/ipcMainControl'
 
-const orchestrator = new Orchestrator();
-orchestrator.getData();
-const SaveSometime = setInterval(orchestrator.saveData, 60000);
+let mainWindow: BrowserWindow
+const hasLock = app.requestSingleInstanceLock()
+
+const orchestrator = new Orchestrator()
+orchestrator.getData()
+const SaveSometime = setInterval(orchestrator.saveData, 60000)
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1000,
+    height: 700,
+    //fullscreen: true,
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+    icon: __dirname + '/static/icon.ico',
+  })
+
+  if (process.env.NODE_ENV === 'development') {
+    const rendererPort = process.argv[2]
+    mainWindow.loadURL(`http://localhost:${rendererPort}`)
+  } else {
+    mainWindow.loadFile(join(app.getAppPath(), 'renderer', 'index.html'))
+    mainWindow.setMenu(null)
+  }
+}
 
 if (!hasLock) {
-  app.quit();
+  app.quit()
 } else {
   app.on('second-instance', () => {
     if (mainWindow) {
-      //@ts-ignore
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      //@ts-ignore
-      mainWindow.focus();
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
     }
-  });
-
-  function createWindow() {
-    //@ts-ignore
-    mainWindow = new BrowserWindow({
-      width: 1000,
-      height: 700,
-      //fullscreen: true,
-      webPreferences: {
-        preload: join(__dirname, 'preload.js'),
-        nodeIntegration: false,
-        contextIsolation: true,
-      },
-      icon: __dirname + '/static/icon.ico',
-    });
-
-    if (process.env.NODE_ENV === 'development') {
-      const rendererPort = process.argv[2];
-      //@ts-ignore
-      mainWindow.loadURL(`http://localhost:${rendererPort}`);
-    } else {
-      //@ts-ignore
-      mainWindow.loadFile(join(app.getAppPath(), 'renderer', 'index.html'));
-      //@ts-ignore
-      mainWindow.setMenu(null);
-    }
-  }
+  })
 
   app.whenReady().then(() => {
-    createWindow();
+    createWindow()
 
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
       callback({
@@ -57,84 +51,80 @@ if (!hasLock) {
           ...details.responseHeaders,
           'Content-Security-Policy': ["script-src 'self'"],
         },
-      });
-    });
+      })
+    })
 
     app.on('activate', function () {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+        createWindow()
       }
-    });
-  });
+    })
+  })
 
   app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
-      orchestrator.saveData();
-      clearInterval(SaveSometime);
-      app.quit();
+      orchestrator.saveData()
+      clearInterval(SaveSometime)
+      app.quit()
     }
-  });
+  })
 
   ipcMain.handle('setCommand', async (event, args) => {
     switch (args[0]) {
       case ipcMainControl.TODO_GET:
-        return await orchestrator.getTodo();
+        return await orchestrator.getTodo()
       case ipcMainControl.TODO_ADD:
-        return await orchestrator.addTodo();
+        return await orchestrator.addTodo()
       case ipcMainControl.TODO_UPDATE:
-        return await orchestrator.updateTodo(args[1], args[2]);
+        return await orchestrator.updateTodo(args[1], args[2])
       case ipcMainControl.TODO_SHIFT:
-        return await orchestrator.shiftTodo(args[1], args[2]);
+        return await orchestrator.shiftTodo(args[1], args[2])
       case ipcMainControl.TODO_DELETE:
-        return await orchestrator.deleteTodo(args[1]);
+        return await orchestrator.deleteTodo(args[1])
 
       case ipcMainControl.TODO_GROUP_ADD:
-        return await orchestrator.addTodoGroup();
+        return await orchestrator.addTodoGroup()
       case ipcMainControl.TODO_GROUP_SHIFT:
-        return null;
+        return null
       case ipcMainControl.TODO_GROUP_DELETE:
-        return await orchestrator.deleteTodoGroup(args[1]);
+        return await orchestrator.deleteTodoGroup(args[1])
       case ipcMainControl.TODO_GROUP_UPDATE_TITLE:
-        return await orchestrator.updateTodoGroupTitle(args[1], args[2]);
+        return await orchestrator.updateTodoGroupTitle(args[1], args[2])
       case ipcMainControl.TODO_GROUP_TODO_ADD:
-        return await orchestrator.addTodoGroupTodo(args[1]);
+        return await orchestrator.addTodoGroupTodo(args[1])
       case ipcMainControl.TODO_GROUP_TODO_SHIFT:
-        return await orchestrator.shiftTodoGroupTodo(args[1], args[2], args[3]);
+        return await orchestrator.shiftTodoGroupTodo(args[1], args[2], args[3])
       case ipcMainControl.TODO_GROUP_TODO_UPDATE:
-        return await orchestrator.updateTodoGroupTodo(
-          args[1],
-          args[2],
-          args[3]
-        );
+        return await orchestrator.updateTodoGroupTodo(args[1], args[2], args[3])
       case ipcMainControl.TODO_GROUP_TODO_DELETE:
-        return await orchestrator.deleteTodoGroupTodo(args[1], args[2]);
+        return await orchestrator.deleteTodoGroupTodo(args[1], args[2])
 
       case ipcMainControl.NOTE_GET_LIST:
-        return await orchestrator.getNoteList();
+        return await orchestrator.getNoteList()
       case ipcMainControl.NOTE_ADD:
-        return await orchestrator.addNoteList();
+        return await orchestrator.addNoteList()
       case ipcMainControl.NOTE_GET:
-        return await orchestrator.getNote(args[1]);
+        return await orchestrator.getNote(args[1])
       case ipcMainControl.NOTE_UPDATE_TITLE:
-        return await orchestrator.updateNoteTitle(args[1], args[2]);
+        return await orchestrator.updateNoteTitle(args[1], args[2])
       case ipcMainControl.NOTE_UPDATE_CONTENT:
-        return await orchestrator.updateNoteContent(args[1], args[2]);
+        return await orchestrator.updateNoteContent(args[1], args[2])
       case ipcMainControl.NOTE_UPDATE_COLOR:
-        return await orchestrator.updateNoteColor(args[1], args[2]);
+        return await orchestrator.updateNoteColor(args[1], args[2])
       case ipcMainControl.NOTE_SHIFT:
-        return await orchestrator.shiftNote(args[1], args[2]);
+        return await orchestrator.shiftNote(args[1], args[2])
       case ipcMainControl.NOTE_DELETE:
-        return await orchestrator.deleteNote(args[1]);
+        return await orchestrator.deleteNote(args[1])
 
       case ipcMainControl.GET_THEME:
-        return await orchestrator.getTheme();
+        return await orchestrator.getTheme()
       case ipcMainControl.SAVE_THEME:
-        return await orchestrator.saveTheme(args[1]);
+        return await orchestrator.saveTheme(args[1])
 
       default:
-        throw new Error('main.error.command_not_exist');
+        throw new Error('main.error.command_not_exist')
     }
-  });
+  })
 }

@@ -1,14 +1,14 @@
-<script lang="ts">
-import NavBar from "./components/NavBar.vue";
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default {
-  components: {
-    NavBar,
-  },
-  mounted() {
-    this.$router.push("/");
-  },
-};
+import NavBar from './components/NavBar.vue'
+
+const router = useRouter()
+
+onMounted(() => {
+  router.push('/')
+})
 </script>
 
 <template>

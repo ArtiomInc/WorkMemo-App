@@ -1,78 +1,76 @@
 <script lang="ts" setup>
-import { ref, Ref, onMounted } from 'vue';
-import ipcMainControl from '../../main/static/ipcMainControl';
+import { ListTodo, NotebookPen } from 'lucide-vue-next'
+import { onMounted, ref, Ref } from 'vue'
+
+import ipcMainControl from '../../main/static/ipcMainControl'
 
 onMounted(async () => {
-  getTheme();
-});
+  getTheme()
+})
 
-let theme: Ref<string> = ref('');
+const theme: Ref<string> = ref('')
 
 const getTheme = () => {
   window.electronAPI
     .setCommand([ipcMainControl.GET_THEME])
     .then((result: any) => {
-      theme.value = result;
-      document.documentElement.classList.add(theme.value);
+      theme.value = result
+      document.documentElement.classList.add(theme.value)
     })
-    .catch((error: any) => {});
-};
+    .catch((error: any) => {
+      console.log(error)
+    })
+}
 
 const saveTheme = () => {
   window.electronAPI
     .setCommand([ipcMainControl.SAVE_THEME, theme.value])
-    .then((result: any) => {})
-    .catch((error: any) => {});
-};
+    .then((result: any) => {
+      console.log(result)
+    })
+    .catch((error: any) => {
+      console.log(error)
+    })
+}
 
 const toggleDarkMode = () => {
   if (theme.value === 'light') {
-    theme.value = 'dark';
-    document.documentElement.classList.add('dark');
+    theme.value = 'dark'
+    document.documentElement.classList.add('dark')
   } else {
-    theme.value = 'light';
-    document.documentElement.classList.remove('dark');
+    theme.value = 'light'
+    document.documentElement.classList.remove('dark')
   }
-  saveTheme();
-};
+  saveTheme()
+}
 </script>
 
 <template>
   <div
-    class="bg-white dark:bg-neutral-800 m-2 p-2 rounded-lg md:flex items-center drop-shadow"
+    class="m-2 items-center rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:flex"
     style="width: calc(100% - 1rem)"
   >
-    <div
-      class="h-14 aspect-square m-auto md:ml-0 md:mr-0 cursor-pointer"
-      @click="toggleDarkMode"
-    >
-      <img
-        class="select-none rounded-lg"
-        src="../public/images/workmemo-logo.svg"
-        alt="WorkMemo logo"
-      />
+    <div class="m-auto aspect-square h-14 cursor-pointer md:ml-0 md:mr-0" @click="toggleDarkMode">
+      <img class="select-none rounded-lg" src="../public/images/workmemo-logo.svg" alt="WorkMemo logo" />
     </div>
     <router-link
       to="/"
-      class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 select-none"
+      class="mt-2 flex h-14 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10 md:ml-2 md:mt-0"
       :class="{
-        'bg-black/10 dark:bg-white/10 cursor-default': $route.fullPath === '/',
+        'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/',
       }"
     >
-      <img class="hidden dark:block h-8" src="../assets/checklist_white.svg" />
-      <img class="block dark:hidden h-8" src="../assets/checklist_black.svg" />
+      <ListTodo class="text-black dark:text-white" :size="20" />
       <span class="ml-3 dark:text-neutral-200">Todos</span>
     </router-link>
     <router-link
       to="/notes"
-      class="flex items-center h-14 mt-2 md:mt-0 md:ml-2 px-5 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 select-none"
+      class="mt-2 flex h-14 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10 md:ml-2 md:mt-0"
       :class="{
-        'bg-black/10 dark:bg-white/10 cursor-default':
-          $route.fullPath === '/notes',
+        'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes',
       }"
     >
-      <img class="hidden dark:block h-8" src="../assets/edit_note_white.svg" />
-      <img class="block dark:hidden h-8" src="../assets/edit_note_black.svg" />
+      <NotebookPen class="text-black dark:text-white" :size="20" />
       <span class="ml-3 dark:text-neutral-200">Notes</span>
     </router-link>
   </div>

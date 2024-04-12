@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 defineProps({
-  content: String,
-});
+  content: {
+    type: String,
+    default: 'Error content',
+  },
+})
+defineEmits(['cancel'])
 </script>
 
 <template>
-  <div
-    class="block fixed w-screen h-screen z-50 top-0 left-0 bg-black/50 dark:bg-white/25"
-  >
-    <div class="flex items-start mt-20 justify-center w-screen h-screen">
-      <div class="bg-white dark:bg-neutral-800 p-2 rounded-lg drop-shadow">
+  <div class="fixed left-0 top-0 z-50 block h-screen w-screen bg-black/50 dark:bg-white/25">
+    <div class="mt-20 flex h-screen w-screen items-start justify-center">
+      <div class="rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
         <span v-html="content"></span>
-        <div class="flex mt-1">
-          <button class="btn-primary text w-full" @click="$emit('cancel')">
-            Cancel
-          </button>
+        <div class="mt-1 flex">
+          <button class="btn primary text w-full" @click="$emit('cancel')">Cancel</button>
         </div>
       </div>
     </div>
