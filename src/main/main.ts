@@ -12,8 +12,8 @@ orchestrator.getData()
 const SaveSometime = setInterval(orchestrator.saveData, 60000)
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 1200,
+    height: 900,
     //fullscreen: true,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),

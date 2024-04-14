@@ -1,26 +1,63 @@
 <script lang="ts" setup>
 import { QuillEditor } from '@vueup/vue-quill'
-import { ArrowDownToLine, ArrowUpToLine, Check, Palette, PencilLine, Trash2 } from 'lucide-vue-next'
-import { nextTick, onMounted, ref, Ref } from 'vue'
+import {
+  ArrowDownToLine,
+  ArrowDownWideNarrow,
+  ArrowUpToLine,
+  Check,
+  Palette,
+  PencilLine,
+  Plus,
+  Trash2,
+} from 'lucide-vue-next'
+import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
 import { ipcMainControl } from '../../main/static/ipcMainControl'
-import DialogColor from '../components/DialogColor.vue'
-import DialogConfirm from '../components/DialogConfirm.vue'
-import DialogError from '../components/DialogError.vue'
+import { useColorStore } from '../stores/DialogColor'
+import { useDeleteStore } from '../stores/DialogDelete'
+import { useErrorStore } from '../stores/DialogError'
 
 import '/public/style/vue-quill.snow.css'
 
+const errorStore = useErrorStore()
+const colorStore = useColorStore()
+const deleteStore = useDeleteStore()
 const noteList: Ref<{ title: string; content: string; color: number }[]> = ref([])
-const selectedID: Ref<number> = ref(-1)
-const noteTitle: Ref<string> = ref('')
-const noteContent: Ref<string> = ref('')
-const isEditingTitle: Ref<boolean> = ref(false)
-const triggerDialogConfirm: Ref<boolean> = ref(false)
-const triggerDialogColor: Ref<boolean> = ref(false)
-const triggerDialogError: Ref<boolean> = ref(false)
-const contentDialogError: Ref<string> = ref('An error occurred')
-const sortable: Ref<boolean> = ref(false)
+const selectedID = ref(-1)
+const noteTitle = ref('')
+const noteContent = ref('')
+const isEditingTitle = ref(false)
+const sortable = ref(false)
 const titleinput: Ref<HTMLElement | null> = ref(document.getElementById('titleinput'))
+const askedColor = ref(false)
+const askedDelete = ref(false)
+
+watch(
+  () => deleteStore.deleteState,
+  (value: boolean) => {
+    if (value == false && deleteStore.deleteLastResultAction == true && askedDelete.value == true) {
+      deleteNote()
+      deleteStore.setDeleteLastResult(false)
+    }
+    if (value == false) {
+      askedDelete.value = false
+    }
+  }
+)
+
+watch(
+  () => colorStore.colorState,
+  (value: boolean) => {
+    if (value == false && colorStore.colorLastResultAction == true && askedColor.value == true) {
+      updateNoteColor(colorStore.colorLastChoice)
+      colorStore.setColorLastChoice(-1)
+      colorStore.setColorLastResult(false)
+    }
+    if (value == false) {
+      askedColor.value = false
+    }
+  }
+)
 
 const getNoteList = () => {
   window.electronAPI
@@ -29,8 +66,7 @@ const getNoteList = () => {
       noteList.value = result
     })
     .catch((error: any) => {
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
 }
 
@@ -41,12 +77,11 @@ const addNoteList = () => {
       getNoteList()
     })
     .catch((error: any) => {
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
 }
 
-const getNote = (id: number) => {
+const getNoteSelected = (id: number) => {
   selectedID.value = id
   window.electronAPI
     .setCommand([ipcMainControl.NOTE_GET, id])
@@ -56,8 +91,7 @@ const getNote = (id: number) => {
     })
     .catch((error: any) => {
       selectedID.value = -1
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
 }
 
@@ -80,32 +114,8 @@ const updateNoteTitle = (id: number, content: string) => {
     .setCommand([ipcMainControl.NOTE_UPDATE_TITLE, id, content])
     .then(() => {})
     .catch((error: any) => {
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
-}
-
-const colorRequest = () => {
-  triggerDialogColor.value = true
-}
-
-const updateNoteColor = (color: number) => {
-  if (color >= 0) {
-    window.electronAPI
-      .setCommand([ipcMainControl.NOTE_UPDATE_COLOR, selectedID.value, color])
-      .then(() => {
-        selectedID.value = -1
-        getNoteList()
-      })
-      .catch((error: any) => {
-        triggerDialogError.value = true
-        contentDialogError.value = error.message
-      })
-  } else {
-    triggerDialogError.value = true
-    contentDialogError.value = "Color choosed doesn't exist"
-  }
-  triggerDialogColor.value = false
 }
 
 const updateNoteContent = () => {
@@ -113,8 +123,7 @@ const updateNoteContent = () => {
     .setCommand([ipcMainControl.NOTE_UPDATE_CONTENT, selectedID.value, noteContent.value])
     .then(() => {})
     .catch((error: any) => {
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
 }
 
@@ -126,17 +135,40 @@ const shiftNote = (id: number, content: string) => {
       getNoteList()
     })
     .catch((error: any) => {
-      triggerDialogError.value = true
-      contentDialogError.value = error.message
+      errorStore.setErrorState(true, error.message)
     })
 }
 
+const colorRequest = () => {
+  askedColor.value = true
+  colorStore.setColorState(true)
+}
+
+const updateNoteColor = (color: number) => {
+  if (color >= 0 && color <= 3) {
+    window.electronAPI
+      .setCommand([ipcMainControl.NOTE_UPDATE_COLOR, selectedID.value, color])
+      .then(() => {
+        //selectedID.value = -1
+        getNoteList()
+      })
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
+      })
+  } else {
+    errorStore.setErrorState(true, "Color choosed doesn't exist")
+  }
+}
+
 const deleteRequest = () => {
-  triggerDialogConfirm.value = true
+  askedDelete.value = true
+  deleteStore.setDeleteState(
+    true,
+    'Are you sure you want to delete this note ?<br> Once the data is deleted, it cannot be recovered.'
+  )
 }
 
 const deleteNote = () => {
-  triggerDialogConfirm.value = false
   if (selectedID.value != -1) {
     window.electronAPI
       .setCommand([ipcMainControl.NOTE_DELETE, selectedID.value])
@@ -145,15 +177,9 @@ const deleteNote = () => {
         getNoteList()
       })
       .catch((error: any) => {
-        triggerDialogError.value = true
-        contentDialogError.value = error.message
+        errorStore.setErrorState(true, error.message)
       })
   }
-}
-
-const releaseDialogError = () => {
-  triggerDialogError.value = false
-  contentDialogError.value = 'An error occurred'
 }
 
 onMounted(async () => {
@@ -188,7 +214,7 @@ onMounted(async () => {
                 'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
                 'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
               }"
-              @click="getNote(index)"
+              @click="getNoteSelected(index)"
             >
               <span class="block dark:text-neutral-200">
                 {{ item.title }}
@@ -208,10 +234,11 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row">
-        <button class="btn primary" @click="addNoteList">Add note</button>
+        <button class="btn primary" @click="addNoteList">
+          <Plus class="text-black dark:text-white" :size="20" />note
+        </button>
         <button class="btn primary" @click="sortable = !sortable">
-          <span v-if="!sortable">Sort order</span>
-          <span v-if="sortable">Finish order sorting</span>
+          <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
         </button>
       </div>
     </div>
@@ -270,16 +297,6 @@ onMounted(async () => {
       </div>
     </div>
   </div>
-  <DialogConfirm
-    v-if="triggerDialogConfirm"
-    title="Delete note ?"
-    content="Are you sure you want to delete this note ?<br/>Impossible to recover after delete"
-    @delete="deleteNote"
-    @cancel="triggerDialogConfirm = false"
-  ></DialogConfirm>
-  <DialogColor v-if="triggerDialogColor" @user-action="updateNoteColor" @cancel="triggerDialogColor = false">
-  </DialogColor>
-  <DialogError v-if="triggerDialogError" :content="contentDialogError" @cancel="releaseDialogError"></DialogError>
 </template>
 
 <style scoped>

@@ -89,7 +89,7 @@ export class Orchestrator {
     }
   }
 
-  async shiftTodo(id: number, content: any): Promise<void> {
+  async shiftTodo(id: number, content: string): Promise<void> {
     try {
       if ((id == 0 && content === 'up') || (id == Orchestrator.data.todo.length - 1 && content === 'down')) {
         throw new Error('orchestrator.error.unable_to_shift_todo')
@@ -209,7 +209,7 @@ export class Orchestrator {
     }
   }
 
-  async shiftNote(id: number, content: any): Promise<void> {
+  async shiftNote(id: number, content: string): Promise<void> {
     try {
       if ((id == 0 && content === 'up') || (id == Orchestrator.data.note.length - 1 && content === 'down')) {
         throw new Error('orchestrator.error.unable_to_shift_note')

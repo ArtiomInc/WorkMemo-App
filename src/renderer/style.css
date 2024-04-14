@@ -15,14 +15,29 @@
 
 @layer components {
   .btn {
-    @apply flex h-8 min-w-[50px] items-center justify-center  gap-2 overflow-hidden whitespace-nowrap text-nowrap rounded border px-3 align-middle no-underline outline-none;
+    @apply flex h-8 min-w-[50px] cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-nowrap rounded-lg border px-3 align-middle no-underline outline-none;
   }
-  .btn.primary {
-    @apply border-primary bg-primary/50 hover:bg-primary/70 dark:border-primary/20 dark:bg-primary/10 dark:hover:bg-primary/20;
+  .btn.secondary {
+    @apply border-[#cbd5e1] bg-[#fff] text-[#09090b] hover:bg-[#f1f5f9] dark:border-[#4a4a4a] dark:bg-[#242427] dark:text-[#fff] dark:hover:bg-[#303033];
   }
 
   .btn.error {
-    @apply border-error bg-error/50 text-error-text hover:bg-error/70 dark:text-red-200;
+    @apply border-[#fca5a5] bg-[#fef2f2] text-[#b91c1c] hover:bg-[#fee2e2] dark:border-[#f87171] dark:bg-[#452a2c] dark:text-[#fee2e2] dark:hover:bg-[#5c3335];
+  }
+
+  .btn.success {
+    @apply border-[#6ee7b7] bg-[#ecfdf5] text-[#047857] hover:bg-[#d1fae5] dark:border-[#4ade80] dark:bg-[#22402f] dark:text-[#d1fae5] dark:hover:bg-[#275439];
+  }
+
+  .btn.warning {
+    @apply border-[#fdba74] bg-[#fff7ed] text-[#c2410c] hover:bg-[#ffedd5] dark:border-[#fb923c] dark:bg-[#453022] dark:text-[#ffedd5] dark:hover:bg-[#5d3d25];
+  }
+  .input {
+    @apply flex h-8 cursor-text items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-lg border px-2 align-middle no-underline outline-none;
+  }
+
+  .input.secondary {
+    @apply border-[#cbd5e1] bg-[#fff] text-[#09090b] hover:bg-[#f1f5f9] dark:border-[#505052] dark:bg-[#242427] dark:text-[#fff] dark:hover:bg-[#303033];
   }
 }
 

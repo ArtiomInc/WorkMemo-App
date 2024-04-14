@@ -1,6 +1,6 @@
+import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { createStore } from 'vuex'
 
 import App from './App.vue'
 import './style.css'
@@ -19,11 +19,7 @@ const router = createRouter({
   ],
 })
 
-// Vuex instance
-const store = createStore({
-  state() {
-    return {}
-  },
-})
+// Piinia instance
+const pinia = createPinia()
 
-app.use(router).use(store).mount('#app')
+app.use(router).use(pinia).mount('#app')

@@ -1,41 +1,79 @@
 <template>
-  <div class="fixed left-0 top-0 z-50 block h-screen w-screen bg-black/50 dark:bg-white/25">
-    <div class="mt-20 flex h-screen w-screen items-start justify-center">
+  <div
+    v-if="state"
+    class="animate-fade-in fixed left-0 top-0 z-50 block h-screen w-screen bg-black/50 p-5 dark:bg-white/25"
+  >
+    <div class="animate-slide-up mt-20 flex items-start justify-center">
       <div class="rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
         <h1 class="text-center text-lg font-bold">Choose color</h1>
         <div class="mb-2 flex">
           <div
             class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-red-400 hover:outline"
-            @click="$emit('userAction', 1)"
+            @click="setAction(1)"
           ></div>
           <div
             class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-green-400 hover:outline"
-            @click="$emit('userAction', 2)"
+            @click="setAction(2)"
           ></div>
           <div
             class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-blue-400 hover:outline"
-            @click="$emit('userAction', 3)"
+            @click="setAction(3)"
           ></div>
           <div
             class="m-1 aspect-square h-8 cursor-pointer rounded-full hover:outline"
             style="background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 1) 100%)"
-            @click="$emit('userAction', 0)"
+            @click="setAction(0)"
           ></div>
         </div>
-        <button class="btn primary text flex w-full justify-center" @click="$emit('cancel')">Cancel</button>
+        <button class="btn primary text flex w-full justify-center" @click="cancelAction()">Cancel</button>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-@keyframes ScaleTrans {
-  from {
-    transform: scale(0, 0);
-  }
+<script lang="ts" setup>
+import { computed } from 'vue'
 
-  to {
-    transform: scale(1, 1);
+import { useColorStore } from '../stores/DialogColor.ts'
+
+const colorStore = useColorStore()
+const state = computed(() => colorStore.colorState)
+
+const cancelAction = () => {
+  colorStore.setColorLastResult(false)
+  colorStore.setColorState(false)
+}
+const setAction = (color: number) => {
+  colorStore.setColorLastResult(true)
+  colorStore.setColorLastChoice(color)
+  colorStore.setColorState(false)
+}
+</script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
 }
 </style>

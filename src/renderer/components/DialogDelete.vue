@@ -5,26 +5,33 @@
   >
     <div class="animate-slide-up mt-20 flex items-start justify-center">
       <div class="rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
+        <h1 class="text-lg font-bold">Delete ?</h1>
         <span v-html="message"></span>
-        <div class="mt-1 flex">
-          <button class="btn primary text w-full" @click="cancel">Cancel</button>
+        <div class="mt-2 flex justify-end gap-1">
+          <button class="btn error" @click="deleteAction">Delete</button>
+          <button class="btn secondary" @click="cancelAction">Cancel</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue'
 
-import { useErrorStore } from '../stores/DialogError'
+import { useDeleteStore } from '../stores/DialogDelete'
 
-const errorStore = useErrorStore()
-const state = computed(() => errorStore.errorState)
-const message = computed(() => errorStore.errorMessage)
+const deleteStore = useDeleteStore()
+const state = computed(() => deleteStore.deleteState)
+const message = computed(() => deleteStore.deleteMessage)
 
-const cancel = () => {
-  errorStore.setErrorState(false, '')
+const cancelAction = () => {
+  deleteStore.setDeleteLastResult(false)
+  deleteStore.setDeleteState(false, '')
+}
+const deleteAction = () => {
+  deleteStore.setDeleteLastResult(true)
+  deleteStore.setDeleteState(false, '')
 }
 </script>
 
