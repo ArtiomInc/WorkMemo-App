@@ -46,32 +46,34 @@ const toggleDarkMode = () => {
 </script>
 
 <template>
-  <div
-    class="m-2 items-center rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:flex"
-    style="width: calc(100% - 1rem)"
-  >
-    <div class="m-auto aspect-square h-14 cursor-pointer md:ml-0 md:mr-0" @click="toggleDarkMode">
-      <img class="select-none rounded-lg" src="../public/images/workmemo-logo.svg" alt="WorkMemo logo" />
+  <div class="m-2 items-center justify-between rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 sm:flex">
+    <div class="flex flex-col items-center justify-center gap-2 sm:flex-row">
+      <div class="aspect-square h-10 cursor-pointer md:ml-0 md:mr-0" @click="toggleDarkMode">
+        <img class="select-none rounded-lg" src="../public/images/workmemo-logo.svg" alt="WorkMemo logo" />
+      </div>
+      <router-link
+        to="/"
+        class="flex h-10 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10"
+        :class="{
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/',
+        }"
+      >
+        <ListTodo class="text-black dark:text-white" :size="20" />
+        <span class="ml-3 dark:text-neutral-200">Todos</span>
+      </router-link>
+      <router-link
+        to="/notes"
+        class="flex h-10 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10"
+        :class="{
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes',
+        }"
+      >
+        <NotebookPen class="text-black dark:text-white" :size="20" />
+        <span class="ml-3 dark:text-neutral-200">Notes</span>
+      </router-link>
     </div>
-    <router-link
-      to="/"
-      class="mt-2 flex h-14 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10 md:ml-2 md:mt-0"
-      :class="{
-        'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/',
-      }"
-    >
-      <ListTodo class="text-black dark:text-white" :size="20" />
-      <span class="ml-3 dark:text-neutral-200">Todos</span>
-    </router-link>
-    <router-link
-      to="/notes"
-      class="mt-2 flex h-14 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10 md:ml-2 md:mt-0"
-      :class="{
-        'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes',
-      }"
-    >
-      <NotebookPen class="text-black dark:text-white" :size="20" />
-      <span class="ml-3 dark:text-neutral-200">Notes</span>
-    </router-link>
+    <div class="hidden items-center justify-center px-2 font-semibold text-black/20 dark:text-white/20 sm:flex">
+      2.1.1
+    </div>
   </div>
 </template>

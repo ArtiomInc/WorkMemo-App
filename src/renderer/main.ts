@@ -19,7 +19,7 @@ const router = createRouter({
   ],
 })
 
-// Piinia instance
+// Pinia instance
 const pinia = createPinia()
 
 app.use(router).use(pinia).mount('#app')

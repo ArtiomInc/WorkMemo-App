@@ -1,15 +1,19 @@
 import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 
 import { Orchestrator } from './services/orchestrator'
 import ipcMainControl from './static/ipcMainControl'
 
 let mainWindow: BrowserWindow
-const hasLock = app.requestSingleInstanceLock()
-
 const orchestrator = new Orchestrator()
-orchestrator.getData()
+const hasLock = app.requestSingleInstanceLock()
 const SaveSometime = setInterval(orchestrator.saveData, 60000)
+
+orchestrator.getData()
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -61,6 +65,9 @@ if (!hasLock) {
         createWindow()
       }
     })
+
+    autoUpdater.checkForUpdates()
+    if (mainWindow) console.log(`Checking for updates. Current version ${app.getVersion()}`)
   })
 
   app.on('window-all-closed', function () {
@@ -128,3 +135,25 @@ if (!hasLock) {
     }
   })
 }
+
+/* New Update Available */
+autoUpdater.on('update-available', (info) => {
+  console.log(info)
+  if (mainWindow) console.log(`Update available. Current version ${app.getVersion()}`)
+  autoUpdater.downloadUpdate()
+})
+
+autoUpdater.on('update-not-available', (info) => {
+  console.log(info)
+  if (mainWindow) console.log(`No update available. Current version ${app.getVersion()}`)
+})
+
+/* Download Completion Message */
+autoUpdater.on('update-downloaded', (info) => {
+  console.log(info)
+  if (mainWindow) console.log(`Update downloaded. Current version ${app.getVersion()}`)
+})
+
+autoUpdater.on('error', (info) => {
+  console.error(info)
+})

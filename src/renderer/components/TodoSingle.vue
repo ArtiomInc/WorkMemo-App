@@ -18,7 +18,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  sub_index: {
+  subIndex: {
     type: Number,
     required: true,
   },
@@ -68,7 +68,7 @@ watch(
   () => colorStore.colorState,
   (value) => {
     if (value == false && colorStore.colorLastResultAction == true && askedColor.value == true) {
-      emit('updatedTodo', props.index, props.sub_index, contentEdited.value, colorStore.colorLastChoice)
+      emit('updatedTodo', props.index, props.subIndex, contentEdited.value, colorStore.colorLastChoice)
       colorStore.setColorLastChoice(-1)
       colorStore.setColorLastResult(false)
     }
@@ -92,7 +92,7 @@ const askDeleteTodo = () => {
 }
 
 const deleteTodo = () => {
-  emit('deleteTodo', props.index, props.sub_index)
+  emit('deleteTodo', props.index, props.subIndex)
 }
 </script>
 
@@ -108,19 +108,15 @@ const deleteTodo = () => {
         'bg-blue-400/50 hover:bg-blue-400/80': props.color === 3,
       }"
       @focus="$event.target && ($event.target as HTMLInputElement).select()"
-      @input="emit('updatedTodo', props.index, props.sub_index, contentEdited, props.color)"
+      @input="emit('updatedTodo', props.index, props.subIndex, contentEdited, props.color)"
     />
-    <button
-      v-if="props.canShiftUp"
-      class="btn secondary"
-      @click="emit('shiftTodo', props.index, props.sub_index, 'up')"
-    >
+    <button v-if="props.canShiftUp" class="btn secondary" @click="emit('shiftTodo', props.index, props.subIndex, 'up')">
       <ArrowUpToLine class="text-black dark:text-white" :size="20" />
     </button>
     <button
       v-if="props.canShiftDown"
       class="btn secondary"
-      @click="emit('shiftTodo', props.index, props.sub_index, 'down')"
+      @click="emit('shiftTodo', props.index, props.subIndex, 'down')"
     >
       <ArrowDownToLine class="text-black dark:text-white" :size="20" />
     </button>
