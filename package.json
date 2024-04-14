@@ -1,6 +1,6 @@
 {
   "name": "todo-note-application",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "ArtiomInc",
   "description": "A Note application build with Electron + Vue",
   "main": "build/main/main.js",
@@ -39,6 +39,7 @@
   "dependencies": {
     "@vueup/vue-quill": "^1.2.0",
     "electron-store": "^8.2.0",
+    "electron-updater": "^6.1.8",
     "express": "^4.19.2",
     "lucide-vue-next": "^0.368.0",
     "net": "^1.0.2",

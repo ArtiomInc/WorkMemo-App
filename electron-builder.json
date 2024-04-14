@@ -1,7 +1,7 @@
 {
   "productName": "WorkMemo",
   "copyright": "Copyright © 2023 ${author}",
-  "appId": "com.example.work-memo-application",
+  "appId": "com.work-memo-application",
   "directories": {
     "output": "dist"
   },
@@ -14,7 +14,8 @@
   "win": {
     "target": "nsis",
     "icon": "assets/icon.ico",
-    "artifactName": "workmemo-setup-${version}.${ext}"
+    "artifactName": "workmemo-setup-${version}.${ext}",
+    "publish": ["github"]
   },
   "linux": {
     "target": ["snap"]
