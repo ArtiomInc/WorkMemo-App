@@ -17,7 +17,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  shiftable: {
+  canShiftUp: {
+    type: Boolean,
+    required: true,
+  },
+  canShiftDown: {
     type: Boolean,
     required: true,
   },
@@ -85,11 +89,11 @@ const deleteTodo = () => {
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button v-if="shiftable" class="btn secondary" @click="emit('shiftGroup', props.index, props.sub_index, 'up')">
+        <button v-if="canShiftUp" class="btn secondary" @click="emit('shiftGroup', props.index, props.sub_index, 'up')">
           <ArrowUpToLine class="text-black dark:text-white" :size="20" />
         </button>
         <button
-          v-if="shiftable"
+          v-if="canShiftDown"
           class="btn secondary"
           @click="emit('shiftGroup', props.index, props.sub_index, 'down')"
         >

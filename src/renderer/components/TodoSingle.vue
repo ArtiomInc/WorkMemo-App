@@ -22,7 +22,11 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  shiftable: {
+  canShiftUp: {
+    type: Boolean,
+    required: true,
+  },
+  canShiftDown: {
     type: Boolean,
     required: true,
   },
@@ -106,11 +110,15 @@ const deleteTodo = () => {
       @focus="$event.target && ($event.target as HTMLInputElement).select()"
       @input="emit('updatedTodo', props.index, props.sub_index, contentEdited, props.color)"
     />
-    <button v-if="props.shiftable" class="btn secondary" @click="emit('shiftTodo', props.index, props.sub_index, 'up')">
+    <button
+      v-if="props.canShiftUp"
+      class="btn secondary"
+      @click="emit('shiftTodo', props.index, props.sub_index, 'up')"
+    >
       <ArrowUpToLine class="text-black dark:text-white" :size="20" />
     </button>
     <button
-      v-if="props.shiftable"
+      v-if="props.canShiftDown"
       class="btn secondary"
       @click="emit('shiftTodo', props.index, props.sub_index, 'down')"
     >

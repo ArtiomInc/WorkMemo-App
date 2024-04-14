@@ -7,7 +7,7 @@
       <div class="rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
         <span v-html="message"></span>
         <div class="mt-1 flex">
-          <button class="btn primary text w-full" @click="cancel">Cancel</button>
+          <button class="btn secondary w-full" @click="cancel">Cancel</button>
         </div>
       </div>
     </div>

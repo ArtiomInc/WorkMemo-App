@@ -25,7 +25,7 @@
             @click="setAction(0)"
           ></div>
         </div>
-        <button class="btn primary text flex w-full justify-center" @click="cancelAction()">Cancel</button>
+        <button class="btn secondary w-full" @click="cancelAction()">Cancel</button>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-import { useColorStore } from '../stores/DialogColor.ts'
+import { useColorStore } from '../stores/DialogColor'
 
 const colorStore = useColorStore()
 const state = computed(() => colorStore.colorState)
