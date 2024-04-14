@@ -3,7 +3,9 @@ import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 
 import { Orchestrator } from './services/orchestrator'
-import ipcMainControl from './static/ipcMainControl'
+import AppCommands from './static/AppCommands'
+import NoteCommands from './static/NoteCommands'
+import TodoCommands from './static/TodoCommands'
 
 let mainWindow: BrowserWindow
 const orchestrator = new Orchestrator()
@@ -80,56 +82,50 @@ if (!hasLock) {
 
   ipcMain.handle('setCommand', async (event, args) => {
     switch (args[0]) {
-      case ipcMainControl.TODO_GET:
+      case TodoCommands.GET_LIST_TODO:
         return await orchestrator.getTodo()
-      case ipcMainControl.TODO_ADD:
+      case TodoCommands.ADD_NEW_TODO:
         return await orchestrator.addTodo()
-      case ipcMainControl.TODO_UPDATE:
+      case TodoCommands.UPDATE_TODO:
         return await orchestrator.updateTodo(args[1], args[2])
-      case ipcMainControl.TODO_SHIFT:
+      case TodoCommands.SHIT_TODO:
         return await orchestrator.shiftTodo(args[1], args[2])
-      case ipcMainControl.TODO_DELETE:
+      case TodoCommands.DELETE_TODO:
         return await orchestrator.deleteTodo(args[1])
-
-      case ipcMainControl.TODO_GROUP_ADD:
+      case TodoCommands.ADD_NEW_GROUP:
         return await orchestrator.addTodoGroup()
-      case ipcMainControl.TODO_GROUP_SHIFT:
-        return null
-      case ipcMainControl.TODO_GROUP_DELETE:
+      case TodoCommands.DELETE_GROUP:
         return await orchestrator.deleteTodoGroup(args[1])
-      case ipcMainControl.TODO_GROUP_UPDATE_TITLE:
+      case TodoCommands.UPDATE_TITLE_GROUP:
         return await orchestrator.updateTodoGroupTitle(args[1], args[2])
-      case ipcMainControl.TODO_GROUP_TODO_ADD:
+      case TodoCommands.ADD_TODO_IN_GROUP:
         return await orchestrator.addTodoGroupTodo(args[1])
-      case ipcMainControl.TODO_GROUP_TODO_SHIFT:
+      case TodoCommands.SHIFT_TODO_IN_GROUP:
         return await orchestrator.shiftTodoGroupTodo(args[1], args[2], args[3])
-      case ipcMainControl.TODO_GROUP_TODO_UPDATE:
+      case TodoCommands.UPDATE_TODO_IN_GROUP:
         return await orchestrator.updateTodoGroupTodo(args[1], args[2], args[3])
-      case ipcMainControl.TODO_GROUP_TODO_DELETE:
+      case TodoCommands.DELETE_TODO_IN_GROUP:
         return await orchestrator.deleteTodoGroupTodo(args[1], args[2])
-
-      case ipcMainControl.NOTE_GET_LIST:
+      case NoteCommands.GET_LIST_NOTE:
         return await orchestrator.getNoteList()
-      case ipcMainControl.NOTE_ADD:
+      case NoteCommands.ADD_NEW_NOTE:
         return await orchestrator.addNoteList()
-      case ipcMainControl.NOTE_GET:
+      case NoteCommands.GET_DETAILS_NOTE:
         return await orchestrator.getNote(args[1])
-      case ipcMainControl.NOTE_UPDATE_TITLE:
+      case NoteCommands.UPDATE_TITLE_NOTE:
         return await orchestrator.updateNoteTitle(args[1], args[2])
-      case ipcMainControl.NOTE_UPDATE_CONTENT:
+      case NoteCommands.UPDATE_CONTENT_NOTE:
         return await orchestrator.updateNoteContent(args[1], args[2])
-      case ipcMainControl.NOTE_UPDATE_COLOR:
+      case NoteCommands.UPDATE_COLOR_NOTE:
         return await orchestrator.updateNoteColor(args[1], args[2])
-      case ipcMainControl.NOTE_SHIFT:
+      case NoteCommands.SHIT_NOTE:
         return await orchestrator.shiftNote(args[1], args[2])
-      case ipcMainControl.NOTE_DELETE:
+      case NoteCommands.DELETE_NOTE:
         return await orchestrator.deleteNote(args[1])
-
-      case ipcMainControl.GET_THEME:
+      case AppCommands.GET_THEME:
         return await orchestrator.getTheme()
-      case ipcMainControl.SAVE_THEME:
+      case AppCommands.SAVE_THEME:
         return await orchestrator.saveTheme(args[1])
-
       default:
         throw new Error('main.error.command_not_exist')
     }

@@ -2,7 +2,10 @@
 import { ListTodo, NotebookPen } from 'lucide-vue-next'
 import { onMounted, ref, Ref } from 'vue'
 
-import ipcMainControl from '../../main/static/ipcMainControl'
+import AppCommands from '../../main/static/AppCommands'
+import { useErrorStore } from '../stores/DialogError'
+
+const errorStore = useErrorStore()
 
 onMounted(async () => {
   getTheme()
@@ -12,24 +15,24 @@ const theme: Ref<string> = ref('')
 
 const getTheme = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.GET_THEME])
+    .setCommand([AppCommands.GET_THEME])
     .then((result: any) => {
       theme.value = result
       document.documentElement.classList.add(theme.value)
     })
     .catch((error: any) => {
-      console.log(error)
+      errorStore.setErrorState(true, error.message)
     })
 }
 
 const saveTheme = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.SAVE_THEME, theme.value])
+    .setCommand([AppCommands.SAVE_THEME, theme.value])
     .then((result: any) => {
       console.log(result)
     })
     .catch((error: any) => {
-      console.log(error)
+      errorStore.setErrorState(true, error.message)
     })
 }
 

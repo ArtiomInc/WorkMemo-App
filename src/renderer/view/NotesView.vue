@@ -12,7 +12,7 @@ import {
 } from 'lucide-vue-next'
 import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
-import { ipcMainControl } from '../../main/static/ipcMainControl'
+import { NoteCommands } from '../../main/static/NoteCommands'
 import { useColorStore } from '../stores/DialogColor'
 import { useDeleteStore } from '../stores/DialogDelete'
 import { useErrorStore } from '../stores/DialogError'
@@ -59,9 +59,9 @@ watch(
   }
 )
 
-const getNoteList = () => {
+const getListNote = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_GET_LIST])
+    .setCommand([NoteCommands.GET_LIST_NOTE])
     .then((result: any) => {
       noteList.value = result
     })
@@ -70,21 +70,21 @@ const getNoteList = () => {
     })
 }
 
-const addNoteList = () => {
+const addNewNote = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_ADD])
+    .setCommand([NoteCommands.ADD_NEW_NOTE])
     .then(() => {
-      getNoteList()
+      getListNote()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
 
-const getNoteSelected = (id: number) => {
+const getDetailsNote = (id: number) => {
   selectedID.value = id
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_GET, id])
+    .setCommand([NoteCommands.GET_DETAILS_NOTE, id])
     .then((result: any) => {
       noteTitle.value = result.title
       noteContent.value = result.content
@@ -95,11 +95,11 @@ const getNoteSelected = (id: number) => {
     })
 }
 
-const changeStateEdit = (payload: boolean) => {
+const toggleEditTitle = (payload: boolean) => {
   isEditingTitle.value = payload
   if (!payload) {
-    updateNoteTitle(selectedID.value, noteTitle.value)
-    getNoteList()
+    updateTitleNote(selectedID.value, noteTitle.value)
+    getListNote()
   } else {
     nextTick(() => {
       if (titleinput.value) {
@@ -109,9 +109,9 @@ const changeStateEdit = (payload: boolean) => {
   }
 }
 
-const updateNoteTitle = (id: number, content: string) => {
+const updateTitleNote = (id: number, content: string) => {
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_UPDATE_TITLE, id, content])
+    .setCommand([NoteCommands.UPDATE_TITLE_NOTE, id, content])
     .then(() => {})
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -120,7 +120,7 @@ const updateNoteTitle = (id: number, content: string) => {
 
 const updateNoteContent = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_UPDATE_CONTENT, selectedID.value, noteContent.value])
+    .setCommand([NoteCommands.UPDATE_CONTENT_NOTE, selectedID.value, noteContent.value])
     .then(() => {})
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -130,9 +130,9 @@ const updateNoteContent = () => {
 const shiftNote = (id: number, content: string) => {
   selectedID.value = -1
   window.electronAPI
-    .setCommand([ipcMainControl.NOTE_SHIFT, id, content])
+    .setCommand([NoteCommands.SHIT_NOTE, id, content])
     .then(() => {
-      getNoteList()
+      getListNote()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -147,10 +147,10 @@ const colorRequest = () => {
 const updateNoteColor = (color: number) => {
   if (color >= 0 && color <= 3) {
     window.electronAPI
-      .setCommand([ipcMainControl.NOTE_UPDATE_COLOR, selectedID.value, color])
+      .setCommand([NoteCommands.UPDATE_COLOR_NOTE, selectedID.value, color])
       .then(() => {
         //selectedID.value = -1
-        getNoteList()
+        getListNote()
       })
       .catch((error: any) => {
         errorStore.setErrorState(true, error.message)
@@ -171,10 +171,10 @@ const deleteRequest = () => {
 const deleteNote = () => {
   if (selectedID.value != -1) {
     window.electronAPI
-      .setCommand([ipcMainControl.NOTE_DELETE, selectedID.value])
+      .setCommand([NoteCommands.DELETE_NOTE, selectedID.value])
       .then(() => {
         selectedID.value = -1
-        getNoteList()
+        getListNote()
       })
       .catch((error: any) => {
         errorStore.setErrorState(true, error.message)
@@ -183,7 +183,7 @@ const deleteNote = () => {
 }
 
 onMounted(async () => {
-  getNoteList()
+  getListNote()
 })
 </script>
 
@@ -214,7 +214,7 @@ onMounted(async () => {
                 'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
                 'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
               }"
-              @click="getNoteSelected(index)"
+              @click="getDetailsNote(index)"
             >
               <span class="block dark:text-neutral-200">
                 {{ item.title }}
@@ -234,7 +234,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row">
-        <button class="btn primary" @click="addNoteList">
+        <button class="btn primary" @click="addNewNote">
           <Plus class="text-black dark:text-white" :size="20" />note
         </button>
         <button class="btn primary" @click="sortable = !sortable">
@@ -254,9 +254,9 @@ onMounted(async () => {
             v-model="noteTitle"
             class="h-8 rounded border border-black/10 bg-black/10 px-2 outline-none dark:border-white/10 dark:bg-white/10 dark:text-neutral-200"
             type="text"
-            @keydown.enter="changeStateEdit(false)"
+            @keydown.enter="toggleEditTitle(false)"
           />
-          <button class="btn primary" @click="changeStateEdit(false)">
+          <button class="btn primary" @click="toggleEditTitle(false)">
             <Check class="text-black dark:text-white" :size="20" />
           </button>
         </div>
@@ -269,10 +269,10 @@ onMounted(async () => {
               'bg-green-400/50': noteList[selectedID].color == 2,
               'bg-blue-400/50': noteList[selectedID].color == 3,
             }"
-            @click="changeStateEdit(true)"
+            @click="toggleEditTitle(true)"
             >{{ noteTitle }}</span
           >
-          <button class="btn primary" @click="changeStateEdit(true)">
+          <button class="btn primary" @click="toggleEditTitle(true)">
             <PencilLine class="text-black dark:text-white" :size="20" />
             Edit title
           </button>

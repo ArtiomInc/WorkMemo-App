@@ -2,7 +2,7 @@
 import { ArrowDownWideNarrow, Plus } from 'lucide-vue-next'
 import { onMounted, ref, Ref } from 'vue'
 
-import { ipcMainControl } from '../../main/static/ipcMainControl'
+import { TodoCommands } from '../../main/static/TodoCommands'
 import TodoGroup from '../components/TodoGroup.vue'
 import TodoSingle from '../components/TodoSingle.vue'
 import { useErrorStore } from '../stores/DialogError'
@@ -27,9 +27,9 @@ const listTodo: Ref<
 
 const sortable: Ref<boolean> = ref(false)
 
-const getTodo = () => {
+const getListTodo = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GET])
+    .setCommand([TodoCommands.GET_LIST_TODO])
     .then((result: any) => {
       listTodo.value = result
     })
@@ -38,22 +38,22 @@ const getTodo = () => {
     })
 }
 
-const addTodo = () => {
+const addNewTodo = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_ADD])
+    .setCommand([TodoCommands.ADD_NEW_TODO])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
 
-const updateTodoOrGroup = (index: number, sub_index: number, content: string, color: number) => {
+const updateTodo = (index: number, sub_index: number, content: string, color: number) => {
   listTodo.value[index].content = content
   listTodo.value[index].color = color
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_UPDATE, index, JSON.parse(JSON.stringify(listTodo.value[index]))])
+    .setCommand([TodoCommands.UPDATE_TODO, index, JSON.parse(JSON.stringify(listTodo.value[index]))])
     .then(() => {})
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -66,7 +66,7 @@ const updateTodoInGroup = (index: number, sub_index: number, content: string, co
     listTodo.value[index].list[sub_index].color = color
     window.electronAPI
       .setCommand([
-        ipcMainControl.TODO_GROUP_TODO_UPDATE,
+        TodoCommands.UPDATE_TODO_IN_GROUP,
         index,
         sub_index,
         JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index])),
@@ -80,31 +80,31 @@ const updateTodoInGroup = (index: number, sub_index: number, content: string, co
 
 const deleteTodo = (index: number) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_DELETE, index])
+    .setCommand([TodoCommands.DELETE_TODO, index])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
 
-const shiftTodoOrGroup = (index: number, sub_index: number, content: string) => {
+const shiftTodo = (index: number, sub_index: number, content: string) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_SHIFT, index, content])
+    .setCommand([TodoCommands.SHIT_TODO, index, content])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
 
-const addGroupOfTodo = () => {
+const addNewGroup = () => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_ADD])
+    .setCommand([TodoCommands.ADD_NEW_GROUP])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -113,20 +113,20 @@ const addGroupOfTodo = () => {
 
 const addTodoInGroup = (index: number) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_TODO_ADD, index])
+    .setCommand([TodoCommands.ADD_TODO_IN_GROUP, index])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
 
-const updateTodoGroupTitle = (index: number, title: string) => {
+const updateTitleGroup = (index: number, title: string) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_UPDATE_TITLE, index, title])
+    .setCommand([TodoCommands.UPDATE_TITLE_GROUP, index, title])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -135,19 +135,19 @@ const updateTodoGroupTitle = (index: number, title: string) => {
 
 const shiftTodoInGroup = (index: number, sub_index: number, content: string) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_TODO_SHIFT, index, sub_index, content])
+    .setCommand([TodoCommands.SHIFT_TODO_IN_GROUP, index, sub_index, content])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
     })
 }
-const deleteGroupOfTodo = (index: number) => {
+const deleteGroup = (index: number) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_DELETE, index])
+    .setCommand([TodoCommands.DELETE_GROUP, index])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -156,9 +156,9 @@ const deleteGroupOfTodo = (index: number) => {
 
 const deleteTodoInGroup = (index: number, sub_index: number) => {
   window.electronAPI
-    .setCommand([ipcMainControl.TODO_GROUP_TODO_DELETE, index, sub_index])
+    .setCommand([TodoCommands.DELETE_TODO_IN_GROUP, index, sub_index])
     .then(() => {
-      getTodo()
+      getListTodo()
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -166,7 +166,7 @@ const deleteTodoInGroup = (index: number, sub_index: number) => {
 }
 
 onMounted(async () => {
-  getTodo()
+  getListTodo()
 })
 </script>
 
@@ -181,8 +181,8 @@ onMounted(async () => {
         :sub-index="-1"
         :can-shift-up="index > 0 && sortable"
         :can-shift-down="index < listTodo.length - 1 && sortable"
-        @updated-todo="updateTodoOrGroup"
-        @shift-todo="shiftTodoOrGroup"
+        @updated-todo="updateTodo"
+        @shift-todo="shiftTodo"
         @delete-todo="deleteTodo"
       ></TodoSingle>
       <TodoGroup
@@ -193,9 +193,9 @@ onMounted(async () => {
         :can-shift-up="index > 0 && sortable"
         :can-shift-down="index < listTodo.length - 1 && sortable"
         @add-todo-in-group="addTodoInGroup"
-        @update-title="updateTodoGroupTitle"
-        @shift-group="shiftTodoOrGroup"
-        @delete-group="deleteGroupOfTodo"
+        @update-title="updateTitleGroup"
+        @shift-group="shiftTodo"
+        @delete-group="deleteGroup"
       >
         <div v-if="todo.list != undefined" class="flex flex-col gap-1">
           <TodoSingle
@@ -214,11 +214,11 @@ onMounted(async () => {
       ></TodoGroup>
     </div>
     <div class="flex items-center gap-1">
-      <button class="btn secondary" @click="addTodo">
+      <button class="btn secondary" @click="addNewTodo">
         <Plus class="text-black dark:text-white" :size="20" />
         todo
       </button>
-      <button class="btn secondary" @click="addGroupOfTodo">
+      <button class="btn secondary" @click="addNewGroup">
         <Plus class="text-black dark:text-white" :size="20" />
         group
       </button>

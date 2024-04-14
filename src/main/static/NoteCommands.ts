@@ -1,0 +1,12 @@
+export enum NoteCommands {
+  GET_LIST_NOTE = 200,
+  ADD_NEW_NOTE = 201,
+  GET_DETAILS_NOTE = 202,
+  UPDATE_TITLE_NOTE = 203,
+  UPDATE_CONTENT_NOTE = 204,
+  UPDATE_COLOR_NOTE = 205,
+  SHIT_NOTE = 206,
+  DELETE_NOTE = 207,
+}
+
+export default NoteCommands
