@@ -87,6 +87,15 @@ const getVersion = () => {
         <NotebookPen class="text-black dark:text-white" :size="20" />
         <span class="ml-3 dark:text-neutral-200">Notes</span>
       </router-link>
+      <router-link
+        to="/test"
+        class="flex h-10 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10"
+        :class="{
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/test',
+        }"
+      >
+        <span class="dark:text-neutral-200">Test</span>
+      </router-link>
     </div>
     <div class="hidden items-center justify-center px-2 font-semibold text-black/20 dark:text-white/20 sm:flex">
       {{ version }}
