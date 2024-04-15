@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ListTodo, NotebookPen } from 'lucide-vue-next'
-import { onMounted, ref, Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import AppCommands from '../../main/static/AppCommands'
 import { useErrorStore } from '../stores/DialogError'
@@ -9,9 +9,11 @@ const errorStore = useErrorStore()
 
 onMounted(async () => {
   getTheme()
+  getVersion()
 })
 
-const theme: Ref<string> = ref('')
+const theme = ref('')
+const version = ref('')
 
 const getTheme = () => {
   window.electronAPI
@@ -46,6 +48,17 @@ const toggleDarkMode = () => {
   }
   saveTheme()
 }
+
+const getVersion = () => {
+  window.electronAPI
+    .setCommand([AppCommands.GET_VERSION, theme.value])
+    .then((result: any) => {
+      version.value = result
+    })
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
+    })
+}
 </script>
 
 <template>
@@ -76,7 +89,7 @@ const toggleDarkMode = () => {
       </router-link>
     </div>
     <div class="hidden items-center justify-center px-2 font-semibold text-black/20 dark:text-white/20 sm:flex">
-      2.1.1
+      {{ version }}
     </div>
   </div>
 </template>

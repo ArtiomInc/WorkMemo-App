@@ -126,6 +126,8 @@ if (!hasLock) {
         return await orchestrator.getTheme()
       case AppCommands.SAVE_THEME:
         return await orchestrator.saveTheme(args[1])
+      case AppCommands.GET_VERSION:
+        return app.getVersion()
       default:
         throw new Error('main.error.command_not_exist')
     }
