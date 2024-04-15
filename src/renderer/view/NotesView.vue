@@ -220,12 +220,12 @@ onMounted(async () => {
                 {{ item.title }}
               </span>
             </div>
-            <button v-if="sortable && index != 0" class="btn primary" @click="shiftNote(index, 'up')">
+            <button v-if="sortable && index != 0" class="btn secondary" @click="shiftNote(index, 'up')">
               <ArrowUpToLine class="text-black dark:text-white" :size="20" />
             </button>
             <button
               v-if="sortable && index != noteList.length - 1"
-              class="btn primary"
+              class="btn secondary"
               @click="shiftNote(index, 'down')"
             >
               <ArrowDownToLine class="text-black dark:text-white" :size="20" />
@@ -234,10 +234,10 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex flex-col gap-1 sm:flex-row">
-        <button class="btn primary" @click="addNewNote">
+        <button class="btn secondary" @click="addNewNote">
           <Plus class="text-black dark:text-white" :size="20" />note
         </button>
-        <button class="btn primary" @click="sortable = !sortable">
+        <button class="btn secondary" @click="sortable = !sortable">
           <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
         </button>
       </div>
@@ -256,7 +256,7 @@ onMounted(async () => {
             type="text"
             @keydown.enter="toggleEditTitle(false)"
           />
-          <button class="btn primary" @click="toggleEditTitle(false)">
+          <button class="btn secondary" @click="toggleEditTitle(false)">
             <Check class="text-black dark:text-white" :size="20" />
           </button>
         </div>
@@ -272,14 +272,14 @@ onMounted(async () => {
             @click="toggleEditTitle(true)"
             >{{ noteTitle }}</span
           >
-          <button class="btn primary" @click="toggleEditTitle(true)">
+          <button class="btn secondary" @click="toggleEditTitle(true)">
             <PencilLine class="text-black dark:text-white" :size="20" />
             Edit title
           </button>
-          <button class="btn primary" @click="colorRequest">
+          <button class="btn secondary" @click="colorRequest">
             <Palette class="text-black dark:text-white" :size="20" />
           </button>
-          <button id="delete" class="btn primary" @click="deleteRequest">
+          <button id="delete" class="btn secondary" @click="deleteRequest">
             <Trash2 class="text-black dark:text-white" :size="20" />
             <p>Delete note</p>
           </button>

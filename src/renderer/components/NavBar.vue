@@ -20,7 +20,11 @@ const getTheme = () => {
     .setCommand([AppCommands.GET_THEME])
     .then((result: any) => {
       theme.value = result
-      document.documentElement.classList.add(theme.value)
+      if (theme.value === 'light') {
+        document.documentElement.classList.remove('dark')
+      } else {
+        document.documentElement.classList.add('dark')
+      }
     })
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)

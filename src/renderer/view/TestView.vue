@@ -1,6 +1,6 @@
 <template>
   <div class="m-2 flex flex-col gap-2 rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
-    <div id="editorjs"></div>
+    <div id="editorjs" class=""></div>
   </div>
 </template>
 
