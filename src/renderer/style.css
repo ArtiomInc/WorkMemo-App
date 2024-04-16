@@ -3,11 +3,6 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'GitlabSans';
-  src: url(/fonts/GitLabSans.otf);
-}
-
-@font-face {
   font-family: 'Inter';
   src: url(/fonts/inter.ttf);
 }
@@ -44,22 +39,4 @@
   .input.secondary {
     @apply border-[#cbd5e1] bg-[#fff] text-[#09090b] hover:bg-[#f1f5f9] dark:border-[#505052] dark:bg-[#242427] dark:text-[#fff] dark:hover:bg-[#303033];
   }
-}
-
-/* ===== Scrollbar CSS ===== */
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 10px;
-}
-
-*::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
-  cursor: pointer;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #7d7d7d;
-  border-radius: 9999px;
-  cursor: pointer;
 }

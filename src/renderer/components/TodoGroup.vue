@@ -72,7 +72,7 @@ const deleteTodo = () => {
       <div class="flex w-full items-center">
         <div v-if="!editableTitle" class="flex w-full items-center">
           <p class="w-full">{{ props.title }}</p>
-          <button class="btn secondary" @click="editableTitle = !editableTitle">
+          <button class="btn secondary w-8 min-w-8 p-0" @click="editableTitle = !editableTitle">
             <PencilLine class="text-black dark:text-white" :size="20" />
           </button>
         </div>
@@ -83,7 +83,7 @@ const deleteTodo = () => {
             type="text"
             @change="emit('updateTitle', index, titleEdited)"
           />
-          <button class="btn secondary" @click="editableTitle = !editableTitle">
+          <button class="btn secondary w-8 min-w-8 p-0" @click="editableTitle = !editableTitle">
             <Check class="text-black dark:text-white" :size="20" />
           </button>
         </div>
@@ -94,15 +94,15 @@ const deleteTodo = () => {
         </button>
         <button
           v-if="canShiftDown"
-          class="btn secondary"
+          class="btn secondary w-8 min-w-8 p-0"
           @click="emit('shiftGroup', props.index, props.subIndex, 'down')"
         >
           <ArrowDownToLine class="text-black dark:text-white" :size="20" />
         </button>
-        <button class="btn secondary" @click="emit('addTodoInGroup', props.index)">
+        <button class="btn secondary w-8 min-w-8 p-0" @click="emit('addTodoInGroup', props.index)">
           <Plus class="text-black dark:text-white" :size="20" />
         </button>
-        <button class="btn secondary" @click="askDeleteTodo">
+        <button class="btn secondary w-8 min-w-8 p-0" @click="askDeleteTodo">
           <Trash2 class="text-black dark:text-white" :size="20" />
         </button>
       </div>

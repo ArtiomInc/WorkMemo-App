@@ -110,20 +110,24 @@ const deleteTodo = () => {
       @focus="$event.target && ($event.target as HTMLInputElement).select()"
       @input="emit('updatedTodo', props.index, props.subIndex, contentEdited, props.color)"
     />
-    <button v-if="props.canShiftUp" class="btn secondary" @click="emit('shiftTodo', props.index, props.subIndex, 'up')">
+    <button
+      v-if="props.canShiftUp"
+      class="btn secondary w-8 min-w-8 p-0"
+      @click="emit('shiftTodo', props.index, props.subIndex, 'up')"
+    >
       <ArrowUpToLine class="text-black dark:text-white" :size="20" />
     </button>
     <button
       v-if="props.canShiftDown"
-      class="btn secondary"
+      class="btn secondary w-8 min-w-8 p-0"
       @click="emit('shiftTodo', props.index, props.subIndex, 'down')"
     >
       <ArrowDownToLine class="text-black dark:text-white" :size="20" />
     </button>
-    <button class="btn secondary" @click="askColorTodo()">
+    <button class="btn secondary w-8 min-w-8 p-0" @click="askColorTodo()">
       <Palette class="text-black dark:text-white" :size="20" />
     </button>
-    <button class="btn secondary" @click="askDeleteTodo()">
+    <button class="btn secondary w-8 min-w-8 p-0" @click="askDeleteTodo()">
       <Trash2 class="text-black dark:text-white" :size="20" />
     </button>
   </div>

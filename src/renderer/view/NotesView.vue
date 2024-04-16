@@ -14,6 +14,7 @@ import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
 import { NoteCommands } from '../../main/static/NoteCommands'
 import '../assets/quill.css'
+import NavBar from '../components/NavBar.vue'
 import { useColorStore } from '../stores/DialogColor'
 import { useDeleteStore } from '../stores/DialogDelete'
 import { useErrorStore } from '../stores/DialogError'
@@ -187,111 +188,118 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col" :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }">
-    <div
-      class="m-2 mt-0 h-full overflow-y-auto rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800"
-      :class="{
-        'md:w-1/4': selectedID != -1,
-      }"
-    >
-      <div v-if="noteList != null" class="overflow-y-auto md:max-h-[calc(100vh-145px)]">
-        <div v-for="(item, index) in noteList" :key="index" class="mb-2">
-          <div
-            class="flex items-center gap-1"
-            :class="{
-              'mb-2': index != noteList.length - 1,
-              'mb-0': index == noteList.length - 1,
-            }"
-          >
+  <div class="flex flex-col">
+    <NavBar></NavBar>
+    <div class="flex flex-col" :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }">
+      <div
+        class="m-2 h-full overflow-y-auto rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800"
+        :class="{
+          'md:w-1/4': selectedID != -1,
+        }"
+      >
+        <div v-if="noteList != null" class="overflow-y-auto md:max-h-[calc(100vh-145px)]">
+          <div v-for="(item, index) in noteList" :key="index" class="mb-2">
             <div
-              class="flex h-8 w-full select-none truncate rounded p-1"
+              class="flex items-center gap-1"
               :class="{
-                'hover:cursor-pointer': selectedID != index || selectedID == -1,
-                'hover:cursor-default': selectedID == index,
-                'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20': item.color == 0,
-                'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
-                'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
-                'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
+                'mb-2': index != noteList.length - 1,
+                'mb-0': index == noteList.length - 1,
               }"
-              @click="getDetailsNote(index)"
             >
-              <span class="block dark:text-neutral-200">
-                {{ item.title }}
-              </span>
+              <div
+                class="flex h-8 w-full select-none truncate rounded p-1"
+                :class="{
+                  'hover:cursor-pointer': selectedID != index || selectedID == -1,
+                  'hover:cursor-default': selectedID == index,
+                  'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20': item.color == 0,
+                  'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
+                  'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
+                  'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
+                }"
+                @click="getDetailsNote(index)"
+              >
+                <span class="block dark:text-neutral-200">
+                  {{ item.title }}
+                </span>
+              </div>
+              <button
+                v-if="sortable && index != 0"
+                class="btn secondary w-8 min-w-8 p-0"
+                @click="shiftNote(index, 'up')"
+              >
+                <ArrowUpToLine class="text-black dark:text-white" :size="20" />
+              </button>
+              <button
+                v-if="sortable && index != noteList.length - 1"
+                class="btn secondary w-8 min-w-8 p-0"
+                @click="shiftNote(index, 'down')"
+              >
+                <ArrowDownToLine class="text-black dark:text-white" :size="20" />
+              </button>
             </div>
-            <button v-if="sortable && index != 0" class="btn secondary" @click="shiftNote(index, 'up')">
-              <ArrowUpToLine class="text-black dark:text-white" :size="20" />
-            </button>
-            <button
-              v-if="sortable && index != noteList.length - 1"
-              class="btn secondary"
-              @click="shiftNote(index, 'down')"
-            >
-              <ArrowDownToLine class="text-black dark:text-white" :size="20" />
-            </button>
           </div>
         </div>
-      </div>
-      <div class="flex flex-col gap-1 sm:flex-row">
-        <button class="btn secondary" @click="addNewNote">
-          <Plus class="text-black dark:text-white" :size="20" />note
-        </button>
-        <button class="btn secondary" @click="sortable = !sortable">
-          <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
-        </button>
-      </div>
-    </div>
-    <div
-      v-if="selectedID != -1"
-      :class="{ 'note-context-responsive': selectedID != -1 }"
-      class="mx-2 mb-2 mt-0 h-full rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:m-0 md:mr-2"
-    >
-      <div class="">
-        <div v-if="isEditingTitle" class="flex items-center gap-1">
-          <input
-            ref="titleinput"
-            v-model="noteTitle"
-            class="h-8 rounded border border-black/10 bg-black/10 px-2 outline-none dark:border-white/10 dark:bg-white/10 dark:text-neutral-200"
-            type="text"
-            @keydown.enter="toggleEditTitle(false)"
-          />
-          <button class="btn secondary" @click="toggleEditTitle(false)">
-            <Check class="text-black dark:text-white" :size="20" />
+        <div class="flex flex-col gap-1 sm:flex-row">
+          <button class="btn secondary" @click="addNewNote">
+            <Plus class="text-black dark:text-white" :size="20" />note
+          </button>
+          <button class="btn secondary" @click="sortable = !sortable">
+            <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
           </button>
         </div>
-        <div v-else class="flex flex-col gap-1 md:flex-row">
-          <span
-            class="flex h-8 cursor-pointer items-center rounded border border-black/10 px-2 py-1 dark:border-white/10"
-            :class="{
-              'bg-black/10 dark:bg-white/10': noteList[selectedID].color == 0,
-              'bg-red-400/50': noteList[selectedID].color == 1,
-              'bg-green-400/50': noteList[selectedID].color == 2,
-              'bg-blue-400/50': noteList[selectedID].color == 3,
-            }"
-            @click="toggleEditTitle(true)"
-            >{{ noteTitle }}</span
-          >
-          <button class="btn secondary" @click="toggleEditTitle(true)">
-            <PencilLine class="text-black dark:text-white" :size="20" />
-            Edit title
-          </button>
-          <button class="btn secondary" @click="colorRequest">
-            <Palette class="text-black dark:text-white" :size="20" />
-          </button>
-          <button id="delete" class="btn secondary" @click="deleteRequest">
-            <Trash2 class="text-black dark:text-white" :size="20" />
-            <p>Delete note</p>
-          </button>
-        </div>
-        <div class="mt-1">
-          <QuillEditor
-            v-model:content="noteContent"
-            spellcheck="false"
-            toolbar="minimal"
-            content-type="html"
-            placeholder="Type your note here"
-            @update:content="updateNoteContent"
-          ></QuillEditor>
+      </div>
+      <div
+        v-if="selectedID != -1"
+        :class="{ 'note-context-responsive': selectedID != -1 }"
+        class="mx-2 mb-2 mt-0 h-full rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:m-0 md:mr-2 md:mt-2"
+      >
+        <div class="">
+          <div v-if="isEditingTitle" class="flex items-center gap-1">
+            <input
+              ref="titleinput"
+              v-model="noteTitle"
+              class="input secondary"
+              type="text"
+              @keydown.enter="toggleEditTitle(false)"
+            />
+            <button class="btn secondary w-8 min-w-8 p-0" @click="toggleEditTitle(false)">
+              <Check class="text-black dark:text-white" :size="20" />
+            </button>
+          </div>
+          <div v-else class="flex flex-col gap-1 md:flex-row">
+            <span
+              class="flex h-8 cursor-pointer items-center rounded border border-black/10 px-2 py-1 dark:border-white/10"
+              :class="{
+                'bg-black/10 dark:bg-white/10': noteList[selectedID].color == 0,
+                'bg-red-400/50': noteList[selectedID].color == 1,
+                'bg-green-400/50': noteList[selectedID].color == 2,
+                'bg-blue-400/50': noteList[selectedID].color == 3,
+              }"
+              @click="toggleEditTitle(true)"
+              >{{ noteTitle }}</span
+            >
+            <button class="btn secondary" @click="toggleEditTitle(true)">
+              <PencilLine class="text-black dark:text-white" :size="20" />
+              Edit title
+            </button>
+            <button class="btn secondary md:w-8 md:min-w-8 md:p-0" @click="colorRequest">
+              <Palette class="text-black dark:text-white" :size="20" />
+            </button>
+            <button id="delete" class="btn secondary" @click="deleteRequest">
+              <Trash2 class="text-black dark:text-white" :size="20" />
+              <p>Delete note</p>
+            </button>
+          </div>
+          <div class="mt-1">
+            <QuillEditor
+              v-model:content="noteContent"
+              spellcheck="false"
+              toolbar="minimal"
+              content-type="html"
+              placeholder="Type your note here"
+              @update:content="updateNoteContent"
+            ></QuillEditor>
+          </div>
         </div>
       </div>
     </div>

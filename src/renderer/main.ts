@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import App from './App.vue'
 import './style.css'
+import MigrationView from './view/MigrationView.vue'
 import NotesView from './view/NotesView.vue'
 import TodosView from './view/TodosView.vue'
 
@@ -14,7 +15,8 @@ const app = createApp(App)
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', name: 'Todos', component: TodosView },
+    { path: '/', name: 'Migration', component: MigrationView },
+    { path: '/todos', name: 'Todos', component: TodosView },
     { path: '/notes', name: 'Notes', component: NotesView },
   ],
 })
