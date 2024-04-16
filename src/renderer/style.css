@@ -7,9 +7,14 @@
   src: url(/fonts/GitLabSans.otf);
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url(/fonts/inter.ttf);
+}
+
 @layer base {
   html {
-    font-family: GitlabSans;
+    font-family: Inter;
   }
 }
 

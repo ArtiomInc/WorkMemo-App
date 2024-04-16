@@ -19,7 +19,7 @@ autoUpdater.autoInstallOnAppQuit = true
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
-    height: 900,
+    height: 800,
     //fullscreen: true,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),

@@ -13,11 +13,10 @@ import {
 import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
 import { NoteCommands } from '../../main/static/NoteCommands'
+import '../assets/quill.css'
 import { useColorStore } from '../stores/DialogColor'
 import { useDeleteStore } from '../stores/DialogDelete'
 import { useErrorStore } from '../stores/DialogError'
-
-import '/public/style/vue-quill.snow.css'
 
 const errorStore = useErrorStore()
 const colorStore = useColorStore()

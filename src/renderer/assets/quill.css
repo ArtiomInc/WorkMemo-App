@@ -40,7 +40,7 @@
 
 .ql-editor > * {
   cursor: text;
-  font-family: Arial, Helvetica, sans-serif;
+  /*font-family: Arial, Helvetica, sans-serif;*/
 }
 .ql-editor p,
 .ql-editor ol,

@@ -5,7 +5,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import './style.css'
 import NotesView from './view/NotesView.vue'
-import TestView from './view/TestView.vue'
 import TodosView from './view/TodosView.vue'
 
 // Vuejs instance
@@ -17,7 +16,6 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Todos', component: TodosView },
     { path: '/notes', name: 'Notes', component: NotesView },
-    { path: '/test', name: 'test', component: TestView },
   ],
 })
 
