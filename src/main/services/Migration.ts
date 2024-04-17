@@ -12,6 +12,8 @@ interface Todo {
   id: number
   type: number
   content?: string
+  color?: number
+  title?: string
   list?: {
     id: number
     type: number
@@ -21,8 +23,8 @@ interface Todo {
 }
 
 export class Migration {
-  protected store: any
-  static data: {
+  protected store: ElectronStore
+  protected data: {
     user: any
     todo: any
     note: any
@@ -41,8 +43,8 @@ export class Migration {
     const fileName = 'data.json'
     try {
       const contenu = await fs.promises.readFile(fileDirectory + fileName, 'utf-8')
-      Migration.data = await JSON.parse(contenu)
-      return Migration.data
+      this.data = await JSON.parse(contenu)
+      return this.data
     } catch {
       throw new Error('orchestrator.error.unable_to_find_data')
     }

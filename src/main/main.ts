@@ -2,15 +2,19 @@ import { app, BrowserWindow, ipcMain, session } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 
+import { AppManager } from './services/AppManager'
 import { Migration } from './services/Migration'
-// import { NoteManager } from './services/NoteManager'
-// import { TodoManager } from './services/TodoManager'
+import { NoteManager } from './services/NoteManager'
+import { TodoManager } from './services/TodoManager'
 import AppCommands from './static/AppCommands'
+import NoteCommands from './static/NoteCommands'
+import TodoCommands from './static/TodoCommands'
 
 let mainWindow: BrowserWindow
+const appManager = new AppManager()
 const migration = new Migration()
-// const todoManager = new TodoManager()
-// const noteManager = new NoteManager()
+const todoManager = new TodoManager()
+const noteManager = new NoteManager()
 const hasLock = app.requestSingleInstanceLock()
 
 autoUpdater.autoDownload = false
@@ -80,58 +84,63 @@ if (!hasLock) {
 
   ipcMain.handle('setCommand', async (event, args) => {
     switch (args[0]) {
-      // case TodoCommands.GET_LIST_TODO:
-      //   return await todoManager.getData()
-      // case TodoCommands.ADD_NEW_TODO:
-      //   return await todoManager.addNewTodo()
-      // case TodoCommands.UPDATE_TODO:
-      //   return await orchestrator.updateTodo(args[1], args[2])
-      // case TodoCommands.SHIT_TODO:
-      //   return await orchestrator.shiftTodo(args[1], args[2])
-      // case TodoCommands.DELETE_TODO:
-      //   return await orchestrator.deleteTodo(args[1])
-      // case TodoCommands.ADD_NEW_GROUP:
-      //   return await orchestrator.addTodoGroup()
-      // case TodoCommands.DELETE_GROUP:
-      //   return await orchestrator.deleteTodoGroup(args[1])
-      // case TodoCommands.UPDATE_TITLE_GROUP:
-      //   return await orchestrator.updateTodoGroupTitle(args[1], args[2])
-      // case TodoCommands.ADD_TODO_IN_GROUP:
-      //   return await orchestrator.addTodoGroupTodo(args[1])
-      // case TodoCommands.SHIFT_TODO_IN_GROUP:
-      //   return await orchestrator.shiftTodoGroupTodo(args[1], args[2], args[3])
-      // case TodoCommands.UPDATE_TODO_IN_GROUP:
-      //   return await orchestrator.updateTodoGroupTodo(args[1], args[2], args[3])
-      // case TodoCommands.DELETE_TODO_IN_GROUP:
-      //   return await orchestrator.deleteTodoGroupTodo(args[1], args[2])
-      // case NoteCommands.GET_LIST_NOTE:
-      //   return await orchestrator.getNoteList()
-      // case NoteCommands.ADD_NEW_NOTE:
-      //   return await orchestrator.addNoteList()
-      // case NoteCommands.GET_DETAILS_NOTE:
-      //   return await orchestrator.getNote(args[1])
-      // case NoteCommands.UPDATE_TITLE_NOTE:
-      //   return await orchestrator.updateNoteTitle(args[1], args[2])
-      // case NoteCommands.UPDATE_CONTENT_NOTE:
-      //   return await orchestrator.updateNoteContent(args[1], args[2])
-      // case NoteCommands.UPDATE_COLOR_NOTE:
-      //   return await orchestrator.updateNoteColor(args[1], args[2])
-      // case NoteCommands.SHIT_NOTE:
-      //   return await orchestrator.shiftNote(args[1], args[2])
-      // case NoteCommands.DELETE_NOTE:
-      //   return await orchestrator.deleteNote(args[1])
-      // case AppCommands.GET_THEME:
-      //   return await orchestrator.getTheme()
-      // case AppCommands.SAVE_THEME:
-      //   return await orchestrator.saveTheme(args[1])
+      case TodoCommands.GET_DATA:
+        return await todoManager.getData()
+      case TodoCommands.ADD_NEW_TODO:
+        return await todoManager.addNewTodo()
+      case TodoCommands.UPDATE_TODO:
+        return await todoManager.updateTodo(args[1], args[2])
+      case TodoCommands.SHIT_TODO:
+        return await todoManager.shiftTodo(args[1], args[2])
+      case TodoCommands.DELETE_TODO:
+        return await todoManager.deleteTodo(args[1])
+      case TodoCommands.ADD_NEW_GROUP:
+        return await todoManager.addGroup()
+      case TodoCommands.UPDATE_TITLE_GROUP:
+        return await todoManager.updateGroupTitle(args[1], args[2])
+      case TodoCommands.ADD_TODO_IN_GROUP:
+        return await todoManager.addTodoInGroup(args[1])
+      case TodoCommands.UPDATE_TODO_IN_GROUP:
+        return await todoManager.updateTodoInGroup(args[1], args[2], args[3])
+      case TodoCommands.SHIFT_TODO_IN_GROUP:
+        return await todoManager.shiftTodoInGroup(args[1], args[2], args[3])
+      case TodoCommands.DELETE_TODO_IN_GROUP:
+        return await todoManager.deleteTodoInGroup(args[1], args[2])
+
+      case NoteCommands.GET_NOTE_LIST:
+        return await noteManager.getNoteList()
+      case NoteCommands.ADD_NEW_NOTE:
+        return await noteManager.addNewNote()
+      case NoteCommands.GET_NOTE_DETAILS:
+        return await noteManager.getNoteDetails(args[1])
+      case NoteCommands.UPDATE_NOTE_TITLE:
+        return await noteManager.updateNoteTitle(args[1], args[2])
+      case NoteCommands.UPDATE_NOTE_CONTENT:
+        return await noteManager.updateNoteContent(args[1], args[2])
+      case NoteCommands.UPDATE_NOTE_COLOR:
+        return await noteManager.updateNoteColor(args[1], args[2])
+      case NoteCommands.SHIFT_NOTE:
+        return await noteManager.shiftNote(args[1], args[2])
+      case NoteCommands.DELETE_NOTE:
+        return await noteManager.deleteNote(args[1])
+
+      case AppCommands.GET_THEME:
+        return await appManager.getTheme()
+      case AppCommands.SAVE_THEME:
+        return await appManager.saveTheme(args[1])
+
       case AppCommands.GET_VERSION:
         return app.getVersion()
       case AppCommands.GET_FILE:
         return migration.getOldData()
       case AppCommands.MIGRATE_STORE_TODO:
-        return migration.setTodoData(args[1])
+        const todo = migration.setTodoData(args[1])
+        todoManager.initialization()
+        return todo
       case AppCommands.MIGRATE_STORE_NOTE:
-        return migration.setNoteData(args[1])
+        const note = migration.setNoteData(args[1])
+        noteManager.initialization()
+        return note
       default:
         throw new Error('main.error.command_not_exist')
     }
