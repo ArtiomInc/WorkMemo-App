@@ -8,7 +8,7 @@ import DialogError from './components/DialogError.vue'
 const router = useRouter()
 
 onMounted(() => {
-  router.push('/todos')
+  router.push('/')
 })
 </script>
 
