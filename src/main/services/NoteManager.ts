@@ -53,12 +53,23 @@ export class NoteManager {
 
   async addNewNote(): Promise<void> {
     try {
-      this.notes.push({
-        id: Math.floor(Math.random() * this.maxRandomID),
-        title: 'New note !',
-        color: 0,
-        content: '<p></p>',
-      })
+      if (this.notes !== undefined) {
+        this.notes.push({
+          id: Math.floor(Math.random() * this.maxRandomID),
+          title: 'New note !',
+          color: 0,
+          content: '<p></p>',
+        })
+      } else {
+        this.notes = [
+          {
+            id: Math.floor(Math.random() * this.maxRandomID),
+            title: 'New note !',
+            color: 0,
+            content: '<p></p>',
+          },
+        ]
+      }
     } catch {
       throw new Error('note.error.unable_to_add_new_note')
     }

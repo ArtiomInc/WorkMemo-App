@@ -47,12 +47,23 @@ export class TodoManager {
 
   async addNewTodo(): Promise<void> {
     try {
-      this.todos.push({
-        id: Math.floor(Math.random() * this.maxRandomID),
-        type: 8,
-        content: 'New todo !',
-        color: 0,
-      })
+      if (this.todos !== undefined) {
+        this.todos.push({
+          id: Math.floor(Math.random() * this.maxRandomID),
+          type: 8,
+          content: 'New todo !',
+          color: 0,
+        })
+      } else {
+        this.todos = [
+          {
+            id: Math.floor(Math.random() * this.maxRandomID),
+            type: 8,
+            content: 'New todo !',
+            color: 0,
+          },
+        ]
+      }
     } catch {
       throw new Error('todo.error.unable_to_add_todo')
     }
