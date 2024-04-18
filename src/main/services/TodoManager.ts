@@ -21,12 +21,20 @@ export class TodoManager {
 
   constructor() {
     this.store = new ElectronStore()
-    this.todos = this.store.get('todo') as Todo[]
+    try {
+      this.todos = this.store.get('todo') as Todo[]
+    } catch {
+      this.todos = []
+    }
     this.maxRandomID = 100_000
   }
 
   async initialization(): Promise<void> {
-    this.todos = this.store.get('todo') as Todo[]
+    try {
+      this.todos = this.store.get('todo') as Todo[]
+    } catch {
+      this.todos = []
+    }
   }
 
   async getData(): Promise<Todo[] | undefined> {
@@ -108,13 +116,25 @@ export class TodoManager {
 
   async addGroup(): Promise<void> {
     try {
-      this.todos.push({
-        id: Math.floor(Math.random() * this.maxRandomID),
-        type: 32,
-        title: 'New todo group !',
-        color: 0,
-        list: [],
-      })
+      if (this.todos !== undefined) {
+        this.todos.push({
+          id: Math.floor(Math.random() * this.maxRandomID),
+          type: 32,
+          title: 'New todo group !',
+          color: 0,
+          list: [],
+        })
+      } else {
+        this.todos = [
+          {
+            id: Math.floor(Math.random() * this.maxRandomID),
+            type: 32,
+            title: 'New todo group !',
+            color: 0,
+            list: [],
+          },
+        ]
+      }
     } catch {
       throw new Error('todo.error.unable_to_add_todo_in_group')
     }

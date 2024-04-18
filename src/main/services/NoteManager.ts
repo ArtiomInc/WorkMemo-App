@@ -14,12 +14,20 @@ export class NoteManager {
 
   constructor() {
     this.store = new ElectronStore()
-    this.notes = this.store.get('note') as Note[]
+    try {
+      this.notes = this.store.get('note') as Note[]
+    } catch {
+      this.notes = []
+    }
     this.maxRandomID = 100_000
   }
 
   async initialization(): Promise<void> {
-    this.notes = this.store.get('note') as Note[]
+    try {
+      this.notes = this.store.get('note') as Note[]
+    } catch {
+      this.notes = []
+    }
   }
 
   async getData(): Promise<Note[] | undefined> {
