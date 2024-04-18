@@ -92,7 +92,7 @@ if (!hasLock) {
         return await todoManager.addNewTodo()
       case TodoCommands.UPDATE_TODO:
         return await todoManager.updateTodo(args[1], args[2])
-      case TodoCommands.SHIT_TODO:
+      case TodoCommands.SHIFT_TODO:
         return await todoManager.shiftTodo(args[1], args[2])
       case TodoCommands.DELETE_TODO:
         return await todoManager.deleteTodo(args[1])

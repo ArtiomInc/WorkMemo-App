@@ -2,7 +2,7 @@ export enum TodoCommands {
   GET_DATA = 200,
   ADD_NEW_TODO = 201,
   UPDATE_TODO = 202,
-  SHIT_TODO = 203,
+  SHIFT_TODO = 203,
   DELETE_TODO = 204,
   ADD_NEW_GROUP = 205,
   UPDATE_TITLE_GROUP = 206,

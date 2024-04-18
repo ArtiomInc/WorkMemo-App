@@ -89,7 +89,11 @@ const deleteTodo = () => {
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button v-if="canShiftUp" class="btn secondary" @click="emit('shiftGroup', props.index, props.subIndex, 'up')">
+        <button
+          v-if="canShiftUp"
+          class="btn secondary w-8 min-w-8 p-0"
+          @click="emit('shiftGroup', props.index, props.subIndex, 'up')"
+        >
           <ArrowUpToLine class="text-black dark:text-white" :size="20" />
         </button>
         <button

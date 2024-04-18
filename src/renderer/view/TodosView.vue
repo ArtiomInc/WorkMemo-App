@@ -64,9 +64,9 @@ const updateTodo = (index: number, subIndex: number, content: string, color: num
   }
 }
 
-const shiftTodo = (index: number, direction: string) => {
+const shiftTodo = (index: number, subIndex: number, direction: string) => {
   window.electronAPI
-    .setCommand([TodoCommands.SHIT_TODO, index, direction])
+    .setCommand([TodoCommands.SHIFT_TODO, index, direction])
     .then(() => {
       getListTodo()
     })
