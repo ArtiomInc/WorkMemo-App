@@ -134,11 +134,19 @@ export class TodoManager {
     }
   }
 
-  async updateTodoInGroup(id: number, sub_id: number, content: any): Promise<void> {
+  async updateTodoInGroup(
+    id: number,
+    sub_id: number,
+    content: {
+      id: number
+      type: number
+      color: number
+      content: string
+    }
+  ): Promise<void> {
     try {
-      if (this.todos[id]) {
-        //@ts-expect-error: Should expect undefined
-        this.todos[id].list[sub_id] = content
+      if (this.todos[id].list !== undefined) {
+        this.todos[id]?.list?.splice(sub_id, 1, content)
       } else {
         throw new Error('todo.error.unable_to_update_todo_in_group')
       }
@@ -148,23 +156,21 @@ export class TodoManager {
   }
 
   async shiftTodoInGroup(id: number, sub_id: number, content: string): Promise<void> {
-    if (this.todos[id].list !== undefined) {
-      if (
-        id == -1 ||
-        (sub_id == 0 && content === 'up') ||
-        (sub_id == this.todos[id].list.length - 1 && content === 'down')
-      ) {
+    const todosInGroup = this.todos[id].list
+    if (todosInGroup !== undefined) {
+      if (id == -1 || (sub_id == 0 && content === 'up') || (sub_id == todosInGroup.length - 1 && content === 'down')) {
         throw new Error('todo.error.unable_to_shift_todo_in_group')
       } else {
         if (content === 'up') {
-          const temp = this.todos[id].list[sub_id]
-          this.todos[id].list[sub_id] = this.todos[id].list[sub_id - 1]
-          this.todos[id].list[sub_id - 1] = temp
+          const temp = todosInGroup[sub_id]
+          todosInGroup[sub_id] = todosInGroup[sub_id - 1]
+          todosInGroup[sub_id - 1] = temp
         } else if (content === 'down') {
-          const temp = this.todos[id].list[sub_id]
-          this.todos[id].list[sub_id] = this.todos[id].list[sub_id + 1]
-          this.todos[id].list[sub_id + 1] = temp
+          const temp = todosInGroup[sub_id]
+          todosInGroup[sub_id] = todosInGroup[sub_id + 1]
+          todosInGroup[sub_id + 1] = temp
         }
+        this.todos[id].list = todosInGroup
       }
     } else {
       throw new Error('todo.error.unable_to_shift_todo_in_group')
@@ -172,13 +178,13 @@ export class TodoManager {
   }
 
   async deleteTodoInGroup(id: number, sub_id: number): Promise<void> {
-    if (this.todos[id] !== undefined) {
-      try {
+    try {
+      if (this.todos[id].list !== undefined) {
         this.todos[id]?.list?.splice(sub_id, 1)
-      } catch {
+      } else {
         throw new Error('todo.error.unable_to_delete_todo_in_group')
       }
-    } else {
+    } catch {
       throw new Error('todo.error.unable_to_delete_todo_in_group')
     }
   }
