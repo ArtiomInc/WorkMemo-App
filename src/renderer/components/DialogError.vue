@@ -4,7 +4,7 @@
     class="animate-fade-in fixed left-0 top-0 z-50 block h-screen w-screen bg-black/50 p-5 dark:bg-white/25"
   >
     <div class="animate-slide-up mt-20 flex items-start justify-center">
-      <div class="rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
+      <div class="card">
         <span v-html="message"></span>
         <div class="mt-1 flex">
           <button class="btn secondary w-full" @click="cancel">Cancel</button>
@@ -48,10 +48,10 @@ const cancel = () => {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .animate-slide-up {
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.2s ease-out;
 }
 </style>

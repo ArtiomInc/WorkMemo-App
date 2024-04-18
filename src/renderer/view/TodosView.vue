@@ -169,7 +169,7 @@ onMounted(async () => {
 <template>
   <div class="flex flex-col">
     <NavBar></NavBar>
-    <div class="m-2 flex flex-col gap-2 rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
+    <div class="card m-2 flex flex-col gap-2">
       <div v-if="listTodo !== undefined && listTodo.length != 0" class="flex flex-col gap-2">
         <div v-for="(todo, index) in listTodo" :key="index">
           <TodoSingle

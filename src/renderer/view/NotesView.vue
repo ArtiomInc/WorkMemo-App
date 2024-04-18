@@ -206,7 +206,7 @@ onMounted(async () => {
     <NavBar></NavBar>
     <div class="flex flex-col" :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }">
       <div
-        class="m-2 h-full overflow-y-auto rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800"
+        class="card m-2 h-full overflow-y-auto"
         :class="{
           'md:w-1/4': selectedID != -1,
         }"
@@ -265,7 +265,7 @@ onMounted(async () => {
       <div
         v-if="selectedID != -1 && noteDetails != undefined"
         :class="{ 'note-context-responsive': selectedID != -1 }"
-        class="mx-2 mb-2 mt-0 h-full rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:m-0 md:mr-2 md:mt-2"
+        class="card mx-2 mb-2 mt-0 h-full md:m-0 md:mr-2 md:mt-2"
       >
         <div class="">
           <div v-if="isEditingTitle" class="flex items-center gap-1">
