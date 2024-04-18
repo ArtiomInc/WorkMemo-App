@@ -15,23 +15,39 @@ export class NoteManager {
   constructor() {
     this.store = new ElectronStore()
     this.notes = this.store.get('note') as Note[]
-    console.log('constructor: NoteManager')
-    console.log(this.notes)
     this.maxRandomID = 100_000
   }
 
-  initialization() {
+  async initialization(): Promise<void> {
     this.notes = this.store.get('note') as Note[]
   }
 
-  async getNoteList(): Promise<any | null> {
+  async getData(): Promise<Note[] | undefined> {
+    if (this.notes) {
+      return this.notes
+    } else if (this.notes == undefined) {
+      return undefined
+    } else {
+      throw new Error('note.error.unable_to_get_note_data')
+    }
+  }
+
+  async saveData(): Promise<void> {
+    if (this.notes !== undefined) {
+      this.store.set('note', this.notes)
+    }
+  }
+
+  async getNoteList(): Promise<{ title: string; color: number }[] | undefined> {
     try {
-      return this.notes.map((item: Note) => ({
-        title: item.title,
-        color: item.color,
-      }))
+      if (this.notes) {
+        return this.notes.map((item: Note) => ({
+          title: item.title,
+          color: item.color,
+        }))
+      }
     } catch {
-      throw new Error('orchestrator.error.unable_to_get_note_list')
+      throw new Error('note.error.unable_to_get_note_list')
     }
   }
 
@@ -44,7 +60,7 @@ export class NoteManager {
         content: '<p></p>',
       })
     } catch {
-      throw new Error('orchestrator.error.unable_to_add_new_note')
+      throw new Error('note.error.unable_to_add_new_note')
     }
   }
 
@@ -52,7 +68,7 @@ export class NoteManager {
     try {
       return this.notes[id]
     } catch {
-      throw new Error('orchestrator.error.unable_to_get_note')
+      throw new Error('note.error.unable_to_get_note')
     }
   }
 
@@ -60,7 +76,7 @@ export class NoteManager {
     try {
       this.notes[id].title = title
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_note_title')
+      throw new Error('note.error.unable_to_update_note_title')
     }
   }
 
@@ -68,7 +84,7 @@ export class NoteManager {
     try {
       this.notes[id].content = content
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_note_content')
+      throw new Error('note.error.unable_to_update_note_content')
     }
   }
 
@@ -76,14 +92,14 @@ export class NoteManager {
     try {
       this.notes[id].color = color
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_note_color')
+      throw new Error('note.error.unable_to_update_note_color')
     }
   }
 
   async shiftNote(id: number, content: string): Promise<void> {
     try {
       if ((id == 0 && content === 'up') || (id == this.notes.length - 1 && content === 'down')) {
-        throw new Error('orchestrator.error.unable_to_shift_note')
+        throw new Error('note.error.unable_to_shift_note')
       } else {
         if (content === 'up') {
           const temp = this.notes[id]
@@ -96,7 +112,7 @@ export class NoteManager {
         }
       }
     } catch {
-      throw new Error('orchestrator.error.unable_to_shift_note')
+      throw new Error('note.error.unable_to_shift_note')
     }
   }
 
@@ -104,7 +120,7 @@ export class NoteManager {
     try {
       this.notes.splice(id, 1)
     } catch {
-      throw new Error('orchestrator.error.unable_to_delete_note')
+      throw new Error('note.error.unable_to_delete_note')
     }
   }
 }

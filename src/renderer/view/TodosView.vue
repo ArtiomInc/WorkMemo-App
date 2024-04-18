@@ -51,7 +51,7 @@ const addNewTodo = () => {
     })
 }
 
-const updateTodo = (index: number, content: string, color: number) => {
+const updateTodo = (index: number, subIndex: number, content: string, color: number) => {
   if (listTodo.value !== undefined) {
     listTodo.value[index].content = content
     listTodo.value[index].color = color
@@ -170,7 +170,7 @@ onMounted(async () => {
   <div class="flex flex-col">
     <NavBar></NavBar>
     <div class="m-2 flex flex-col gap-2 rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
-      <div v-if="listTodo !== undefined">
+      <div v-if="listTodo !== undefined && listTodo.length != 0" class="flex flex-col gap-2">
         <div v-for="(todo, index) in listTodo" :key="index">
           <TodoSingle
             v-if="todo.list == undefined"

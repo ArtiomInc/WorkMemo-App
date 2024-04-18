@@ -49,7 +49,9 @@ const getDataFile = () => {
       }
     })
     .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+      //errorStore.setErrorState(true, error.message)
+      console.log(error)
+      router.push('/todos')
     })
 }
 
@@ -73,12 +75,23 @@ const storeNoteData = () => {
       .setCommand([AppCommands.MIGRATE_STORE_NOTE, oldNoteData])
       .then((result: any) => {
         console.log(result)
-        router.push('/todos')
+        saveMigrationDone()
       })
       .catch((error: any) => {
         errorStore.setErrorState(true, error.message)
       })
   }
+}
+
+const saveMigrationDone = () => {
+  window.electronAPI
+    .setCommand([AppCommands.SAVE_MIGRATION_STATE, 1])
+    .then(() => {
+      router.push('/todos')
+    })
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
+    })
 }
 </script>
 

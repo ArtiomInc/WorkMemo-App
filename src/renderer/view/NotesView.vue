@@ -46,11 +46,11 @@ const titleinput: Ref<HTMLElement | null> = ref(document.getElementById('titlein
 watch(
   () => deleteStore.deleteState,
   (value: boolean) => {
-    if (value == false && deleteStore.deleteLastResultAction == true && askedDelete.value == true) {
+    if (value === false && deleteStore.deleteLastResultAction === true && askedDelete.value === true) {
       deleteNote()
       deleteStore.setDeleteLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedDelete.value = false
     }
   }
@@ -59,12 +59,12 @@ watch(
 watch(
   () => colorStore.colorState,
   (value: boolean) => {
-    if (value == false && colorStore.colorLastResultAction == true && askedColor.value == true) {
+    if (value === false && colorStore.colorLastResultAction === true && askedColor.value === true) {
       updateNoteColor(colorStore.colorLastChoice)
       colorStore.setColorLastChoice(-1)
       colorStore.setColorLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedColor.value = false
     }
   }
@@ -221,7 +221,7 @@ onMounted(async () => {
               }"
             >
               <div
-                class="flex h-8 w-full select-none truncate rounded p-1"
+                class="input w-full justify-start border-0"
                 :class="{
                   'hover:cursor-pointer': selectedID != index || selectedID == -1,
                   'hover:cursor-default': selectedID == index,
@@ -282,7 +282,7 @@ onMounted(async () => {
           </div>
           <div v-else class="flex flex-col gap-1 md:flex-row">
             <span
-              class="flex h-8 cursor-pointer items-center rounded border border-black/10 px-2 py-1 dark:border-white/10"
+              class="input cursor-pointer border border-black/10 dark:border-white/10"
               :class="{
                 'bg-black/10 dark:bg-white/10': noteDetails.color == 0,
                 'bg-red-400/50': noteDetails.color == 1,

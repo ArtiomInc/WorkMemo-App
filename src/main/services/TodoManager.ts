@@ -22,20 +22,26 @@ export class TodoManager {
   constructor() {
     this.store = new ElectronStore()
     this.todos = this.store.get('todo') as Todo[]
-    console.log('constructor: TodoManager')
-    console.log(this.todos)
     this.maxRandomID = 100_000
   }
 
-  initialization() {
+  async initialization(): Promise<void> {
     this.todos = this.store.get('todo') as Todo[]
   }
 
-  async getData(): Promise<any | null> {
+  async getData(): Promise<Todo[] | undefined> {
     if (this.todos) {
       return this.todos
+    } else if (this.todos === undefined) {
+      return undefined
     } else {
-      throw new Error('orchestrator.error.unable_to_get_todo_data')
+      throw new Error('todo.error.unable_to_get_todo_data')
+    }
+  }
+
+  async saveData(): Promise<void> {
+    if (this.todos !== undefined) {
+      this.store.set('todo', this.todos)
     }
   }
 
@@ -48,7 +54,7 @@ export class TodoManager {
         color: 0,
       })
     } catch {
-      throw new Error('orchestrator.error.unable_to_add_todo')
+      throw new Error('todo.error.unable_to_add_todo')
     }
   }
 
@@ -57,14 +63,14 @@ export class TodoManager {
       this.todos[id].content = todo.content
       this.todos[id].color = todo.color
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_todo')
+      throw new Error('todo.error.unable_to_update_todo')
     }
   }
 
   async shiftTodo(id: number, content: string): Promise<void> {
     try {
       if ((id == 0 && content === 'up') || (id == this.todos.length - 1 && content === 'down')) {
-        throw new Error('orchestrator.error.unable_to_shift_todo')
+        throw new Error('todo.error.unable_to_shift_todo')
       } else {
         if (content === 'up') {
           const temp = this.todos[id]
@@ -77,7 +83,7 @@ export class TodoManager {
         }
       }
     } catch {
-      throw new Error('orchestrator.error.unable_to_shift_todo')
+      throw new Error('todo.error.unable_to_shift_todo')
     }
   }
 
@@ -85,7 +91,7 @@ export class TodoManager {
     try {
       this.todos.splice(id, 1)
     } catch {
-      throw new Error('orchestrator.error.unable_to_delete_todo')
+      throw new Error('todo.error.unable_to_delete_todo')
     }
   }
 
@@ -99,7 +105,7 @@ export class TodoManager {
         list: [],
       })
     } catch {
-      throw new Error('orchestrator.error.unable_to_add_todo_in_group')
+      throw new Error('todo.error.unable_to_add_todo_in_group')
     }
   }
 
@@ -107,7 +113,7 @@ export class TodoManager {
     try {
       this.todos[id].title = title
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_group_title')
+      throw new Error('todo.error.unable_to_update_group_title')
     }
   }
 
@@ -121,10 +127,10 @@ export class TodoManager {
           color: 0,
         })
       } else {
-        throw new Error('orchestrator.error.unable_to_add_todo_in_group')
+        throw new Error('todo.error.unable_to_add_todo_in_group')
       }
     } catch {
-      throw new Error('orchestrator.error.unable_to_add_todo_in_group')
+      throw new Error('todo.error.unable_to_add_todo_in_group')
     }
   }
 
@@ -134,41 +140,34 @@ export class TodoManager {
         //@ts-expect-error: Should expect undefined
         this.todos[id].list[sub_id] = content
       } else {
-        throw new Error('orchestrator.error.unable_to_update_todo_in_group')
+        throw new Error('todo.error.unable_to_update_todo_in_group')
       }
     } catch {
-      throw new Error('orchestrator.error.unable_to_update_todo_in_group')
+      throw new Error('todo.error.unable_to_update_todo_in_group')
     }
   }
 
   async shiftTodoInGroup(id: number, sub_id: number, content: string): Promise<void> {
-    if (this.todos[id] !== undefined) {
+    if (this.todos[id].list !== undefined) {
       if (
         id == -1 ||
         (sub_id == 0 && content === 'up') ||
-        //@ts-expect-error: Should expect undefined
         (sub_id == this.todos[id].list.length - 1 && content === 'down')
       ) {
-        throw new Error('orchestrator.error.unable_to_shift_todo_in_group')
+        throw new Error('todo.error.unable_to_shift_todo_in_group')
       } else {
         if (content === 'up') {
-          //@ts-expect-error: Should expect undefined
           const temp = this.todos[id].list[sub_id]
-          //@ts-expect-error: Should expect undefined
           this.todos[id].list[sub_id] = this.todos[id].list[sub_id - 1]
-          //@ts-expect-error: Should expect undefined
           this.todos[id].list[sub_id - 1] = temp
         } else if (content === 'down') {
-          //@ts-expect-error: Should expect undefined
           const temp = this.todos[id].list[sub_id]
-          //@ts-expect-error: Should expect undefined
           this.todos[id].list[sub_id] = this.todos[id].list[sub_id + 1]
-          //@ts-expect-error: Should expect undefined
           this.todos[id].list[sub_id + 1] = temp
         }
       }
     } else {
-      throw new Error('orchestrator.error.unable_to_shift_todo_in_group')
+      throw new Error('todo.error.unable_to_shift_todo_in_group')
     }
   }
 
@@ -177,10 +176,10 @@ export class TodoManager {
       try {
         this.todos[id]?.list?.splice(sub_id, 1)
       } catch {
-        throw new Error('orchestrator.error.unable_to_delete_todo_in_group')
+        throw new Error('todo.error.unable_to_delete_todo_in_group')
       }
     } else {
-      throw new Error('orchestrator.error.unable_to_delete_todo_in_group')
+      throw new Error('todo.error.unable_to_delete_todo_in_group')
     }
   }
 }

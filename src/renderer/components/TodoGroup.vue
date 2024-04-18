@@ -43,11 +43,11 @@ watch(editableTitle, (state: boolean) => {
 watch(
   () => deleteStore.deleteState,
   (value) => {
-    if (value == false && deleteStore.deleteLastResultAction == true && askedDelete.value == true) {
+    if (value === false && deleteStore.deleteLastResultAction === true && askedDelete.value === true) {
       deleteTodo()
       deleteStore.setDeleteLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedDelete.value = false
     }
   }

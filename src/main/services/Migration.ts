@@ -46,31 +46,45 @@ export class Migration {
       this.data = await JSON.parse(contenu)
       return this.data
     } catch {
-      throw new Error('orchestrator.error.unable_to_find_data')
+      this.store.set('migration', 1)
+      throw new Error('migration.error.unable_to_find_old_data')
     }
   }
 
-  setTodoData(data: Todo[]) {
+  async setTodoData(data: Todo[]): Promise<Todo[]> {
     this.store.set('todo', data)
-    return this.store.get('todo')
+    return this.store.get('todo') as Todo[]
   }
 
-  setNoteData(data: Note[]) {
+  async setNoteData(data: Note[]): Promise<Note[]> {
     this.store.set('note', data)
-    return this.store.get('note')
+    return this.store.get('note') as Note[]
   }
 
-  async getTheme() {
+  async getTheme(): Promise<string> {
     try {
-      return this.store.get('theme')
+      return this.store.get('theme') as string
     } catch {
       this.store.set('theme', 'light')
-      return this.store.get('theme')
+      return this.store.get('theme') as string
     }
   }
 
-  async saveTheme(theme: string) {
+  async getMigrationState(): Promise<number> {
+    try {
+      return this.store.get('migration') as number
+    } catch {
+      this.store.set('migration', 0)
+      return 0
+    }
+  }
+
+  async saveTheme(theme: string): Promise<void> {
     this.store.set('theme', theme)
+  }
+
+  async saveMigrationState(state: number): Promise<void> {
+    this.store.set('migration', state)
   }
 }
 

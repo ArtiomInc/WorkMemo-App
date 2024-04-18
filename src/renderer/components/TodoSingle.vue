@@ -54,11 +54,11 @@ watch(
 watch(
   () => deleteStore.deleteState,
   (value) => {
-    if (value == false && deleteStore.deleteLastResultAction == true && askedDelete.value == true) {
+    if (value === false && deleteStore.deleteLastResultAction === true && askedDelete.value === true) {
       deleteTodo()
       deleteStore.setDeleteLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedDelete.value = false
     }
   }
@@ -67,12 +67,12 @@ watch(
 watch(
   () => colorStore.colorState,
   (value) => {
-    if (value == false && colorStore.colorLastResultAction == true && askedColor.value == true) {
+    if (value === false && colorStore.colorLastResultAction === true && askedColor.value === true) {
       emit('updatedTodo', props.index, props.subIndex, contentEdited.value, colorStore.colorLastChoice)
       colorStore.setColorLastChoice(-1)
       colorStore.setColorLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedColor.value = false
     }
   }

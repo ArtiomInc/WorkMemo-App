@@ -3,8 +3,11 @@ export enum AppCommands {
   SAVE_THEME = 1,
   GET_VERSION = 2,
   GET_FILE = 3,
-  MIGRATE_STORE_TODO = 4,
-  MIGRATE_STORE_NOTE = 5,
+  GET_MIGRATION_STATE = 4,
+  SAVE_MIGRATION_STATE = 5,
+  MIGRATE_STORE_TODO = 6,
+  MIGRATE_STORE_NOTE = 7,
+  CHECK_BACKUP = 8,
 }
 
 export default AppCommands

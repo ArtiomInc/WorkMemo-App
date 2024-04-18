@@ -78,6 +78,8 @@ if (!hasLock) {
 
   app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
+      todoManager.saveData()
+      noteManager.saveData()
       app.quit()
     }
   })
@@ -132,15 +134,22 @@ if (!hasLock) {
       case AppCommands.GET_VERSION:
         return app.getVersion()
       case AppCommands.GET_FILE:
-        return migration.getOldData()
+        return await migration.getOldData()
+      case AppCommands.GET_MIGRATION_STATE:
+        return await migration.getMigrationState()
+      case AppCommands.SAVE_MIGRATION_STATE:
+        return await migration.saveMigrationState(args[1])
       case AppCommands.MIGRATE_STORE_TODO:
-        const todo = migration.setTodoData(args[1])
-        todoManager.initialization()
-        return todo
+        await migration.setTodoData(args[1])
+        await todoManager.initialization()
+        return await todoManager.getData()
       case AppCommands.MIGRATE_STORE_NOTE:
-        const note = migration.setNoteData(args[1])
-        noteManager.initialization()
-        return note
+        await migration.setNoteData(args[1])
+        await noteManager.initialization()
+        return await noteManager.getData()
+      case AppCommands.CHECK_BACKUP:
+        return await appManager.checkLastSaveStoreDate()
+
       default:
         throw new Error('main.error.command_not_exist')
     }
