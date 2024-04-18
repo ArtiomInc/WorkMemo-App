@@ -40,3 +40,7 @@
     @apply border-[#cbd5e1] bg-[#fff] text-[#09090b] hover:bg-[#f1f5f9] dark:border-[#505052] dark:bg-[#242427] dark:text-[#fff] dark:hover:bg-[#303033];
   }
 }
+
+:root {
+  color-scheme: dark;
+}

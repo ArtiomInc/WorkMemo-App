@@ -22,8 +22,10 @@ const getTheme = () => {
       theme.value = result
       if (theme.value === 'light') {
         document.documentElement.classList.remove('dark')
+        document.documentElement.style.colorScheme = 'light'
       } else {
         document.documentElement.classList.add('dark')
+        document.documentElement.style.colorScheme = 'dark'
       }
     })
     .catch((error: any) => {
@@ -44,9 +46,11 @@ const toggleDarkMode = () => {
   if (theme.value === 'light') {
     theme.value = 'dark'
     document.documentElement.classList.add('dark')
+    document.documentElement.style.colorScheme = 'dark'
   } else {
     theme.value = 'light'
     document.documentElement.classList.remove('dark')
+    document.documentElement.style.colorScheme = 'light'
   }
   saveTheme()
 }
