@@ -22,8 +22,10 @@ const getTheme = () => {
       theme.value = result
       if (theme.value === 'light') {
         document.documentElement.classList.remove('dark')
+        document.documentElement.style.colorScheme = 'light'
       } else {
         document.documentElement.classList.add('dark')
+        document.documentElement.style.colorScheme = 'dark'
       }
     })
     .catch((error: any) => {
@@ -44,9 +46,11 @@ const toggleDarkMode = () => {
   if (theme.value === 'light') {
     theme.value = 'dark'
     document.documentElement.classList.add('dark')
+    document.documentElement.style.colorScheme = 'dark'
   } else {
     theme.value = 'light'
     document.documentElement.classList.remove('dark')
+    document.documentElement.style.colorScheme = 'light'
   }
   saveTheme()
 }
@@ -64,10 +68,10 @@ const getVersion = () => {
 </script>
 
 <template>
-  <div class="m-2 mb-0 items-center justify-between rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 sm:flex">
+  <div class="card m-2 mb-0 items-center justify-between sm:flex">
     <div class="flex flex-col items-center justify-center gap-2 sm:flex-row">
       <div class="aspect-square h-10 cursor-pointer md:ml-0 md:mr-0" @click="toggleDarkMode">
-        <img class="select-none rounded-lg" src="../images/icon.svg" alt="WorkMemo logo" />
+        <img class="select-none rounded-lg" src="../assets/icon.svg" alt="WorkMemo logo" />
       </div>
       <router-link
         to="/todos"

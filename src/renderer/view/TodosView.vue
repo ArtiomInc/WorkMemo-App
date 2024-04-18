@@ -11,26 +11,27 @@ import { useErrorStore } from '../stores/DialogError'
 const errorStore = useErrorStore()
 
 const listTodo: Ref<
-  {
-    id: number
-    content: string
-    type?: number
-    title?: string
-    color?: number
-    list?: {
+  | {
       id: number
       content: string
-      type: number
-      color: number
+      type?: number
+      title?: string
+      color?: number
+      list?: {
+        id: number
+        content: string
+        type: number
+        color: number
+      }[]
     }[]
-  }[]
-> = ref([])
+  | undefined
+> = ref(undefined)
 
 const sortable: Ref<boolean> = ref(false)
 
 const getListTodo = () => {
   window.electronAPI
-    .setCommand([TodoCommands.GET_LIST_TODO])
+    .setCommand([TodoCommands.GET_DATA])
     .then((result: any) => {
       listTodo.value = result
     })
@@ -50,28 +51,12 @@ const addNewTodo = () => {
     })
 }
 
-const updateTodo = (index: number, sub_index: number, content: string, color: number) => {
-  listTodo.value[index].content = content
-  listTodo.value[index].color = color
-  window.electronAPI
-    .setCommand([TodoCommands.UPDATE_TODO, index, JSON.parse(JSON.stringify(listTodo.value[index]))])
-    .then(() => {})
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
-    })
-}
-
-const updateTodoInGroup = (index: number, sub_index: number, content: string, color: number) => {
-  if (listTodo.value[index].list) {
-    listTodo.value[index].list[sub_index].content = content
-    listTodo.value[index].list[sub_index].color = color
+const updateTodo = (index: number, subIndex: number, content: string, color: number) => {
+  if (listTodo.value !== undefined) {
+    listTodo.value[index].content = content
+    listTodo.value[index].color = color
     window.electronAPI
-      .setCommand([
-        TodoCommands.UPDATE_TODO_IN_GROUP,
-        index,
-        sub_index,
-        JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index])),
-      ])
+      .setCommand([TodoCommands.UPDATE_TODO, index, JSON.parse(JSON.stringify(listTodo.value[index]))])
       .then(() => {})
       .catch((error: any) => {
         errorStore.setErrorState(true, error.message)
@@ -79,9 +64,9 @@ const updateTodoInGroup = (index: number, sub_index: number, content: string, co
   }
 }
 
-const deleteTodo = (index: number) => {
+const shiftTodo = (index: number, direction: string) => {
   window.electronAPI
-    .setCommand([TodoCommands.DELETE_TODO, index])
+    .setCommand([TodoCommands.SHIT_TODO, index, direction])
     .then(() => {
       getListTodo()
     })
@@ -90,9 +75,9 @@ const deleteTodo = (index: number) => {
     })
 }
 
-const shiftTodo = (index: number, sub_index: number, content: string) => {
+const deleteTodo = (index: number) => {
   window.electronAPI
-    .setCommand([TodoCommands.SHIT_TODO, index, content])
+    .setCommand([TodoCommands.DELETE_TODO, index])
     .then(() => {
       getListTodo()
     })
@@ -112,17 +97,6 @@ const addNewGroup = () => {
     })
 }
 
-const addTodoInGroup = (index: number) => {
-  window.electronAPI
-    .setCommand([TodoCommands.ADD_TODO_IN_GROUP, index])
-    .then(() => {
-      getListTodo()
-    })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
-    })
-}
-
 const updateTitleGroup = (index: number, title: string) => {
   window.electronAPI
     .setCommand([TodoCommands.UPDATE_TITLE_GROUP, index, title])
@@ -134,9 +108,9 @@ const updateTitleGroup = (index: number, title: string) => {
     })
 }
 
-const shiftTodoInGroup = (index: number, sub_index: number, content: string) => {
+const addTodoInGroup = (index: number) => {
   window.electronAPI
-    .setCommand([TodoCommands.SHIFT_TODO_IN_GROUP, index, sub_index, content])
+    .setCommand([TodoCommands.ADD_TODO_IN_GROUP, index])
     .then(() => {
       getListTodo()
     })
@@ -144,9 +118,30 @@ const shiftTodoInGroup = (index: number, sub_index: number, content: string) => 
       errorStore.setErrorState(true, error.message)
     })
 }
-const deleteGroup = (index: number) => {
+
+const updateTodoInGroup = (index: number, sub_index: number, content: string, color: number) => {
+  if (listTodo.value !== undefined) {
+    if (listTodo.value[index].list) {
+      listTodo.value[index].list[sub_index].content = content
+      listTodo.value[index].list[sub_index].color = color
+      window.electronAPI
+        .setCommand([
+          TodoCommands.UPDATE_TODO_IN_GROUP,
+          index,
+          sub_index,
+          JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index])),
+        ])
+        .then(() => {})
+        .catch((error: any) => {
+          errorStore.setErrorState(true, error.message)
+        })
+    }
+  }
+}
+
+const shiftTodoInGroup = (index: number, sub_index: number, content: string) => {
   window.electronAPI
-    .setCommand([TodoCommands.DELETE_GROUP, index])
+    .setCommand([TodoCommands.SHIFT_TODO_IN_GROUP, index, sub_index, content])
     .then(() => {
       getListTodo()
     })
@@ -174,47 +169,49 @@ onMounted(async () => {
 <template>
   <div class="flex flex-col">
     <NavBar></NavBar>
-    <div class="m-2 flex flex-col gap-2 rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800">
-      <div v-for="(todo, index) in listTodo" :key="index">
-        <TodoSingle
-          v-if="todo.list == undefined"
-          :color="todo.color"
-          :content="todo.content"
-          :index="index"
-          :sub-index="-1"
-          :can-shift-up="index > 0 && sortable"
-          :can-shift-down="index < listTodo.length - 1 && sortable"
-          @updated-todo="updateTodo"
-          @shift-todo="shiftTodo"
-          @delete-todo="deleteTodo"
-        ></TodoSingle>
-        <TodoGroup
-          v-if="todo.title"
-          :title="todo.title"
-          :index="index"
-          :sub-index="-1"
-          :can-shift-up="index > 0 && sortable"
-          :can-shift-down="index < listTodo.length - 1 && sortable"
-          @add-todo-in-group="addTodoInGroup"
-          @update-title="updateTitleGroup"
-          @shift-group="shiftTodo"
-          @delete-group="deleteGroup"
-        >
-          <div v-if="todo.list != undefined" class="flex flex-col gap-1">
-            <TodoSingle
-              v-for="(sub_todo, sub_index) in todo.list"
-              :key="sub_index"
-              :color="sub_todo.color"
-              :content="sub_todo.content"
-              :index="index"
-              :sub-index="sub_index"
-              :can-shift-up="sub_index > 0 && sortable"
-              :can-shift-down="sub_index < todo.list.length - 1 && sortable"
-              @updated-todo="updateTodoInGroup"
-              @shift-todo="shiftTodoInGroup"
-              @delete-todo="deleteTodoInGroup"
-            ></TodoSingle></div
-        ></TodoGroup>
+    <div class="card m-2 flex flex-col gap-2">
+      <div v-if="listTodo !== undefined && listTodo.length != 0" class="flex flex-col gap-2">
+        <div v-for="(todo, index) in listTodo" :key="index">
+          <TodoSingle
+            v-if="todo.list == undefined"
+            :color="todo.color"
+            :content="todo.content"
+            :index="index"
+            :sub-index="-1"
+            :can-shift-up="index > 0 && sortable"
+            :can-shift-down="index < listTodo.length - 1 && sortable"
+            @updated-todo="updateTodo"
+            @shift-todo="shiftTodo"
+            @delete-todo="deleteTodo"
+          ></TodoSingle>
+          <TodoGroup
+            v-if="todo.title"
+            :title="todo.title"
+            :index="index"
+            :sub-index="-1"
+            :can-shift-up="index > 0 && sortable"
+            :can-shift-down="index < listTodo.length - 1 && sortable"
+            @add-todo-in-group="addTodoInGroup"
+            @update-title="updateTitleGroup"
+            @shift-group="shiftTodo"
+            @delete-group="deleteTodo"
+          >
+            <div v-if="todo.list != undefined" class="flex flex-col gap-1">
+              <TodoSingle
+                v-for="(sub_todo, sub_index) in todo.list"
+                :key="sub_index"
+                :color="sub_todo.color"
+                :content="sub_todo.content"
+                :index="index"
+                :sub-index="sub_index"
+                :can-shift-up="sub_index > 0 && sortable"
+                :can-shift-down="sub_index < todo.list.length - 1 && sortable"
+                @updated-todo="updateTodoInGroup"
+                @shift-todo="shiftTodoInGroup"
+                @delete-todo="deleteTodoInGroup"
+              ></TodoSingle></div
+          ></TodoGroup>
+        </div>
       </div>
       <div class="flex items-center gap-1">
         <button class="btn secondary" @click="addNewTodo">

@@ -1,8 +1,8 @@
 {
-  "name": "todo-note-application",
-  "version": "2.1.1",
+  "name": "workmemo-app",
+  "version": "2.2.0",
   "author": "ArtyomInc",
-  "description": "A Note application build with Electron + Vue",
+  "description": "A todos task and notes talking application build with electron + vue",
   "repository": "https://github.com/ArtyomInc/workmemo-app/",
   "publish": {
     "provider": "github",
@@ -10,7 +10,7 @@
   },
   "main": "build/main/main.js",
   "scripts": {
-    "dev": "node scripts/dev-server.js",
+    "dev": "npm run lint && node scripts/dev-server.js",
     "build": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder",
     "build:win": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --win",
     "build:mac": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --mac",
@@ -20,7 +20,6 @@
     "typecheck": "vue-tsc --noEmit -p src/main/tsconfig.json"
   },
   "devDependencies": {
-    "@types/editorjs__header": "^2.6.3",
     "@vitejs/plugin-vue": "^4.6.2",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
@@ -43,25 +42,12 @@
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
-    "@editorjs/editorjs": "^2.29.1",
-    "@editorjs/embed": "^2.7.1",
-    "@editorjs/header": "^2.8.1",
-    "@editorjs/inline-code": "^1.5.0",
-    "@editorjs/list": "^1.9.0",
-    "@editorjs/marker": "^1.4.0",
-    "@editorjs/quote": "^2.6.0",
-    "@editorjs/simple-image": "^1.6.0",
-    "@editorjs/table": "^2.3.0",
     "@vueup/vue-quill": "^1.2.0",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.1.8",
-    "express": "^4.19.2",
     "lucide-vue-next": "^0.368.0",
-    "net": "^1.0.2",
     "pinia": "^2.1.7",
     "vue": "^3.2.47",
-    "vue-router": "^4.3.0",
-    "vuedraggable": "^4.1.0",
-    "vuex": "^4.1.0"
+    "vue-router": "^4.3.0"
   }
 }

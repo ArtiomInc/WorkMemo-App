@@ -19,27 +19,38 @@ import { useColorStore } from '../stores/DialogColor'
 import { useDeleteStore } from '../stores/DialogDelete'
 import { useErrorStore } from '../stores/DialogError'
 
+interface NoteList {
+  title: string
+  color: number
+}
+
+interface Note {
+  id: number
+  title: string
+  content: string
+  color: number
+}
+
 const errorStore = useErrorStore()
 const colorStore = useColorStore()
 const deleteStore = useDeleteStore()
-const noteList: Ref<{ title: string; content: string; color: number }[]> = ref([])
+const askedColor = ref(false)
+const askedDelete = ref(false)
+const noteList: Ref<NoteList[] | undefined> = ref(undefined)
+const noteDetails: Ref<Note | undefined> = ref(undefined)
 const selectedID = ref(-1)
-const noteTitle = ref('')
-const noteContent = ref('')
 const isEditingTitle = ref(false)
 const sortable = ref(false)
 const titleinput: Ref<HTMLElement | null> = ref(document.getElementById('titleinput'))
-const askedColor = ref(false)
-const askedDelete = ref(false)
 
 watch(
   () => deleteStore.deleteState,
   (value: boolean) => {
-    if (value == false && deleteStore.deleteLastResultAction == true && askedDelete.value == true) {
+    if (value === false && deleteStore.deleteLastResultAction === true && askedDelete.value === true) {
       deleteNote()
       deleteStore.setDeleteLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedDelete.value = false
     }
   }
@@ -48,12 +59,12 @@ watch(
 watch(
   () => colorStore.colorState,
   (value: boolean) => {
-    if (value == false && colorStore.colorLastResultAction == true && askedColor.value == true) {
+    if (value === false && colorStore.colorLastResultAction === true && askedColor.value === true) {
       updateNoteColor(colorStore.colorLastChoice)
       colorStore.setColorLastChoice(-1)
       colorStore.setColorLastResult(false)
     }
-    if (value == false) {
+    if (value === false) {
       askedColor.value = false
     }
   }
@@ -61,8 +72,8 @@ watch(
 
 const getListNote = () => {
   window.electronAPI
-    .setCommand([NoteCommands.GET_LIST_NOTE])
-    .then((result: any) => {
+    .setCommand([NoteCommands.GET_NOTE_LIST])
+    .then((result: NoteList[]) => {
       noteList.value = result
     })
     .catch((error: any) => {
@@ -84,21 +95,21 @@ const addNewNote = () => {
 const getDetailsNote = (id: number) => {
   selectedID.value = id
   window.electronAPI
-    .setCommand([NoteCommands.GET_DETAILS_NOTE, id])
-    .then((result: any) => {
-      noteTitle.value = result.title
-      noteContent.value = result.content
+    .setCommand([NoteCommands.GET_NOTE_DETAILS, id])
+    .then((result: Note) => {
+      noteDetails.value = result
     })
     .catch((error: any) => {
       selectedID.value = -1
+      noteDetails.value = undefined
       errorStore.setErrorState(true, error.message)
     })
 }
 
 const toggleEditTitle = (payload: boolean) => {
   isEditingTitle.value = payload
-  if (!payload) {
-    updateTitleNote(selectedID.value, noteTitle.value)
+  if (!payload && noteDetails.value) {
+    updateTitleNote(selectedID.value, noteDetails.value?.title)
     getListNote()
   } else {
     nextTick(() => {
@@ -111,7 +122,7 @@ const toggleEditTitle = (payload: boolean) => {
 
 const updateTitleNote = (id: number, content: string) => {
   window.electronAPI
-    .setCommand([NoteCommands.UPDATE_TITLE_NOTE, id, content])
+    .setCommand([NoteCommands.UPDATE_NOTE_TITLE, id, content])
     .then(() => {})
     .catch((error: any) => {
       errorStore.setErrorState(true, error.message)
@@ -119,24 +130,14 @@ const updateTitleNote = (id: number, content: string) => {
 }
 
 const updateNoteContent = () => {
-  window.electronAPI
-    .setCommand([NoteCommands.UPDATE_CONTENT_NOTE, selectedID.value, noteContent.value])
-    .then(() => {})
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
-    })
-}
-
-const shiftNote = (id: number, content: string) => {
-  selectedID.value = -1
-  window.electronAPI
-    .setCommand([NoteCommands.SHIT_NOTE, id, content])
-    .then(() => {
-      getListNote()
-    })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
-    })
+  if (noteDetails.value) {
+    window.electronAPI
+      .setCommand([NoteCommands.UPDATE_NOTE_CONTENT, selectedID.value, noteDetails.value?.content])
+      .then(() => {})
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
+      })
+  }
 }
 
 const colorRequest = () => {
@@ -147,9 +148,8 @@ const colorRequest = () => {
 const updateNoteColor = (color: number) => {
   if (color >= 0 && color <= 3) {
     window.electronAPI
-      .setCommand([NoteCommands.UPDATE_COLOR_NOTE, selectedID.value, color])
+      .setCommand([NoteCommands.UPDATE_NOTE_COLOR, selectedID.value, color])
       .then(() => {
-        //selectedID.value = -1
         getListNote()
       })
       .catch((error: any) => {
@@ -158,6 +158,19 @@ const updateNoteColor = (color: number) => {
   } else {
     errorStore.setErrorState(true, "Color choosed doesn't exist")
   }
+}
+
+const shiftNote = (id: number, direction: string) => {
+  selectedID.value = -1
+  noteDetails.value = undefined
+  window.electronAPI
+    .setCommand([NoteCommands.SHIFT_NOTE, id, direction])
+    .then(() => {
+      getListNote()
+    })
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
+    })
 }
 
 const deleteRequest = () => {
@@ -174,6 +187,7 @@ const deleteNote = () => {
       .setCommand([NoteCommands.DELETE_NOTE, selectedID.value])
       .then(() => {
         selectedID.value = -1
+        noteDetails.value = undefined
         getListNote()
       })
       .catch((error: any) => {
@@ -192,7 +206,7 @@ onMounted(async () => {
     <NavBar></NavBar>
     <div class="flex flex-col" :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }">
       <div
-        class="m-2 h-full overflow-y-auto rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800"
+        class="card m-2 h-full overflow-y-auto"
         :class="{
           'md:w-1/4': selectedID != -1,
         }"
@@ -207,7 +221,7 @@ onMounted(async () => {
               }"
             >
               <div
-                class="flex h-8 w-full select-none truncate rounded p-1"
+                class="input w-full justify-start border-0"
                 :class="{
                   'hover:cursor-pointer': selectedID != index || selectedID == -1,
                   'hover:cursor-default': selectedID == index,
@@ -249,15 +263,15 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        v-if="selectedID != -1"
+        v-if="selectedID != -1 && noteDetails != undefined"
         :class="{ 'note-context-responsive': selectedID != -1 }"
-        class="mx-2 mb-2 mt-0 h-full rounded-lg bg-white p-2 drop-shadow dark:bg-neutral-800 md:m-0 md:mr-2 md:mt-2"
+        class="card mx-2 mb-2 mt-0 h-full md:m-0 md:mr-2 md:mt-2"
       >
         <div class="">
           <div v-if="isEditingTitle" class="flex items-center gap-1">
             <input
               ref="titleinput"
-              v-model="noteTitle"
+              v-model="noteDetails.title"
               class="input secondary"
               type="text"
               @keydown.enter="toggleEditTitle(false)"
@@ -268,15 +282,15 @@ onMounted(async () => {
           </div>
           <div v-else class="flex flex-col gap-1 md:flex-row">
             <span
-              class="flex h-8 cursor-pointer items-center rounded border border-black/10 px-2 py-1 dark:border-white/10"
+              class="input cursor-pointer border border-black/10 dark:border-white/10"
               :class="{
-                'bg-black/10 dark:bg-white/10': noteList[selectedID].color == 0,
-                'bg-red-400/50': noteList[selectedID].color == 1,
-                'bg-green-400/50': noteList[selectedID].color == 2,
-                'bg-blue-400/50': noteList[selectedID].color == 3,
+                'bg-black/10 dark:bg-white/10': noteDetails.color == 0,
+                'bg-red-400/50': noteDetails.color == 1,
+                'bg-green-400/50': noteDetails.color == 2,
+                'bg-blue-400/50': noteDetails.color == 3,
               }"
               @click="toggleEditTitle(true)"
-              >{{ noteTitle }}</span
+              >{{ noteDetails.title }}</span
             >
             <button class="btn secondary" @click="toggleEditTitle(true)">
               <PencilLine class="text-black dark:text-white" :size="20" />
@@ -292,7 +306,7 @@ onMounted(async () => {
           </div>
           <div class="mt-1">
             <QuillEditor
-              v-model:content="noteContent"
+              v-model:content="noteDetails.content"
               spellcheck="false"
               toolbar="minimal"
               content-type="html"

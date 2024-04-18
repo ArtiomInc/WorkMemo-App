@@ -7,65 +7,91 @@
           From the version 2.1.1, the WorkMemo application use a different way to store the data to make them more
           robust.
         </p>
-        <p class="text-lg">Please import the old data.json file once to migrate your data to the new system</p>
-        <div class="flex flex-col items-center gap-1">
-          <div class="flex items-center justify-center gap-1">
-            <Info class="text-black dark:text-white" :size="20" />
-            <p class="truncate font-semibold">On Windows, go to</p>
-          </div>
-          <code class="rounded-md bg-black/10 px-1 dark:bg-white/10"
-            >C:\Users\%user%\AppData\Roaming\Notes\data.json</code
-          >
-        </div>
-        <div class="flex justify-center">
-          <input
-            type="file"
-            accept=".json"
-            class="w-full max-w-[230px] text-sm text-slate-500 outline-none file:mr-4 file:rounded-md file:border-0 file:bg-green-500/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-green-500 hover:file:bg-green-500/30"
-            @change="handleFileInputChange"
-          />
-        </div>
-        <span v-if="!isFileLoaded && !isFileWrong" class="h-8"></span>
-        <button v-if="isFileLoaded" class="btn secondary" @click="router.push('/todos')">Migration =></button>
-        <span v-if="isFileWrong" class="flex h-8 items-center justify-center rounded bg-red-500/20 px-10 text-red-500"
-          >wrong file</span
-        >
+        <p class="text-lg">The data.json file will be imported and stored in store of application.</p>
+        <button v-if="isFileLoaded" class="btn secondary" @click="storeTodoData">
+          <FolderSync class="text-black dark:text-white" :size="20" />
+          Start migration
+        </button>
+        <span v-else class="h-8"></span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Info } from 'lucide-vue-next'
+import { FolderSync } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import AppCommands from '../../main/static/AppCommands'
+import { useErrorStore } from '../stores/DialogError'
+
+const errorStore = useErrorStore()
 const router = useRouter()
+let oldTodoData: any | undefined = undefined
+let oldNoteData: any | undefined = undefined
 
 onMounted(() => {
-  router.push('/')
+  getDataFile()
 })
 
 const isFileLoaded = ref(false)
-const isFileWrong = ref(false)
 
-const handleFileInputChange = (event: Event) => {
-  const files = (event.target as HTMLInputElement).files
-  if (files && files.length > 0) {
-    const file = files[0]
-    const reader = new FileReader()
-    reader.onload = () => {
-      const fileContent = reader.result as string
-      const fileContentParsed = JSON.parse(fileContent)
-      if (fileContentParsed.todo && fileContentParsed.note) {
+const getDataFile = () => {
+  window.electronAPI
+    .setCommand([AppCommands.GET_FILE])
+    .then((result: any) => {
+      if (result.todo && result.note) {
         isFileLoaded.value = true
-        isFileWrong.value = false
-      } else {
-        isFileLoaded.value = false
-        isFileWrong.value = true
+        oldTodoData = result.todo
+        oldNoteData = result.note
+        console.log(result)
       }
-    }
-    reader.readAsText(file)
+    })
+    .catch((error: any) => {
+      //errorStore.setErrorState(true, error.message)
+      console.log(error)
+      router.push('/todos')
+    })
+}
+
+const storeTodoData = () => {
+  if (oldTodoData != undefined) {
+    window.electronAPI
+      .setCommand([AppCommands.MIGRATE_STORE_TODO, oldTodoData])
+      .then((result: any) => {
+        console.log(result)
+        storeNoteData()
+      })
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
+      })
   }
+}
+
+const storeNoteData = () => {
+  if (oldNoteData != undefined) {
+    window.electronAPI
+      .setCommand([AppCommands.MIGRATE_STORE_NOTE, oldNoteData])
+      .then((result: any) => {
+        console.log(result)
+        saveMigrationDone()
+      })
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
+      })
+  }
+}
+
+const saveMigrationDone = () => {
+  window.electronAPI
+    .setCommand([AppCommands.SAVE_MIGRATION_STATE, 1])
+    .then(() => {
+      router.push('/todos')
+    })
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
+    })
 }
 </script>
 
