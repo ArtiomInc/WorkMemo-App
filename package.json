@@ -1,8 +1,8 @@
 {
-  "name": "todo-note-application",
+  "name": "workmemo-app",
   "version": "2.2.0",
   "author": "ArtyomInc",
-  "description": "A Note application build with Electron + Vue",
+  "description": "A todos task and notes talking application build with electron + vue",
   "repository": "https://github.com/ArtyomInc/workmemo-app/",
   "publish": {
     "provider": "github",
