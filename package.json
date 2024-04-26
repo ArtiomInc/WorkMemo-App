@@ -48,7 +48,6 @@
     "lucide-vue-next": "^0.368.0",
     "pinia": "^2.1.7",
     "quill-blot-formatter": "^1.0.5",
-    "quill-image-compress": "^1.2.32",
     "vue": "^3.2.47",
     "vue-router": "^4.3.0"
   }

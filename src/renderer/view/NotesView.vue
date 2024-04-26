@@ -10,8 +10,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-vue-next'
-import BlotFormatter from 'quill-blot-formatter'
-import ImageCompress from 'quill-image-compress'
+import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
 import { NoteCommands } from '../../main/static/NoteCommands'
@@ -322,22 +321,11 @@ onMounted(async () => {
                 [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }],
                 ['link', 'image'],
               ]"
-              :modules="[
-                {
-                  name: 'blotFormatter',
-                  module: BlotFormatter,
-                },
-                {
-                  name: 'imageCompress',
-                  module: ImageCompress,
-                  option: {
-                    quality: 0.8,
-                    maxWidth: 1000,
-                    maxHeight: 1000,
-                    imageType: ['image/jpeg', 'image/png', 'image/webp'],
-                  },
-                },
-              ]"
+              :modules="{
+                name: 'blotFormatter',
+                module: BlotFormatter,
+                options: {},
+              }"
               content-type="html"
               placeholder="Type your note here"
               @update:content="updateNoteContent"
