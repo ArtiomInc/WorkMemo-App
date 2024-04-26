@@ -38,6 +38,7 @@ export class AppManager {
       console.log('[💾] backup already created today')
     } else {
       console.log('[💾] create backup of store')
+      this.store.set('lastSaveStoreDate', todayDay)
       await this.dailyCopyOfStore()
     }
   }
