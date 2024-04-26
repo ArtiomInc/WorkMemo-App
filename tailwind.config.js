@@ -14,6 +14,15 @@ module.exports = {
         warning: '#fdba74',
         'warning-text': '#fdba74',
       },
+      animation: {
+        wiggle: 'wiggle 1s linear infinite',
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-6deg)' },
+          '50%': { transform: 'rotate(6deg)' },
+        },
+      },
     },
   },
   variants: {

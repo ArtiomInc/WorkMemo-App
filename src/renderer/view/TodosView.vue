@@ -214,16 +214,19 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button class="btn secondary" @click="addNewTodo">
-          <Plus class="text-black dark:text-white" :size="20" />
+        <button class="btn secondary group" @click="addNewTodo">
+          <Plus class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white" :size="20" />
           todo
         </button>
-        <button class="btn secondary" @click="addNewGroup">
-          <Plus class="text-black dark:text-white" :size="20" />
+        <button class="btn secondary group" @click="addNewGroup">
+          <Plus class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white" :size="20" />
           group
         </button>
-        <button class="btn secondary" @click="sortable = !sortable">
-          <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />
+        <button class="btn secondary group" @click="sortable = !sortable">
+          <ArrowDownWideNarrow
+            class="text-black transition-transform duration-100 group-hover:rotate-180 dark:text-white"
+            :size="20"
+          />
           sort
         </button>
       </div>

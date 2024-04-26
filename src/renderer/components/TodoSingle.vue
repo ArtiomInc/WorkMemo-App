@@ -112,23 +112,23 @@ const deleteTodo = () => {
     />
     <button
       v-if="props.canShiftUp"
-      class="btn secondary w-8 min-w-8 p-0"
+      class="btn secondary group w-8 min-w-8 p-0"
       @click="emit('shiftTodo', props.index, props.subIndex, 'up')"
     >
-      <ArrowUpToLine class="text-black dark:text-white" :size="20" />
+      <ArrowUpToLine class="group-hover:animate-wiggle text-black dark:text-white" :size="20" />
     </button>
     <button
       v-if="props.canShiftDown"
-      class="btn secondary w-8 min-w-8 p-0"
+      class="btn secondary group w-8 min-w-8 p-0"
       @click="emit('shiftTodo', props.index, props.subIndex, 'down')"
     >
-      <ArrowDownToLine class="text-black dark:text-white" :size="20" />
+      <ArrowDownToLine class="group-hover:animate-wiggle text-black dark:text-white" :size="20" />
     </button>
-    <button class="btn secondary w-8 min-w-8 p-0" @click="askColorTodo()">
-      <Palette class="text-black dark:text-white" :size="20" />
+    <button class="btn secondary group w-8 min-w-8 p-0" @click="askColorTodo()">
+      <Palette class="text-black transition-transform group-hover:rotate-[-45deg] dark:text-white" :size="20" />
     </button>
-    <button class="btn secondary w-8 min-w-8 p-0" @click="askDeleteTodo()">
-      <Trash2 class="text-black dark:text-white" :size="20" />
+    <button class="btn secondary group w-8 min-w-8 p-0" @click="askDeleteTodo()">
+      <Trash2 class="text-black transition-transform group-hover:rotate-[25deg] dark:text-white" :size="20" />
     </button>
   </div>
 </template>
