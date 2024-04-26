@@ -10,6 +10,8 @@ import {
   Plus,
   Trash2,
 } from 'lucide-vue-next'
+import BlotFormatter from 'quill-blot-formatter'
+import ImageCompress from 'quill-image-compress'
 import { nextTick, onMounted, ref, Ref, watch } from 'vue'
 
 import { NoteCommands } from '../../main/static/NoteCommands'
@@ -241,14 +243,14 @@ onMounted(async () => {
                 class="btn secondary group w-8 min-w-8 p-0"
                 @click="shiftNote(index, 'up')"
               >
-                <ArrowUpToLine class="group-hover:animate-wiggle text-black dark:text-white" :size="20" />
+                <ArrowUpToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
               </button>
               <button
                 v-if="sortable && index != noteList.length - 1"
                 class="btn secondary group w-8 min-w-8 p-0"
                 @click="shiftNote(index, 'down')"
               >
-                <ArrowDownToLine class="group-hover:animate-wiggle text-black dark:text-white" :size="20" />
+                <ArrowDownToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
               </button>
             </div>
           </div>
@@ -314,7 +316,28 @@ onMounted(async () => {
             <QuillEditor
               v-model:content="noteDetails.content"
               spellcheck="false"
-              toolbar="minimal"
+              :toolbar="[
+                [{ header: 1 }, { header: 2 }],
+                ['bold', 'italic', 'underline'],
+                [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }],
+                ['link', 'image'],
+              ]"
+              :modules="[
+                {
+                  name: 'blotFormatter',
+                  module: BlotFormatter,
+                },
+                {
+                  name: 'imageCompress',
+                  module: ImageCompress,
+                  option: {
+                    quality: 0.8,
+                    maxWidth: 1000,
+                    maxHeight: 1000,
+                    imageType: ['image/jpeg', 'image/png', 'image/webp'],
+                  },
+                },
+              ]"
               content-type="html"
               placeholder="Type your note here"
               @update:content="updateNoteContent"
