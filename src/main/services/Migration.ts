@@ -61,15 +61,6 @@ export class Migration {
     return this.store.get('note') as Note[]
   }
 
-  async getTheme(): Promise<string> {
-    try {
-      return this.store.get('theme') as string
-    } catch {
-      this.store.set('theme', 'light')
-      return this.store.get('theme') as string
-    }
-  }
-
   async getMigrationState(): Promise<number> {
     try {
       return this.store.get('migration') as number
@@ -77,10 +68,6 @@ export class Migration {
       this.store.set('migration', 0)
       return 0
     }
-  }
-
-  async saveTheme(theme: string): Promise<void> {
-    this.store.set('theme', theme)
   }
 
   async saveMigrationState(state: number): Promise<void> {

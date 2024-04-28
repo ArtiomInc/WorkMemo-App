@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, session } from 'electron'
+import { app, BrowserWindow, ipcMain, session, shell } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 
@@ -40,6 +40,11 @@ function createWindow() {
     mainWindow.loadFile(join(app.getAppPath(), 'renderer', 'index.html'))
     mainWindow.setMenu(null)
   }
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
 }
 
 if (!hasLock) {
@@ -149,7 +154,6 @@ if (!hasLock) {
         return await noteManager.getData()
       case AppCommands.CHECK_BACKUP:
         return await appManager.checkLastSaveStoreDate()
-
       default:
         throw new Error('main.error.command_not_exist')
     }
