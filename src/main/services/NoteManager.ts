@@ -30,7 +30,7 @@ export class NoteManager {
     }
   }
 
-  async getData(): Promise<Note[] | undefined> {
+  getData(): Note[] | undefined {
     if (this.notes) {
       return this.notes
     } else if (this.notes == undefined) {
@@ -40,7 +40,7 @@ export class NoteManager {
     }
   }
 
-  async saveData(): Promise<void> {
+  saveData(): void {
     if (this.notes !== undefined) {
       this.store.set('note', this.notes)
     }

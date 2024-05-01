@@ -37,7 +37,7 @@ export class TodoManager {
     }
   }
 
-  async getData(): Promise<Todo[] | undefined> {
+  getData(): Todo[] | undefined {
     if (this.todos) {
       return this.todos
     } else if (this.todos === undefined) {
@@ -47,7 +47,7 @@ export class TodoManager {
     }
   }
 
-  async saveData(): Promise<void> {
+  saveData(): void {
     if (this.todos !== undefined) {
       this.store.set('todo', this.todos)
     }

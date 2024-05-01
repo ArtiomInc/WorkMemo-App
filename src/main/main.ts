@@ -16,6 +16,8 @@ const migration = new Migration()
 const todoManager = new TodoManager()
 const noteManager = new NoteManager()
 const hasLock = app.requestSingleInstanceLock()
+const saveTodoInterval = setInterval(todoManager.saveData, 60000)
+const saveNoteInterval = setInterval(noteManager.saveData, 60000)
 
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
@@ -83,6 +85,8 @@ if (!hasLock) {
 
   app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
+      clearInterval(saveTodoInterval)
+      clearInterval(saveNoteInterval)
       todoManager.saveData()
       noteManager.saveData()
       app.quit()
@@ -147,11 +151,11 @@ if (!hasLock) {
       case AppCommands.MIGRATE_STORE_TODO:
         await migration.setTodoData(args[1])
         await todoManager.initialization()
-        return await todoManager.getData()
+        return todoManager.getData()
       case AppCommands.MIGRATE_STORE_NOTE:
         await migration.setNoteData(args[1])
         await noteManager.initialization()
-        return await noteManager.getData()
+        return noteManager.getData()
       case AppCommands.CHECK_BACKUP:
         return await appManager.checkLastSaveStoreDate()
       default:
