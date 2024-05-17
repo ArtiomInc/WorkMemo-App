@@ -8,19 +8,19 @@
         <h1 class="text-center text-lg font-bold">Choose color</h1>
         <div class="mb-2 flex">
           <div
-            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-red-400 hover:outline"
+            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-red-400 transition-[outline] duration-100 hover:outline"
             @click="setAction(1)"
           ></div>
           <div
-            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-green-400 hover:outline"
+            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-green-400 transition-[outline] duration-100 hover:outline"
             @click="setAction(2)"
           ></div>
           <div
-            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-blue-400 hover:outline"
+            class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-blue-400 transition-[outline] duration-100 hover:outline"
             @click="setAction(3)"
           ></div>
           <div
-            class="m-1 aspect-square h-8 cursor-pointer rounded-full hover:outline"
+            class="m-1 aspect-square h-8 cursor-pointer rounded-full transition-[outline] duration-100 hover:outline"
             style="background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 1) 100%)"
             @click="setAction(0)"
           ></div>

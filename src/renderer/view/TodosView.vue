@@ -178,8 +178,9 @@ onMounted(async () => {
             :content="todo.content"
             :index="index"
             :sub-index="-1"
-            :can-shift-up="index > 0 && sortable"
-            :can-shift-down="index < listTodo.length - 1 && sortable"
+            :sortable="sortable"
+            :can-shift-up="index > 0"
+            :can-shift-down="index < listTodo.length - 1"
             @updated-todo="updateTodo"
             @shift-todo="shiftTodo"
             @delete-todo="deleteTodo"
@@ -189,8 +190,9 @@ onMounted(async () => {
             :title="todo.title"
             :index="index"
             :sub-index="-1"
-            :can-shift-up="index > 0 && sortable"
-            :can-shift-down="index < listTodo.length - 1 && sortable"
+            :sortable="sortable"
+            :can-shift-up="index > 0"
+            :can-shift-down="index < listTodo.length - 1"
             @add-todo-in-group="addTodoInGroup"
             @update-title="updateTitleGroup"
             @shift-group="shiftTodo"
@@ -204,8 +206,9 @@ onMounted(async () => {
                 :content="sub_todo.content"
                 :index="index"
                 :sub-index="sub_index"
-                :can-shift-up="sub_index > 0 && sortable"
-                :can-shift-down="sub_index < todo.list.length - 1 && sortable"
+                :sortable="sortable"
+                :can-shift-up="sub_index > 0"
+                :can-shift-down="sub_index < todo.list.length - 1"
                 @updated-todo="updateTodoInGroup"
                 @shift-todo="shiftTodoInGroup"
                 @delete-todo="deleteTodoInGroup"
@@ -214,17 +217,18 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button class="btn secondary group" @click="addNewTodo">
-          <Plus class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white" :size="20" />
+        <button class="btn secondary" @click="addNewTodo">
+          <Plus class="text-black dark:text-white" :size="20" />
           todo
         </button>
-        <button class="btn secondary group" @click="addNewGroup">
-          <Plus class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white" :size="20" />
+        <button class="btn secondary" @click="addNewGroup">
+          <Plus class="text-black dark:text-white" :size="20" />
           group
         </button>
-        <button class="btn secondary group" @click="sortable = !sortable">
+        <button class="btn secondary" @click="sortable = !sortable">
           <ArrowDownWideNarrow
-            class="text-black transition-transform duration-100 group-hover:rotate-180 dark:text-white"
+            class="text-black transition-transform duration-100 dark:text-white"
+            :class="{ 'rotate-0 ': sortable, 'rotate-180 ': !sortable }"
             :size="20"
           />
           sort
@@ -234,4 +238,10 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.transition-color-transform {
+  transition:
+    color 0.2s,
+    transform 0.2s;
+}
+</style>

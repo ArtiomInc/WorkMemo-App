@@ -238,34 +238,30 @@ onMounted(async () => {
                 </span>
               </div>
               <button
-                v-if="sortable && index != 0"
-                class="btn secondary group w-8 min-w-8 p-0"
+                v-if="sortable"
+                :disabled="index == 0"
+                class="btn secondary w-8 min-w-8 p-0"
                 @click="shiftNote(index, 'up')"
               >
-                <ArrowUpToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+                <ArrowUpToLine class="text-black dark:text-white" :size="20" />
               </button>
               <button
-                v-if="sortable && index != noteList.length - 1"
-                class="btn secondary group w-8 min-w-8 p-0"
+                v-if="sortable"
+                :disabled="index == noteList.length - 1"
+                class="btn secondary w-8 min-w-8 p-0"
                 @click="shiftNote(index, 'down')"
               >
-                <ArrowDownToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+                <ArrowDownToLine class="text-black dark:text-white" :size="20" />
               </button>
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-1 sm:flex-row">
-          <button class="btn secondary group" @click="addNewNote">
-            <Plus
-              class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white"
-              :size="20"
-            />note
+          <button class="btn secondary" @click="addNewNote">
+            <Plus class="text-black dark:text-white" :size="20" />note
           </button>
-          <button class="btn secondary group" @click="sortable = !sortable">
-            <ArrowDownWideNarrow
-              class="text-black transition-transform duration-100 group-hover:rotate-180 dark:text-white"
-              :size="20"
-            />sort
+          <button class="btn secondary" @click="sortable = !sortable">
+            <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
           </button>
         </div>
       </div>
@@ -283,8 +279,8 @@ onMounted(async () => {
               type="text"
               @keydown.enter="toggleEditTitle(false)"
             />
-            <button class="btn secondary group w-8 min-w-8 p-0" @click="toggleEditTitle(false)">
-              <Check class="text-black group-hover:animate-pulse dark:text-white" :size="20" />
+            <button class="btn secondary w-8 min-w-8 p-0" @click="toggleEditTitle(false)">
+              <Check class="text-black dark:text-white" :size="20" />
             </button>
           </div>
           <div v-else class="flex flex-col gap-1 md:flex-row">
@@ -299,15 +295,15 @@ onMounted(async () => {
               @click="toggleEditTitle(true)"
               >{{ noteDetails.title }}</span
             >
-            <button class="btn secondary group" @click="toggleEditTitle(true)">
-              <Pencil class="text-black transition-transform group-hover:rotate-[-45deg] dark:text-white" :size="20" />
+            <button class="btn secondary" @click="toggleEditTitle(true)">
+              <Pencil class="text-black dark:text-white" :size="20" />
               Edit title
             </button>
-            <button class="btn secondary group md:w-8 md:min-w-8 md:p-0" @click="colorRequest">
-              <Palette class="text-black transition-transform group-hover:rotate-[-45deg] dark:text-white" :size="20" />
+            <button class="btn secondary md:w-8 md:min-w-8 md:p-0" @click="colorRequest">
+              <Palette class="text-black dark:text-white" :size="20" />
             </button>
-            <button id="delete" class="btn secondary group" @click="deleteRequest">
-              <Trash2 class="text-black transition-transform group-hover:rotate-[25deg] dark:text-white" :size="20" />
+            <button id="delete" class="btn secondary" @click="deleteRequest">
+              <Trash2 class="text-black dark:text-white" :size="20" />
               <p>Delete note</p>
             </button>
           </div>

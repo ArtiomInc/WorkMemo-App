@@ -17,6 +17,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  sortable: {
+    type: Boolean,
+    required: true,
+  },
   canShiftUp: {
     type: Boolean,
     required: true,
@@ -72,8 +76,8 @@ const deleteTodo = () => {
       <div class="flex w-full items-center">
         <div v-if="!editableTitle" class="flex w-full items-center">
           <p class="w-full">{{ props.title }}</p>
-          <button class="btn secondary group w-8 min-w-8 p-0" @click="editableTitle = !editableTitle">
-            <Pencil class="text-black transition-transform group-hover:rotate-[-45deg] dark:text-white" :size="20" />
+          <button class="btn secondary w-8 min-w-8 p-0" @click="editableTitle = !editableTitle">
+            <Pencil class="text-black dark:text-white" :size="20" />
           </button>
         </div>
         <div v-else class="flex w-full items-center gap-1">
@@ -90,24 +94,26 @@ const deleteTodo = () => {
       </div>
       <div class="flex items-center gap-1">
         <button
-          v-if="canShiftUp"
-          class="btn secondary group w-8 min-w-8 p-0"
+          v-if="props.sortable"
+          :disabled="!canShiftUp"
+          class="btn secondary w-8 min-w-8 p-0"
           @click="emit('shiftGroup', props.index, props.subIndex, 'up')"
         >
-          <ArrowUpToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+          <ArrowUpToLine class="text-black dark:text-white" :size="20" />
         </button>
         <button
-          v-if="canShiftDown"
-          class="btn secondary group w-8 min-w-8 p-0"
+          v-if="props.sortable"
+          :disabled="!canShiftDown"
+          class="btn secondary w-8 min-w-8 p-0"
           @click="emit('shiftGroup', props.index, props.subIndex, 'down')"
         >
-          <ArrowDownToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+          <ArrowDownToLine class="text-black dark:text-white" :size="20" />
         </button>
-        <button class="btn secondary group w-8 min-w-8 p-0" @click="emit('addTodoInGroup', props.index)">
-          <Plus class="text-black transition-transform duration-100 group-hover:rotate-90 dark:text-white" :size="20" />
+        <button class="btn secondary w-8 min-w-8 p-0" @click="emit('addTodoInGroup', props.index)">
+          <Plus class="text-black dark:text-white" :size="20" />
         </button>
-        <button class="btn secondary group w-8 min-w-8 p-0" @click="askDeleteTodo">
-          <Trash2 class="text-black transition-transform group-hover:rotate-[25deg] dark:text-white" :size="20" />
+        <button class="btn secondary w-8 min-w-8 p-0" @click="askDeleteTodo">
+          <Trash2 class="text-black dark:text-white" :size="20" />
         </button>
       </div>
     </div>

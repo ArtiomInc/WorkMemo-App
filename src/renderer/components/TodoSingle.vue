@@ -22,6 +22,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  sortable: {
+    type: Boolean,
+    required: true,
+  },
   canShiftUp: {
     type: Boolean,
     required: true,
@@ -111,24 +115,26 @@ const deleteTodo = () => {
       @input="emit('updatedTodo', props.index, props.subIndex, contentEdited, props.color)"
     />
     <button
-      v-if="props.canShiftUp"
-      class="btn secondary group w-8 min-w-8 p-0"
+      v-if="props.sortable"
+      :disabled="!props.canShiftUp"
+      class="btn secondary w-8 min-w-8 p-0"
       @click="emit('shiftTodo', props.index, props.subIndex, 'up')"
     >
-      <ArrowUpToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+      <ArrowUpToLine class="text-black dark:text-white" :size="20" />
     </button>
     <button
-      v-if="props.canShiftDown"
+      v-if="props.sortable"
+      :disabled="!props.canShiftDown"
       class="btn secondary group w-8 min-w-8 p-0"
       @click="emit('shiftTodo', props.index, props.subIndex, 'down')"
     >
-      <ArrowDownToLine class="text-black group-hover:animate-wiggle dark:text-white" :size="20" />
+      <ArrowDownToLine class="text-black dark:text-white" :size="20" />
     </button>
-    <button class="btn secondary group w-8 min-w-8 p-0" @click="askColorTodo()">
-      <Palette class="text-black transition-transform group-hover:rotate-[-45deg] dark:text-white" :size="20" />
+    <button class="btn secondary w-8 min-w-8 p-0" @click="askColorTodo()">
+      <Palette class="text-black dark:text-white" :size="20" />
     </button>
     <button class="btn secondary group w-8 min-w-8 p-0" @click="askDeleteTodo()">
-      <Trash2 class="text-black transition-transform group-hover:rotate-[25deg] dark:text-white" :size="20" />
+      <Trash2 class="text-black dark:text-white" :size="20" />
     </button>
   </div>
 </template>

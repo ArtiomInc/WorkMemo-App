@@ -15,7 +15,7 @@
 
 @layer components {
   .btn {
-    @apply flex h-8 min-w-[50px] cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-nowrap rounded-lg border px-3 align-middle no-underline outline-none;
+    @apply flex h-8 min-w-[50px] cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-nowrap rounded-lg border px-3 align-middle no-underline outline-none transition-colors disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn.secondary {
     @apply border-[#cbd5e1] bg-[#fff] text-[#09090b] hover:bg-[#f1f5f9] dark:border-[#4a4a4a] dark:bg-[#242427] dark:text-[#fff] dark:hover:bg-[#303033];
@@ -34,7 +34,7 @@
   }
 
   .input {
-    @apply flex h-8 cursor-text items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-lg border px-2 align-middle no-underline outline-none;
+    @apply flex h-8 cursor-text items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-lg border px-2 align-middle no-underline outline-none transition-colors;
   }
 
   .input.secondary {
