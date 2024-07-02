@@ -24,13 +24,15 @@ jobs:
 
       - name: Get the version from package.json
         id: get_version
-        run: echo "::set-output name=VERSION::$(node -p -e "require('./package.json').version")"
+        run: echo "VERSION=$(node -p -e \"require('./package.json').version\")" >> $GITHUB_ENV
 
       - name: Create tag
         id: tag_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git tag v${{ steps.get_version.outputs.VERSION }}
-          git push origin v${{ steps.get_version.outputs.VERSION }}
+          git tag v${{ env.VERSION }}
+          git push origin v${{ env.VERSION }}
 
       - name: Create GitHub Release
         id: create_release
@@ -38,12 +40,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.get_version.outputs.VERSION }}
-          release_name: Release v${{ steps.get_version.outputs.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
           draft: false
           prerelease: false
 
-      - name: Upload Release Assets
+      - name: Upload builder-debug.yml
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -51,7 +53,7 @@ jobs:
           asset_name: builder-debug.yml
           asset_content_type: application/octet-stream
 
-      - name: Upload Release Assets
+      - name: Upload builder-effective-config.yaml
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -59,7 +61,7 @@ jobs:
           asset_name: builder-effective-config.yaml
           asset_content_type: application/octet-stream
 
-      - name: Upload Release Assets
+      - name: Upload latest.yml
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -67,18 +69,18 @@ jobs:
           asset_name: latest.yml
           asset_content_type: application/octet-stream
 
-      - name: Upload Release Assets
+      - name: Upload workmemo-setup.exe
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/workmemo-setup-2.3.1.exe
-          asset_name: workmemo-setup-2.3.1.exe
+          asset_path: dist/workmemo-setup-${{ env.VERSION }}.exe
+          asset_name: workmemo-setup-${{ env.VERSION }}.exe
           asset_content_type: application/octet-stream
 
-      - name: Upload Release Assets
+      - name: Upload workmemo-setup.exe.blockmap
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/workmemo-setup-2.3.1.exe.blockmap
-          asset_name: workmemo-setup-2.3.1.exe.blockmap
+          asset_path: dist/workmemo-setup-${{ env.VERSION }}.exe.blockmap
+          asset_name: workmemo-setup-${{ env.VERSION }}.exe.blockmap
           asset_content_type: application/octet-stream
