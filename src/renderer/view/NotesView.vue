@@ -278,6 +278,7 @@ onMounted(async () => {
               class="input secondary"
               type="text"
               @keydown.enter="toggleEditTitle(false)"
+              @blur="toggleEditTitle(false)"
             />
             <button class="btn secondary w-8 min-w-8 p-0" @click="toggleEditTitle(false)">
               <Check class="text-black dark:text-white" :size="20" />
