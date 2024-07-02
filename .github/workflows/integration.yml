@@ -1,4 +1,4 @@
-name: Deploy on VPS Lite
+name: Create release
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -23,16 +23,16 @@ jobs:
         run: npm run build
 
       - name: Get the version from package.json
-        id: get_version
-        run: echo "VERSION=$(node -p -e \"require('./package.json').version\")" >> $GITHUB_ENV
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
 
       - name: Create tag
         id: tag_version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git tag v${{ env.VERSION }}
-          git push origin v${{ env.VERSION }}
+          git tag v${{ steps.package-version.outputs.current-version }}
+          git push origin v${{ steps.package-version.outputs.current-version }}
 
       - name: Create GitHub Release
         id: create_release
@@ -40,8 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release v${{ env.VERSION }}
+          tag_name: v${{ steps.package-version.outputs.current-version }}
+          release_name: Release v${{ steps.package-version.outputs.current-version }}
           draft: false
           prerelease: false
 
@@ -73,14 +73,14 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/workmemo-setup-${{ env.VERSION }}.exe
-          asset_name: workmemo-setup-${{ env.VERSION }}.exe
+          asset_path: dist/workmemo-setup-${{ steps.package-version.outputs.current-version }}.exe
+          asset_name: workmemo-setup-${{ steps.package-version.outputs.current-version }}.exe
           asset_content_type: application/octet-stream
 
       - name: Upload workmemo-setup.exe.blockmap
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/workmemo-setup-${{ env.VERSION }}.exe.blockmap
-          asset_name: workmemo-setup-${{ env.VERSION }}.exe.blockmap
+          asset_path: dist/workmemo-setup-${{ steps.package-version.outputs.current-version }}.exe.blockmap
+          asset_name: workmemo-setup-${{ steps.package-version.outputs.current-version }}.exe.blockmap
           asset_content_type: application/octet-stream
