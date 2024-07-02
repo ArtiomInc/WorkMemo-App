@@ -1,4 +1,4 @@
-name: Create release
+name: Deploy on VPS Lite
 
 on:
   workflow_dispatch:
@@ -26,13 +26,18 @@ jobs:
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Create tag
         id: tag_version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_PAT: ${{ secrets.ACTIONS_PAT }}
         run: |
           git tag v${{ steps.package-version.outputs.current-version }}
-          git push origin v${{ steps.package-version.outputs.current-version }}
+          git push https://x-access-token:${{ secrets.ACTIONS_PAT }}@github.com/${{ github.repository }} v${{ steps.package-version.outputs.current-version }}
 
       - name: Create GitHub Release
         id: create_release
