@@ -28,10 +28,12 @@ jobs:
 
       - name: Create tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MY_PERSONAL_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          git config --global user.email "artiom.game@gmail.com "
+          git config --global user.name "ArtyomInc"
           git tag v${{ steps.package-version.outputs.current-version }}
-          git push origin v${{ steps.package-version.outputs.current-version }}
+          git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}/ v${{ steps.package-version.outputs.current-version }}
 
       - name: Create GitHub Release
         id: create_release
