@@ -6,10 +6,9 @@ import { TodoCommands } from '../../main/static/TodoCommands'
 import NavBar from '../components/NavBar.vue'
 import TodoGroup from '../components/TodoGroup.vue'
 import TodoSingle from '../components/TodoSingle.vue'
-import { useErrorStore } from '../stores/DialogError'
+import Modal from '../components/ui/Modal.vue'
 
-const errorStore = useErrorStore()
-
+const error = ref('')
 const listTodo: Ref<
   | {
       id: number
@@ -27,7 +26,7 @@ const listTodo: Ref<
   | undefined
 > = ref(undefined)
 
-const sortable: Ref<boolean> = ref(false)
+const sortable = ref(false)
 
 const getListTodo = () => {
   window.electronAPI
@@ -35,8 +34,8 @@ const getListTodo = () => {
     .then((result: any) => {
       listTodo.value = result
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -46,8 +45,8 @@ const addNewTodo = () => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -58,8 +57,8 @@ const updateTodo = (index: number, subIndex: number, content: string, color: num
     window.electronAPI
       .setCommand([TodoCommands.UPDATE_TODO, index, JSON.parse(JSON.stringify(listTodo.value[index]))])
       .then(() => {})
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   }
 }
@@ -70,8 +69,8 @@ const shiftTodo = (index: number, subIndex: number, direction: string) => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -81,8 +80,8 @@ const deleteTodo = (index: number) => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -92,8 +91,8 @@ const addNewGroup = () => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -103,8 +102,8 @@ const updateTitleGroup = (index: number, title: string) => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -114,8 +113,8 @@ const addTodoInGroup = (index: number) => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -132,8 +131,8 @@ const updateTodoInGroup = (index: number, sub_index: number, content: string, co
           JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index]))
         ])
         .then(() => {})
-        .catch((error: any) => {
-          errorStore.setErrorState(true, error.message)
+        .catch((e: Error) => {
+          error.value = e.message
         })
     }
   }
@@ -145,8 +144,8 @@ const shiftTodoInGroup = (index: number, sub_index: number, content: string) => 
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -156,8 +155,8 @@ const deleteTodoInGroup = (index: number, sub_index: number) => {
     .then(() => {
       getListTodo()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -174,7 +173,7 @@ onMounted(async () => {
         <div v-for="(todo, index) in listTodo" :key="index">
           <TodoSingle
             v-if="todo.list == undefined"
-            :color="todo.color"
+            :color="todo.color || 0"
             :content="todo.content"
             :index="index"
             :sub-index="-1"
@@ -227,8 +226,8 @@ onMounted(async () => {
         </button>
         <button
           class="btn secondary"
-          @click="sortable = !sortable"
           :class="{ '!bg-[#f1f5f9] dark:!bg-[#303033]': sortable }"
+          @click="sortable = !sortable"
         >
           <ArrowDownWideNarrow
             class="text-black transition-transform duration-100 dark:text-white"
@@ -240,6 +239,12 @@ onMounted(async () => {
       </div>
     </div>
   </div>
+  <Modal v-if="error !== ''">
+    <p>{{ error }}</p>
+    <div class="mt-1 flex">
+      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
+    </div>
+  </Modal>
 </template>
 
 <style scoped>

@@ -3,9 +3,9 @@ import { ListTodo, NotebookPen } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 
 import AppCommands from '../../main/static/AppCommands'
-import { useErrorStore } from '../stores/DialogError'
+import Modal from './ui/Modal.vue'
 
-const errorStore = useErrorStore()
+const error = ref('')
 
 onMounted(async () => {
   getTheme()
@@ -28,8 +28,8 @@ const getTheme = () => {
         document.documentElement.style.colorScheme = 'dark'
       }
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: any) => {
+      error.value = e.message
     })
 }
 
@@ -37,8 +37,8 @@ const saveTheme = () => {
   window.electronAPI
     .setCommand([AppCommands.SAVE_THEME, theme.value])
     .then(() => {})
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: any) => {
+      error.value = e.message
     })
 }
 
@@ -61,8 +61,8 @@ const getVersion = () => {
     .then((result: any) => {
       version.value = result
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: any) => {
+      error.value = e.message
     })
 }
 </script>
@@ -98,4 +98,10 @@ const getVersion = () => {
       {{ version }}
     </div>
   </div>
+  <Modal v-if="error !== ''">
+    <p>{{ error }}</p>
+    <div class="mt-1 flex">
+      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
+    </div>
+  </Modal>
 </template>

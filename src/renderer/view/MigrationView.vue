@@ -16,6 +16,12 @@
       </div>
     </div>
   </div>
+  <Modal v-if="error !== ''">
+    <p>{{ error }}</p>
+    <div class="mt-1 flex">
+      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
+    </div>
+  </Modal>
 </template>
 
 <script setup lang="ts">
@@ -24,10 +30,10 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import AppCommands from '../../main/static/AppCommands'
-import { useErrorStore } from '../stores/DialogError'
+import Modal from '../components/ui/Modal.vue'
 
-const errorStore = useErrorStore()
 const router = useRouter()
+const error = ref('')
 let oldTodoData: any | undefined = undefined
 let oldNoteData: any | undefined = undefined
 
@@ -63,8 +69,8 @@ const storeTodoData = () => {
         console.log(result)
         storeNoteData()
       })
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   }
 }
@@ -77,8 +83,8 @@ const storeNoteData = () => {
         console.log(result)
         saveMigrationDone()
       })
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   }
 }
@@ -89,8 +95,8 @@ const saveMigrationDone = () => {
     .then(() => {
       router.push('/todos')
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 </script>

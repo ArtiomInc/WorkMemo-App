@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import AppCommands from '../main/static/AppCommands'
-import DialogColor from './components/DialogColor.vue'
-import DialogDelete from './components/DialogDelete.vue'
-import DialogError from './components/DialogError.vue'
-import { useErrorStore } from './stores/DialogError'
+import Modal from './components/ui/Modal.vue'
 
 const router = useRouter()
-const errorStore = useErrorStore()
+const error = ref('')
 
 onMounted(() => {
   router.push('/todos')
@@ -25,8 +22,8 @@ const getMigrationState = () => {
         router.push('/')
       }
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -34,17 +31,18 @@ const checkBackupStore = () => {
   window.electronAPI
     .setCommand([AppCommands.CHECK_BACKUP])
     .then(() => {})
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 </script>
 
 <template>
   <router-view />
-  <DialogDelete />
-  <DialogColor />
-  <DialogError />
+  <Modal v-if="error !== ''">
+    <p>{{ error }}</p>
+    <div class="mt-1 flex">
+      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
+    </div>
+  </Modal>
 </template>
-
-<style scoped></style>

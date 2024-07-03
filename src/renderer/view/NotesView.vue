@@ -11,14 +11,12 @@ import {
   Trash2
 } from 'lucide-vue-next'
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
-import { nextTick, onMounted, ref, Ref, watch } from 'vue'
+import { nextTick, onMounted, reactive, ref, Ref } from 'vue'
 
 import { NoteCommands } from '../../main/static/NoteCommands'
 import '../assets/quill.css'
 import NavBar from '../components/NavBar.vue'
-import { useColorStore } from '../stores/DialogColor'
-import { useDeleteStore } from '../stores/DialogDelete'
-import { useErrorStore } from '../stores/DialogError'
+import Modal from '../components/ui/Modal.vue'
 
 interface NoteList {
   title: string
@@ -32,44 +30,35 @@ interface Note {
   color: number
 }
 
-const errorStore = useErrorStore()
-const colorStore = useColorStore()
-const deleteStore = useDeleteStore()
-const askedColor = ref(false)
-const askedDelete = ref(false)
 const noteList: Ref<NoteList[] | undefined> = ref(undefined)
 const noteDetails: Ref<Note | undefined> = ref(undefined)
 const selectedID = ref(-1)
 const isEditingTitle = ref(false)
 const sortable = ref(false)
-const titleinput: Ref<HTMLElement | null> = ref(document.getElementById('titleinput'))
-
-watch(
-  () => deleteStore.deleteState,
-  (value: boolean) => {
-    if (value === false && deleteStore.deleteLastResultAction === true && askedDelete.value === true) {
-      deleteNote()
-      deleteStore.setDeleteLastResult(false)
-    }
-    if (value === false) {
-      askedDelete.value = false
-    }
+const notetitle: Ref<HTMLElement | null> = ref(document.getElementById('notetitle'))
+const remove = reactive({
+  state: false,
+  message: '',
+  delete() {
+    deleteNote()
+    this.state = false
+  },
+  cancel() {
+    remove.state = false
   }
-)
-
-watch(
-  () => colorStore.colorState,
-  (value: boolean) => {
-    if (value === false && colorStore.colorLastResultAction === true && askedColor.value === true) {
-      updateNoteColor(colorStore.colorLastChoice)
-      colorStore.setColorLastChoice(-1)
-      colorStore.setColorLastResult(false)
-    }
-    if (value === false) {
-      askedColor.value = false
-    }
+})
+const color = reactive({
+  state: false,
+  message: '',
+  update(id: number) {
+    updateNoteColor(id)
+    this.state = false
+  },
+  cancel() {
+    this.state = false
   }
-)
+})
+const error = ref('')
 
 const getListNote = () => {
   window.electronAPI
@@ -77,8 +66,8 @@ const getListNote = () => {
     .then((result: NoteList[]) => {
       noteList.value = result
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -88,8 +77,8 @@ const addNewNote = () => {
     .then(() => {
       getListNote()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -100,10 +89,10 @@ const getDetailsNote = (id: number) => {
     .then((result: Note) => {
       noteDetails.value = result
     })
-    .catch((error: any) => {
+    .catch((e: Error) => {
       selectedID.value = -1
       noteDetails.value = undefined
-      errorStore.setErrorState(true, error.message)
+      error.value = e.message
     })
 }
 
@@ -114,8 +103,8 @@ const toggleEditTitle = (payload: boolean) => {
     getListNote()
   } else {
     nextTick(() => {
-      if (titleinput.value) {
-        titleinput.value.focus()
+      if (notetitle.value) {
+        notetitle.value.focus()
       }
     })
   }
@@ -125,8 +114,8 @@ const updateTitleNote = (id: number, content: string) => {
   window.electronAPI
     .setCommand([NoteCommands.UPDATE_NOTE_TITLE, id, content])
     .then(() => {})
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
 }
 
@@ -135,15 +124,10 @@ const updateNoteContent = () => {
     window.electronAPI
       .setCommand([NoteCommands.UPDATE_NOTE_CONTENT, selectedID.value, noteDetails.value?.content])
       .then(() => {})
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   }
-}
-
-const colorRequest = () => {
-  askedColor.value = true
-  colorStore.setColorState(true)
 }
 
 const updateNoteColor = (color: number) => {
@@ -153,11 +137,11 @@ const updateNoteColor = (color: number) => {
       .then(() => {
         getListNote()
       })
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   } else {
-    errorStore.setErrorState(true, "Color choosed doesn't exist")
+    error.value = "Color choosed doesn't exist"
   }
 }
 
@@ -169,17 +153,9 @@ const shiftNote = (id: number, direction: string) => {
     .then(() => {
       getListNote()
     })
-    .catch((error: any) => {
-      errorStore.setErrorState(true, error.message)
+    .catch((e: Error) => {
+      error.value = e.message
     })
-}
-
-const deleteRequest = () => {
-  askedDelete.value = true
-  deleteStore.setDeleteState(
-    true,
-    'Are you sure you want to delete this note ?<br> Once the data is deleted, it cannot be recovered.'
-  )
 }
 
 const deleteNote = () => {
@@ -191,8 +167,8 @@ const deleteNote = () => {
         noteDetails.value = undefined
         getListNote()
       })
-      .catch((error: any) => {
-        errorStore.setErrorState(true, error.message)
+      .catch((e: Error) => {
+        error.value = e.message
       })
   }
 }
@@ -262,8 +238,8 @@ onMounted(async () => {
           </button>
           <button
             class="btn secondary"
-            @click="sortable = !sortable"
             :class="{ '!bg-[#f1f5f9] dark:!bg-[#303033]': sortable }"
+            @click="sortable = !sortable"
           >
             <ArrowDownWideNarrow
               class="text-black transition-transform duration-100 dark:text-white"
@@ -282,7 +258,7 @@ onMounted(async () => {
         <div class="">
           <div v-if="isEditingTitle" class="flex items-center gap-1">
             <input
-              ref="titleinput"
+              ref="notetitle"
               v-model="noteDetails.title"
               class="input secondary"
               type="text"
@@ -309,10 +285,10 @@ onMounted(async () => {
               <Pencil class="text-black dark:text-white" :size="20" />
               Edit title
             </button>
-            <button class="btn secondary md:w-8 md:min-w-8 md:p-0" @click="colorRequest">
+            <button class="btn secondary md:w-8 md:min-w-8 md:p-0" @click="color.state = true">
               <Palette class="text-black dark:text-white" :size="20" />
             </button>
-            <button id="delete" class="btn secondary" @click="deleteRequest">
+            <button id="delete" class="btn secondary" @click="remove.state = true">
               <Trash2 class="text-black dark:text-white" :size="20" />
               <p>Delete note</p>
             </button>
@@ -341,6 +317,46 @@ onMounted(async () => {
       </div>
     </div>
   </div>
+  <Modal v-if="remove.state">
+    <h1 class="text-lg font-bold">Delete todo ?</h1>
+    <p>
+      Are you sure you want to delete this todo ?<br />
+      Once the data is deleted, it cannot be recovered.
+    </p>
+    <div class="mt-2 flex justify-end gap-1">
+      <button class="btn error" @click="remove.delete()">Delete</button>
+      <button class="btn secondary" @click="remove.cancel()">Cancel</button>
+    </div>
+  </Modal>
+  <Modal v-if="color.state">
+    <h1 class="text-center text-lg font-bold">Choose color</h1>
+    <div class="mb-2 flex">
+      <div
+        class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-red-400 transition-[outline] duration-100 hover:outline"
+        @click="color.update(1)"
+      />
+      <div
+        class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-green-400 transition-[outline] duration-100 hover:outline"
+        @click="color.update(2)"
+      />
+      <div
+        class="m-1 aspect-square h-8 cursor-pointer rounded-full bg-blue-400 transition-[outline] duration-100 hover:outline"
+        @click="color.update(3)"
+      />
+      <div
+        class="m-1 aspect-square h-8 cursor-pointer rounded-full transition-[outline] duration-100 hover:outline"
+        style="background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 1) 100%)"
+        @click="color.update(0)"
+      />
+    </div>
+    <button class="btn secondary w-full" @click="color.cancel()">Cancel</button>
+  </Modal>
+  <Modal v-if="error !== ''">
+    <p>{{ error }}</p>
+    <div class="mt-1 flex">
+      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
+    </div>
+  </Modal>
 </template>
 
 <style scoped>
