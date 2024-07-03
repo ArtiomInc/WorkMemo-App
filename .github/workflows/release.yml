@@ -1,4 +1,4 @@
-name: Deploy on VPS Lite
+name: Release app on Windows
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build application
-        run: npm run build
+        run: npm run build:win
 
       - name: Get the version from package.json
         id: package-version
