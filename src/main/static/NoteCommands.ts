@@ -6,7 +6,7 @@ export enum NoteCommands {
   UPDATE_NOTE_CONTENT = 104,
   UPDATE_NOTE_COLOR = 105,
   SHIFT_NOTE = 106,
-  DELETE_NOTE = 107,
+  DELETE_NOTE = 107
 }
 
 export default NoteCommands

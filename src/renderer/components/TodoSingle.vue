@@ -8,32 +8,32 @@ import { useDeleteStore } from '../stores/DialogDelete'
 const props = defineProps({
   color: {
     type: Number,
-    default: 0,
+    default: 0
   },
   content: {
     type: String,
-    default: '',
+    default: ''
   },
   index: {
     type: Number,
-    required: true,
+    required: true
   },
   subIndex: {
     type: Number,
-    required: true,
+    required: true
   },
   sortable: {
     type: Boolean,
-    required: true,
+    required: true
   },
   canShiftUp: {
     type: Boolean,
-    required: true,
+    required: true
   },
   canShiftDown: {
     type: Boolean,
-    required: true,
-  },
+    required: true
+  }
 })
 
 const emit = defineEmits(['updatedTodo', 'shiftTodo', 'deleteTodo'])
@@ -109,7 +109,7 @@ const deleteTodo = () => {
         'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20': props.color === 0,
         'bg-red-400/50 hover:bg-red-400/80': props.color === 1,
         'bg-green-400/50 hover:bg-green-400/80': props.color === 2,
-        'bg-blue-400/50 hover:bg-blue-400/80': props.color === 3,
+        'bg-blue-400/50 hover:bg-blue-400/80': props.color === 3
       }"
       @focus="$event.target && ($event.target as HTMLInputElement).select()"
       @input="emit('updatedTodo', props.index, props.subIndex, contentEdited, props.color)"

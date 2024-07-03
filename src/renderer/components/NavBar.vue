@@ -77,7 +77,7 @@ const getVersion = () => {
         to="/todos"
         class="flex h-10 select-none items-center rounded-lg px-5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
         :class="{
-          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/todos',
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/todos'
         }"
       >
         <ListTodo class="text-black dark:text-white" :size="20" />
@@ -87,7 +87,7 @@ const getVersion = () => {
         to="/notes"
         class="flex h-10 select-none items-center rounded-lg px-5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
         :class="{
-          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes',
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes'
         }"
       >
         <NotebookPen class="text-black dark:text-white" :size="20" />

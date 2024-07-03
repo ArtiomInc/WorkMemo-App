@@ -9,7 +9,7 @@ export enum TodoCommands {
   ADD_TODO_IN_GROUP = 207,
   UPDATE_TODO_IN_GROUP = 208,
   SHIFT_TODO_IN_GROUP = 209,
-  DELETE_TODO_IN_GROUP = 210,
+  DELETE_TODO_IN_GROUP = 210
 }
 
 export default TodoCommands

@@ -31,7 +31,7 @@ export class Migration {
   } = {
     user: null,
     todo: [],
-    note: [],
+    note: []
   }
 
   constructor() {

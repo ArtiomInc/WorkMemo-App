@@ -8,7 +8,7 @@ function buildRenderer() {
   return Vite.build({
     configFile: Path.join(__dirname, '..', 'vite.config.js'),
     base: './',
-    mode: 'production',
+    mode: 'production'
   })
 }
 
@@ -19,7 +19,7 @@ function buildMain() {
 
 FileSystem.rmSync(Path.join(__dirname, '..', 'build'), {
   recursive: true,
-  force: true,
+  force: true
 })
 
 console.log(Chalk.blueBright('Transpiling renderer & main...'))

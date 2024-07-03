@@ -20,6 +20,6 @@ export const useDeleteStore = defineStore('delete', () => {
     deleteLastResultAction,
     deleteMessage,
     setDeleteState,
-    setDeleteLastResult,
+    setDeleteLastResult
   }
 })

@@ -60,7 +60,7 @@ export class TodoManager {
           id: Math.floor(Math.random() * this.maxRandomID),
           type: 8,
           content: 'New todo !',
-          color: 0,
+          color: 0
         })
       } else {
         this.todos = [
@@ -68,8 +68,8 @@ export class TodoManager {
             id: Math.floor(Math.random() * this.maxRandomID),
             type: 8,
             content: 'New todo !',
-            color: 0,
-          },
+            color: 0
+          }
         ]
       }
     } catch {
@@ -122,7 +122,7 @@ export class TodoManager {
           type: 32,
           title: 'New todo group !',
           color: 0,
-          list: [],
+          list: []
         })
       } else {
         this.todos = [
@@ -131,8 +131,8 @@ export class TodoManager {
             type: 32,
             title: 'New todo group !',
             color: 0,
-            list: [],
-          },
+            list: []
+          }
         ]
       }
     } catch {
@@ -155,7 +155,7 @@ export class TodoManager {
           id: Math.floor(Math.random() * this.maxRandomID),
           type: 8,
           content: 'New todo in group !',
-          color: 0,
+          color: 0
         })
       } else {
         throw new Error('todo.error.unable_to_add_todo_in_group')

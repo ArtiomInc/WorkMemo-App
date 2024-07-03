@@ -24,6 +24,6 @@ export const useColorStore = defineStore('color', () => {
     colorLastChoice,
     setColorState,
     setColorLastResult,
-    setColorLastChoice,
+    setColorLastChoice
   }
 })

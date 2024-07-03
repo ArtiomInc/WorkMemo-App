@@ -16,5 +16,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
           }
         })
     })
-  },
+  }
 })

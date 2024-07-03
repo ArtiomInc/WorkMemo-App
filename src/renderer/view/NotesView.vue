@@ -8,7 +8,7 @@ import {
   Palette,
   Pencil,
   Plus,
-  Trash2,
+  Trash2
 } from 'lucide-vue-next'
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { nextTick, onMounted, ref, Ref, watch } from 'vue'
@@ -209,7 +209,7 @@ onMounted(async () => {
       <div
         class="card m-2 h-full overflow-y-auto"
         :class="{
-          'md:w-1/4': selectedID != -1,
+          'md:w-1/4': selectedID != -1
         }"
       >
         <div v-if="noteList != null" class="overflow-y-auto md:max-h-[calc(100vh-145px)]">
@@ -218,7 +218,7 @@ onMounted(async () => {
               class="flex items-center gap-1"
               :class="{
                 'mb-2': index != noteList.length - 1,
-                'mb-0': index == noteList.length - 1,
+                'mb-0': index == noteList.length - 1
               }"
             >
               <div
@@ -229,7 +229,7 @@ onMounted(async () => {
                   'bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20': item.color == 0,
                   'bg-red-400/50 hover:bg-red-400/80': item.color == 1,
                   'bg-green-400/50 hover:bg-green-400/80': item.color == 2,
-                  'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3,
+                  'bg-blue-400/50 hover:bg-blue-400/80': item.color == 3
                 }"
                 @click="getDetailsNote(index)"
               >
@@ -291,7 +291,7 @@ onMounted(async () => {
                 'bg-black/10 dark:bg-white/10': noteDetails.color == 0,
                 'bg-red-400/50': noteDetails.color == 1,
                 'bg-green-400/50': noteDetails.color == 2,
-                'bg-blue-400/50': noteDetails.color == 3,
+                'bg-blue-400/50': noteDetails.color == 3
               }"
               @click="toggleEditTitle(true)"
               >{{ noteDetails.title }}</span
@@ -316,12 +316,12 @@ onMounted(async () => {
                 [{ header: 1 }, { header: 2 }],
                 ['bold', 'italic', 'underline'],
                 [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }],
-                ['link', 'image'],
+                ['link', 'image']
               ]"
               :modules="{
                 name: 'blotFormatter',
                 module: BlotFormatter,
-                options: {},
+                options: {}
               }"
               content-type="html"
               placeholder="Type your note here"

@@ -11,12 +11,10 @@
   "main": "build/main/main.js",
   "scripts": {
     "dev": "npm run lint && node scripts/dev-server.js",
-    "build": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder",
-    "build:win": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --win",
-    "build:mac": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --mac",
-    "build:linux": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --linux",
-    "lint": "npm run lint:ci -- --fix",
-    "lint:ci": "eslint . --ext .vue,.js,.ts --ignore-path .eslintignore --max-warnings 0",
+    "build:win": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --win",
+    "build:mac": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --mac",
+    "build:linux": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --linux",
+    "lint": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit -p src/main/tsconfig.json"
   },
   "devDependencies": {

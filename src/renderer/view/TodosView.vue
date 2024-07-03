@@ -129,7 +129,7 @@ const updateTodoInGroup = (index: number, sub_index: number, content: string, co
           TodoCommands.UPDATE_TODO_IN_GROUP,
           index,
           sub_index,
-          JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index])),
+          JSON.parse(JSON.stringify(listTodo.value[index].list[sub_index]))
         ])
         .then(() => {})
         .catch((error: any) => {

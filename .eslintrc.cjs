@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     node: true,
-    'vue/setup-compiler-macros': true,
+    'vue/setup-compiler-macros': true
   },
   extends: [
     'plugin:vue/vue3-essential',
@@ -9,13 +9,26 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
     '@vue/eslint-config-typescript/recommended',
-    '@vue/eslint-config-prettier',
+    '@vue/eslint-config-prettier'
   ],
   plugins: ['perfectionist'],
   root: true,
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
-    'vue/no-v-html': 'off',
+    'vue/no-v-html': 'warn',
+    'vue/multi-word-component-names': 'off',
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'always',
+          normal: 'always',
+          component: 'always'
+        },
+        svg: 'always',
+        math: 'always'
+      }
+    ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'perfectionist/sort-named-imports': 'error',
@@ -31,9 +44,9 @@ module.exports = {
           ['parent-type', 'sibling-type', 'index-type'],
           ['parent', 'sibling', 'index'],
           'object',
-          'unknown',
-        ],
-      },
-    ],
-  },
+          'unknown'
+        ]
+      }
+    ]
+  }
 }

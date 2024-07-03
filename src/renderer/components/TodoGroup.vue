@@ -7,28 +7,28 @@ import { useDeleteStore } from '../stores/DialogDelete'
 const props = defineProps({
   title: {
     type: String,
-    required: true,
+    required: true
   },
   index: {
     type: Number,
-    required: true,
+    required: true
   },
   subIndex: {
     type: Number,
-    required: true,
+    required: true
   },
   sortable: {
     type: Boolean,
-    required: true,
+    required: true
   },
   canShiftUp: {
     type: Boolean,
-    required: true,
+    required: true
   },
   canShiftDown: {
     type: Boolean,
-    required: true,
-  },
+    required: true
+  }
 })
 
 const emit = defineEmits(['addTodoInGroup', 'updateTitle', 'shiftGroup', 'deleteGroup'])

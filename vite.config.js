@@ -9,14 +9,14 @@ const config = defineConfig({
   root: Path.join(__dirname, 'src', 'renderer'),
   publicDir: 'public',
   server: {
-    port: 8088,
+    port: 8088
   },
   open: false,
   build: {
     outDir: Path.join(__dirname, 'build', 'renderer'),
-    emptyOutDir: true,
+    emptyOutDir: true
   },
-  plugins: [vuePlugin()],
+  plugins: [vuePlugin()]
 })
 
 module.exports = config
