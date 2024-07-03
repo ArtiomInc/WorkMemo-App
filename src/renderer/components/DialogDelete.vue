@@ -6,7 +6,7 @@
     <div class="animate-slide-up mt-20 flex items-start justify-center">
       <div class="card">
         <h1 class="text-lg font-bold">Delete ?</h1>
-        <span v-html="message"></span>
+        <span v-html="message" />
         <div class="mt-2 flex justify-end gap-1">
           <button class="btn error" @click="deleteAction">Delete</button>
           <button class="btn secondary" @click="cancelAction">Cancel</button>

@@ -118,7 +118,7 @@ const deleteTodo = () => {
       </div>
     </div>
     <div>
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

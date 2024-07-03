@@ -5,7 +5,7 @@
   >
     <div class="animate-slide-up mt-20 flex items-start justify-center">
       <div class="card">
-        <span v-html="message"></span>
+        <span v-html="message" />
         <div class="mt-1 flex">
           <button class="btn secondary w-full" @click="cancel">Cancel</button>
         </div>

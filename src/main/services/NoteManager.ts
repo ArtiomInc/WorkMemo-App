@@ -51,7 +51,7 @@ export class NoteManager {
       if (this.notes) {
         return this.notes.map((item: Note) => ({
           title: item.title,
-          color: item.color,
+          color: item.color
         }))
       }
     } catch {
@@ -66,7 +66,7 @@ export class NoteManager {
           id: Math.floor(Math.random() * this.maxRandomID),
           title: 'New note !',
           color: 0,
-          content: '<p></p>',
+          content: '<p></p>'
         })
       } else {
         this.notes = [
@@ -74,8 +74,8 @@ export class NoteManager {
             id: Math.floor(Math.random() * this.maxRandomID),
             title: 'New note !',
             color: 0,
-            content: '<p></p>',
-          },
+            content: '<p></p>'
+          }
         ]
       }
     } catch {

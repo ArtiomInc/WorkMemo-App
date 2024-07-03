@@ -168,7 +168,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col">
-    <NavBar></NavBar>
+    <NavBar />
     <div class="card m-2 flex flex-col gap-2">
       <div v-if="listTodo !== undefined && listTodo.length != 0" class="flex flex-col gap-2">
         <div v-for="(todo, index) in listTodo" :key="index">
@@ -184,7 +184,7 @@ onMounted(async () => {
             @updated-todo="updateTodo"
             @shift-todo="shiftTodo"
             @delete-todo="deleteTodo"
-          ></TodoSingle>
+          />
           <TodoGroup
             v-if="todo.title"
             :title="todo.title"
@@ -212,7 +212,7 @@ onMounted(async () => {
                 @updated-todo="updateTodoInGroup"
                 @shift-todo="shiftTodoInGroup"
                 @delete-todo="deleteTodoInGroup"
-              ></TodoSingle></div
+              /></div
           ></TodoGroup>
         </div>
       </div>
@@ -225,13 +225,17 @@ onMounted(async () => {
           <Plus class="text-black dark:text-white" :size="20" />
           group
         </button>
-        <button class="btn secondary" @click="sortable = !sortable">
+        <button
+          class="btn secondary"
+          @click="sortable = !sortable"
+          :class="{ '!bg-[#f1f5f9] dark:!bg-[#303033]': sortable }"
+        >
           <ArrowDownWideNarrow
             class="text-black transition-transform duration-100 dark:text-white"
             :class="{ 'rotate-0 ': sortable, 'rotate-180 ': !sortable }"
             :size="20"
           />
-          sort
+          {{ sortable ? 'finish' : 'sort' }}
         </button>
       </div>
     </div>

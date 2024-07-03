@@ -41,10 +41,10 @@ const checkBackupStore = () => {
 </script>
 
 <template>
-  <router-view></router-view>
-  <DialogDelete></DialogDelete>
-  <DialogColor> </DialogColor>
-  <DialogError></DialogError>
+  <router-view />
+  <DialogDelete />
+  <DialogColor />
+  <DialogError />
 </template>
 
 <style scoped></style>

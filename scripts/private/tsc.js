@@ -4,7 +4,7 @@ const Chalk = require('chalk')
 function compile(directory) {
   return new Promise((resolve, reject) => {
     const tscProcess = ChildProcess.exec('tsc', {
-      cwd: directory,
+      cwd: directory
     })
 
     tscProcess.stdout.on('data', (data) =>

@@ -204,7 +204,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col">
-    <NavBar></NavBar>
+    <NavBar />
     <div class="flex flex-col" :class="{ content: selectedID != -1, 'md:flex-row': selectedID != -1 }">
       <div
         class="card m-2 h-full overflow-y-auto"
@@ -260,8 +260,17 @@ onMounted(async () => {
           <button class="btn secondary" @click="addNewNote">
             <Plus class="text-black dark:text-white" :size="20" />note
           </button>
-          <button class="btn secondary" @click="sortable = !sortable">
-            <ArrowDownWideNarrow class="text-black dark:text-white" :size="20" />sort
+          <button
+            class="btn secondary"
+            @click="sortable = !sortable"
+            :class="{ '!bg-[#f1f5f9] dark:!bg-[#303033]': sortable }"
+          >
+            <ArrowDownWideNarrow
+              class="text-black transition-transform duration-100 dark:text-white"
+              :class="{ 'rotate-0 ': sortable, 'rotate-180 ': !sortable }"
+              :size="20"
+            />
+            {{ sortable ? 'finish' : 'sort' }}
           </button>
         </div>
       </div>
@@ -326,7 +335,7 @@ onMounted(async () => {
               content-type="html"
               placeholder="Type your note here"
               @update:content="updateNoteContent"
-            ></QuillEditor>
+            />
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@
           <FolderSync class="text-black dark:text-white" :size="20" />
           Start migration
         </button>
-        <span v-else class="h-8"></span>
+        <span v-else class="h-8" />
       </div>
     </div>
   </div>
