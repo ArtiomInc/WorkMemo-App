@@ -1,7 +1,9 @@
 name: Deploy on VPS Lite
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
