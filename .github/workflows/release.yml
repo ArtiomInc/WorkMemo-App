@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: electronuserland/builder:wine
 
     steps:
       - name: Checkout code
