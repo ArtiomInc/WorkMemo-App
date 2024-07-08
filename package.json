@@ -10,7 +10,7 @@
   },
   "main": "build/main/main.js",
   "scripts": {
-    "dev": "npm run lint && node scripts/dev-server.js",
+    "dev": "npm run lint && npm run typecheck && node scripts/dev-server.js",
     "build:win": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --win",
     "build:mac": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --mac",
     "build:linux": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --linux",
