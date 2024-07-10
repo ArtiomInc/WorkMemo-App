@@ -9,8 +9,8 @@ import TodoSingle from '../components/TodoSingle.vue'
 import Modal from '../components/ui/Modal.vue'
 
 const error = ref('')
-const listTodo: Ref<
-  | {
+// prettier-ignore
+const listTodo: Ref<{
       id: number
       content: string
       type?: number
@@ -23,8 +23,7 @@ const listTodo: Ref<
         color: number
       }[]
     }[]
-  | undefined
-> = ref(undefined)
+  | undefined > = ref(undefined)
 
 const sortable = ref(false)
 
@@ -160,6 +159,11 @@ const deleteTodoInGroup = (index: number, sub_index: number) => {
     })
 }
 
+function getRandom() {
+  const value = Math.floor(Math.random() * 9_999_999)
+  return value
+}
+
 onMounted(async () => {
   getListTodo()
 })
@@ -170,7 +174,7 @@ onMounted(async () => {
     <NavBar />
     <div class="card m-2 flex flex-col gap-2">
       <div v-if="listTodo !== undefined && listTodo.length != 0" class="flex flex-col gap-2">
-        <div v-for="(todo, index) in listTodo" :key="index">
+        <div v-for="(todo, index) in listTodo" :key="getRandom()">
           <TodoSingle
             v-if="todo.list == undefined"
             :color="todo.color || 0"
@@ -200,7 +204,7 @@ onMounted(async () => {
             <div v-if="todo.list != undefined" class="flex flex-col gap-1">
               <TodoSingle
                 v-for="(sub_todo, sub_index) in todo.list"
-                :key="sub_index"
+                :key="getRandom()"
                 :color="sub_todo.color"
                 :content="sub_todo.content"
                 :index="index"
