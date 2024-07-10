@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'vue/no-v-html': 'warn',
     'vue/multi-word-component-names': 'off',
+    'vue/valid-v-for': 'off',
     'vue/html-self-closing': [
       'error',
       {
