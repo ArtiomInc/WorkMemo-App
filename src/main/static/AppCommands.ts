@@ -7,7 +7,7 @@ export enum AppCommands {
   SAVE_MIGRATION_STATE = 5,
   MIGRATE_STORE_TODO = 6,
   MIGRATE_STORE_NOTE = 7,
-  CHECK_BACKUP = 8
+  CHECK_BACKUP = 8,
 }
 
 export default AppCommands

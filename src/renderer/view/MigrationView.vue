@@ -12,16 +12,10 @@
           <FolderSync class="text-black dark:text-white" :size="20" />
           Start migration
         </button>
-        <span v-else class="h-8" />
+        <span v-else class="h-8"></span>
       </div>
     </div>
   </div>
-  <Modal v-if="error !== ''">
-    <p>{{ error }}</p>
-    <div class="mt-1 flex">
-      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
-    </div>
-  </Modal>
 </template>
 
 <script setup lang="ts">
@@ -30,10 +24,10 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import AppCommands from '../../main/static/AppCommands'
-import Modal from '../components/ui/Modal.vue'
+import { useErrorStore } from '../stores/DialogError'
 
+const errorStore = useErrorStore()
 const router = useRouter()
-const error = ref('')
 let oldTodoData: any | undefined = undefined
 let oldNoteData: any | undefined = undefined
 
@@ -69,8 +63,8 @@ const storeTodoData = () => {
         console.log(result)
         storeNoteData()
       })
-      .catch((e: Error) => {
-        error.value = e.message
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
       })
   }
 }
@@ -83,8 +77,8 @@ const storeNoteData = () => {
         console.log(result)
         saveMigrationDone()
       })
-      .catch((e: Error) => {
-        error.value = e.message
+      .catch((error: any) => {
+        errorStore.setErrorState(true, error.message)
       })
   }
 }
@@ -95,8 +89,8 @@ const saveMigrationDone = () => {
     .then(() => {
       router.push('/todos')
     })
-    .catch((e: Error) => {
-      error.value = e.message
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
     })
 }
 </script>

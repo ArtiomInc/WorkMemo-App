@@ -1,6 +1,6 @@
 {
   "name": "workmemo-app",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "author": "ArtyomInc",
   "description": "A todos task and notes talking application build with electron + vue",
   "repository": "https://github.com/ArtyomInc/workmemo-app/",
@@ -10,11 +10,13 @@
   },
   "main": "build/main/main.js",
   "scripts": {
-    "dev": "npm run lint && npm run typecheck && node scripts/dev-server.js",
-    "build:win": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --win",
-    "build:mac": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --mac",
-    "build:linux": "npm run lint && npm run typecheck && node scripts/build.js && electron-builder --linux",
-    "lint": "eslint . --fix",
+    "dev": "npm run lint && node scripts/dev-server.js",
+    "build": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder",
+    "build:win": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --win",
+    "build:mac": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --mac",
+    "build:linux": "npm run lint:ci && npm run typecheck && node scripts/build.js && electron-builder --linux",
+    "lint": "npm run lint:ci -- --fix",
+    "lint:ci": "eslint . --ext .vue,.js,.ts --ignore-path .eslintignore --max-warnings 0",
     "typecheck": "vue-tsc --noEmit -p src/main/tsconfig.json"
   },
   "devDependencies": {

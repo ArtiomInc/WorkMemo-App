@@ -18,7 +18,7 @@ let rendererPort = 0
 async function startRenderer() {
   viteServer = await Vite.createServer({
     configFile: Path.join(__dirname, '..', 'vite.config.js'),
-    mode: 'development'
+    mode: 'development',
   })
 
   return viteServer.listen()
@@ -104,7 +104,7 @@ async function start() {
 
   const path = Path.join(__dirname, '..', 'src', 'main')
   Chokidar.watch(path, {
-    cwd: path
+    cwd: path,
   }).on('change', (path) => {
     console.log(Chalk.blueBright(`[electron] `) + `Change in ${path}. reloading... 🚀`)
 

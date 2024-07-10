@@ -3,9 +3,9 @@ import { ListTodo, NotebookPen } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 
 import AppCommands from '../../main/static/AppCommands'
-import Modal from './ui/Modal.vue'
+import { useErrorStore } from '../stores/DialogError'
 
-const error = ref('')
+const errorStore = useErrorStore()
 
 onMounted(async () => {
   getTheme()
@@ -28,8 +28,8 @@ const getTheme = () => {
         document.documentElement.style.colorScheme = 'dark'
       }
     })
-    .catch((e: any) => {
-      error.value = e.message
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
     })
 }
 
@@ -37,8 +37,8 @@ const saveTheme = () => {
   window.electronAPI
     .setCommand([AppCommands.SAVE_THEME, theme.value])
     .then(() => {})
-    .catch((e: any) => {
-      error.value = e.message
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
     })
 }
 
@@ -61,8 +61,8 @@ const getVersion = () => {
     .then((result: any) => {
       version.value = result
     })
-    .catch((e: any) => {
-      error.value = e.message
+    .catch((error: any) => {
+      errorStore.setErrorState(true, error.message)
     })
 }
 </script>
@@ -75,9 +75,9 @@ const getVersion = () => {
       </div>
       <router-link
         to="/todos"
-        class="flex h-10 select-none items-center rounded-lg px-5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+        class="flex h-10 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10"
         :class="{
-          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/todos'
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/todos',
         }"
       >
         <ListTodo class="text-black dark:text-white" :size="20" />
@@ -85,9 +85,9 @@ const getVersion = () => {
       </router-link>
       <router-link
         to="/notes"
-        class="flex h-10 select-none items-center rounded-lg px-5 transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+        class="flex h-10 select-none items-center rounded-lg px-5 hover:bg-black/10 dark:hover:bg-white/10"
         :class="{
-          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes'
+          'cursor-default bg-black/10 dark:bg-white/10': $route.fullPath === '/notes',
         }"
       >
         <NotebookPen class="text-black dark:text-white" :size="20" />
@@ -98,10 +98,4 @@ const getVersion = () => {
       {{ version }}
     </div>
   </div>
-  <Modal v-if="error !== ''">
-    <p>{{ error }}</p>
-    <div class="mt-1 flex">
-      <button class="btn secondary w-full" @click="error = ''">Cancel</button>
-    </div>
-  </Modal>
 </template>

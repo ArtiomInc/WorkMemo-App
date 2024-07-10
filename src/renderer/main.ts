@@ -17,8 +17,8 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'Migration', component: MigrationView },
     { path: '/todos', name: 'Todos', component: TodosView },
-    { path: '/notes', name: 'Notes', component: NotesView }
-  ]
+    { path: '/notes', name: 'Notes', component: NotesView },
+  ],
 })
 
 // Pinia instance

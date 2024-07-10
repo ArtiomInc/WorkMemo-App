@@ -30,9 +30,9 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
     },
-    icon: __dirname + '/static/icon.ico'
+    icon: __dirname + '/static/icon.ico',
   })
 
   if (process.env.NODE_ENV === 'development') {
@@ -66,8 +66,8 @@ if (!hasLock) {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          'Content-Security-Policy': ["script-src 'self'"]
-        }
+          'Content-Security-Policy': ["script-src 'self'"],
+        },
       })
     })
 
